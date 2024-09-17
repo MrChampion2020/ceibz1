@@ -24,5 +24,5 @@ export { default as PreFinalScreen } from './register/PreFinalScreen';
 export { default as PromptsScreen } from './register/PromptsScreen';
 export { default as ShowPromptsScreen } from './register/ShowPromptsScreen';
 export { default as TypeScreen } from './register/TypeScreen';
-export { default as LoginScreen } from './register/LoginScreen';
+export { default as MainScreen } from './register/MainScreen';
 export { default as LiveStream } from './register/LiveStream';

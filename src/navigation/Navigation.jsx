@@ -16,7 +16,7 @@ import {
   GenderScreen,
   HomeTownScreen,
   LocationScreen,
-  LoginScreen,
+  MainScreen,
   LookingFor,
   AdminScreen,
   PasswordScreen,
@@ -34,7 +34,7 @@ const Navigation = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginRoute />}>
-          <Route path="" element={<LoginScreen />} />
+          <Route path="" element={<MainScreen />} />
           {/* <Route path="login" element={<LoginScreen />} /> */}
           <Route path="basic" element={<BasicInfo />} />
           <Route path="birth" element={<BirthScreen />} />

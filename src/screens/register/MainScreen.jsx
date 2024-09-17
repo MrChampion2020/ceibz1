@@ -275,7 +275,7 @@ export default ImageUpload;
 //   const navigation = useNavigate();
 
 //   const carouselImages = [
-//     { src: church, text: 'Teens Church' },
+//     { src: church, text: 'Loveworld Teens Church ' },
 //     { src: pastorjoe, text: 'Foundation School' },
 //     { src: carousel3, text: 'Children Church' }
 //   ];
@@ -590,7 +590,7 @@ export default ImageUpload;
 //   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
 //   const carouselImages = [
-//     { src: church, text: 'Teens Church' },
+//     { src: church, text: 'Loveworld Teens Church ' },
 //     { src: pastorjoe, text: 'Foundation School' },
 //     { src: carousel3, text: 'Children Church' }
 //   ];
@@ -909,7 +909,7 @@ import pastorjoe from '../../assets/pjoe.jpg';
 import carousel3 from '../../assets/pjoe1.jpg';
 import chuch from '../../assets/chuch.jpg';
 
-const LoginScreen = () => {
+const MainScreen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const [showFullText3, setShowFullText3] = useState(false);
@@ -925,9 +925,9 @@ const LoginScreen = () => {
   };
 
   const carouselImages = [
-    { src: church, text: 'Teens Church' },
-    { src: pastorjoe, text: 'Foundation School' },
-    { src: carousel3, text: 'Children Church' }
+    { src: church, text: 'The Loveworld Teens Church ' },
+    { src: pastorjoe, text: 'Loveworld Foundation School' },
+    { src: carousel3, text: 'Loveworld Children Church' }
   ];
 
   const handleNextSlide = () => {
@@ -944,13 +944,13 @@ const LoginScreen = () => {
     Sunday: "10:30 AM"
   };
 
-  const textSectionJoe = `The man of God Highly Esteemed Pastor Joe Agbaje is the highly revered Pastor of Christ Embassy 
+  const textSectionJoe = `The man of God Highly Esteemed Pastor Joe Agbaje is the highly revered Zonal Pastor of Christ Embassy 
   Ibadan Zone 1, an ardent follower of the President of the Loveworld Nation Rev. Chris Oyakhilome DSc. DSc. DD. 
-  Over the years, he has demonstrated the power of the Word in teaching, healing the sick, and setting captives free. 
-  Every meeting with him is epoch-making!`;
+  Over the years, he has demonstrated the power of the Word in teaching, healing the sick, and setting the captives free. 
+  Every meeting with him is epoch-making! `;
 
-  const textSection3 = "Christ Embassy is not just a local assembly; it’s a vision...";
-  const textSection4 = "Christ Embassy is not just a local assembly; it’s a vision...";
+  const textSection3 = "Christ Embassy is not just a local assembly; I witnessed this in mz life ever since I joined the ministry";
+  const textSection4 = "Christ Embassy is not just a local assembly; it’s a vision come true for me and mz entire family! On a daily basis we experience the love of God!";
 
   // Helper to trigger section animation when scrolled into view
   useEffect(() => {
@@ -1086,12 +1086,12 @@ const LoginScreen = () => {
       <div style={{ width: '100%', height: '50%' }}>
         {/* Section 1: About */}
         <div className={`section ${activeSection === 1 ? 'active' : ''}`} style={{
-          padding: '50px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+          padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 1 ? 'translateY(0)' : 'translateY(30px)'
         }}>
-          <img src={pastorjoe} alt="Pastor Joe" style={{ width: isMobile ? '100%' : '50%', height: '500px', marginRight: '20px' }} />
+          <img src={pastorjoe} alt="Pastor Joe" style={{ width: isMobile ? '100%' : '50%', height: '350px', marginRight: '5px' }} />
           <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: 30, fontWeight: 900, marginBottom: 30 }}>Today with Pastor Joe</h2>
+            <h2 style={{ fontSize: 30, fontWeight: 900, marginBottom: 40 }}>Today with Pastor Joe</h2>
             <p>{showFullTextJoe ? textSectionJoe : `${textSectionJoe.slice(0, 100)}...`}</p>
             <button onClick={() => setShowFullTextJoe(!showFullTextJoe)} style={{ padding: '10px 20px', backgroundColor: 'orange', color: 'white', border: 'none' }}>
               {showFullTextJoe ? 'Show Less' : 'Read More'}
@@ -1101,17 +1101,60 @@ const LoginScreen = () => {
 
         {/* Section 2: Our Vision */}
         <div style={{
+  backgroundImage: `url(${transparentImage})`,
+  backgroundSize: 'cover',
+  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  height: '60vh',
+  width: '100%',
+  padding: '20px 10px',
+  margin: 'auto',
+  transition: 'transform 0.6s ease-in-out',
+  transform: activeSection === 2 ? 'translateY(0)' : 'translateY(30px)',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center',
+  boxSizing: 'border-box'
+}}>
+  <h1 style={{
+    color: 'white',
+    fontSize: '2rem', // Responsive font size
+    padding: '10px',
+    textAlign: 'center',
+    fontWeight: 700
+  }}>Our Vision</h1>
+  
+  <p style={{
+    color: 'white',
+    fontSize: '1rem', // Responsive font size
+    maxWidth: '800px', // Restrict width for readability on larger screens
+    padding: '20px',
+    lineHeight: 1.6 // Improves text readability
+  }}>
+    Christ Embassy is not just a local assembly; it’s a vision. 
+    The Lord has called us to fulfill a very definite purpose, 
+    which is to take His divine presence to the peoples and nations of the world, 
+    and to demonstrate the character of His Spirit everywhere. 
+    When you worship with us, you learn more than just the letters of the Word;
+    you’re imparted with and impacted by the Spirit of the Word. 
+    As we share God’s Word, it takes root in you, and you become exactly what the Lord wants you to be.
+    The Holy Spirit gets a hold of your life, and His vision becomes real to you and in your life.
+  </p>
+</div>
+
+        {/* <div style={{
           backgroundImage: `url(${transparentImage})`,
           backgroundSize: 'cover',
           backgroundColor: 'rgba(0, 0, 0, 0.4)',
           height: '100vh',
           width: '100%',
-          padding: '20px 50px',
+          padding: '20px 10px',
           margin: 'auto',
           transition: 'transform 0.6s ease-in-out', transform: activeSection === 2 ? 'translateY(0)' : 'translateY(30px)'
         }}>
-          <h1 style={{ color: 'white', fontSize: '40px', padding: 10, textAlign: 'center'}}>Our Vision</h1>
-          <p style={{ color: 'white', fontSize: '20px', overflow: 'hidden' }}>
+          <h1 style={{ color: 'white', fontSize: '30px', padding: 10, textAlign: 'center', fontWeight: 700}}>Our Vision</h1>
+          <p style={{ color: 'white', fontSize: '16px', padding: 20 }}>
           Christ Embassy is not just a local assembly; it’s a vision. 
      The Lord has called us to fulfill a very definite purpose,
       which is to take His divine presence to the peoples and nations of the world,
@@ -1123,14 +1166,14 @@ const LoginScreen = () => {
      The Holy Spirit gets a hold of your life,
       and His vision becomes real to you and in your life.
           </p>
-        </div>
+        </div> */}
 
         {/* Section 3 */}
         <div className={`section ${activeSection === 3 ? 'active' : ''}`} style={{
-          padding: '50px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+          padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 3 ? 'translateY(0)' : 'translateY(30px)'
         }}>
-          <img src={chuch} alt="Section 3" style={{ width: isMobile ? '100%' : '50%', height: '300px', marginRight: '20px' }} />
+          <img src={chuch} alt="Section 3" style={{ width: isMobile ? '100%' : '50%', height: '300px', marginRight: '5px' }} />
           <div style={{ flex: 1 }}>
             <h1 style={{ textAlign: 'center', fontSize: 40, fontWeight: 600, marginBottom: 40}}>Testimony</h1>
             <p>{showFullText3 ? textSection3 : `${textSection3.slice(0, 100)}...`}</p>
@@ -1142,10 +1185,10 @@ const LoginScreen = () => {
 
         {/* Section 4 */}
         <div className={`section ${activeSection === 4 ? 'active' : ''}`} style={{
-          padding: '50px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+          padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 4 ? 'translateY(0)' : 'translateY(30px)'
         }}>
-          <img src={church} alt="Section 4" style={{ width: isMobile ? '100%' : '50%', height: '300px', marginRight: '20px' }} />
+          <img src={church} alt="Section 4" style={{ width: isMobile ? '100%' : '50%', height: '300px', marginRight: '5px' }} />
           <div style={{ flex: 1 }}>
             <h1 style={{ textAlign: 'center', fontSize: 40, fontWeight: 600, marginBottom: 40 }}>Testimony</h1>
             <p>{showFullText4 ? textSection4 : `${textSection4.slice(0, 100)}...`}</p>
@@ -1155,7 +1198,7 @@ const LoginScreen = () => {
           </div>
         </div>
 
-        {/* Section 5: Schedule with Buttons */}
+        {/* Section 5: Schedule with Buttons
         <div style={{
           backgroundImage: `url(${transparentImage})`,
           backgroundSize: 'cover',
@@ -1167,7 +1210,7 @@ const LoginScreen = () => {
         }}>
           <h1 style={{ color: 'white', fontSize: '2rem' }}>Our Schedule</h1>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', marginBottom: '20px', padding: 40 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px', marginBottom: '50px', padding: 40 }}>
             {Object.keys(schedule).map((day) => (
               <button key={day} onClick={() => setCurrentDay(day)} style={{
                 padding: '10px 20px',
@@ -1179,12 +1222,12 @@ const LoginScreen = () => {
             ))}
           </div>
           
-          {/* Schedule Response Boxes */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', padding: '20px' }}>
+          {/* Schedule Response Boxes /}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', padding: '20px' }}>
             {Object.keys(schedule).map((day, index) => (
               <div key={index} style={{
-                width: '100px',
-                height: '100px',
+                width: '80px',
+                height: '60px',
                 backgroundColor: 'rgba(255, 255, 255, 0.3)',
                 color: 'white',
                 display: 'flex',
@@ -1196,19 +1239,130 @@ const LoginScreen = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
+
+        {/* Section 5: Schedule with Buttons */}
+<div style={{
+  backgroundImage: `url(${transparentImage})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  padding: '2rem',
+  textAlign: 'center',
+  width: '100vw',
+  height: '70vh',
+  boxSizing: 'border-box',  // Ensures padding is included in the width/height calculations
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',  // Vertically center the content
+  alignItems: 'center',      // Horizontally center the content
+  transition: 'transform 0.6s ease-in-out',
+  transform: activeSection === 5 ? 'translateY(0)' : 'translateY(30px)'
+}}>
+  <h1 style={{ color: 'white', fontSize: 'clamp(1.5rem, 5vw, 3rem)', marginBottom: '2rem' }}>
+    Our Schedule
+  </h1>
+
+  {/* Buttons for Days */}
+  <div style={{ 
+    display: 'flex', 
+    flexWrap: 'wrap', 
+    justifyContent: 'center', 
+    gap: '1rem', 
+    marginBottom: '3rem', 
+    padding: '1rem',
+    maxWidth: '80vw',  // Ensures the buttons don't exceed the screen width
+    boxSizing: 'border-box'
+  }}>
+    {Object.keys(schedule).map((day) => (
+      <button key={day} onClick={() => setCurrentDay(day)} style={{
+        padding: '10px 20px',
+        backgroundColor: 'orange',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',  // Adjust button text size
+        cursor: 'pointer',
+      }}>
+        {day}
+      </button>
+    ))}
+  </div>
+
+  {/* Schedule Response Boxes */}
+  <div style={{ 
+    display: 'flex', 
+    flexWrap: 'wrap', 
+    justifyContent: 'center', 
+    gap: '1rem', 
+    padding: '1rem', 
+    maxWidth: '80vw',  // Keep the response boxes within the screen width
+    boxSizing: 'border-box'
+  }}>
+    {Object.keys(schedule).map((day, index) => (
+      <div key={index} style={{
+        width: 'clamp(60px, 10vw, 100px)',  // Responsive width
+        height: 'clamp(40px, 6vw, 80px)',  // Responsive height
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '5px',
+        fontSize: 'clamp(0.8rem, 2vw, 1.2rem)',  // Responsive text size
+      }}>
+        {currentDay === day ? schedule[day] : '--:--'}
+      </div>
+    ))}
+  </div>
+</div>
+
 
         {/* Section 6: Carousel */}
         <div className={`section ${activeSection === 6 ? 'active' : ''}`} style={{
-          padding: '50px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
-          justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 6 ? 'translateY(0)' : 'translateY(30px)'
+          padding: '10px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+          justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 6 ? 'translateY(0px)' : 'translateY(30px)'
         }}>
-          <img src={carouselImages[carouselIndex].src} alt="Carousel" style={{ width: isMobile ? '100%' : '60%', height: '300px', marginRight: '20px' }} />
+          <img src={carouselImages[carouselIndex].src} alt="Carousel" style={{ width: isMobile ? '120%' : '60%', height: '350px', marginRight: '5px' }} />
           <div style={{ flex: 1 }}>
             <h2>{carouselImages[carouselIndex].text}</h2>
           </div>
         </div>
       </div>
+
+
+{/* Section 6: Useful Links */} 
+<div style={{
+  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  backgroundSize: 'cover',
+  padding: '20px',
+  width: '100%',
+  height: '70%',
+  display: 'flex',
+  transition: 'transform 0.6s ease-in-out',
+  transform: activeSection === 6 ? 'translateY(0)' : 'translateY(5px)'
+}}>
+  {/* Column for Useful Links */}
+  <div style={{
+    flex: '0 0 50%', // 20% width for the left column
+    textAlign: 'left',
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    width: "100%",
+    
+  }}>
+    <h2 style={{ color: 'black', fontSize: '16px', width: '100%'}}>Other Useful Links</h2>
+    <a href="#" style={{ color: 'black', textDecoration: 'none' }}>Give</a>
+    <a href="#" style={{ color: 'black', textDecoration: 'none' }}>Testify</a>
+    <a href="#" style={{ color: 'black', textDecoration: 'none' }}>Programs</a>
+    <a href="#" style={{ color: 'black', textDecoration: 'none' }}>Rhapsody</a>
+    <a href="#" style={{ color: 'black', textDecoration: 'none' }}>Pastor's Desk</a>
+  </div>
+
+  
+</div>
 
       {/* Footer */}
       <footer style={{
@@ -1217,6 +1371,7 @@ const LoginScreen = () => {
         padding: '20px',
         backgroundColor: 'black',
         color: 'white',
+        height: '70%',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <a href="#contact" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
@@ -1235,4 +1390,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default MainScreen;
