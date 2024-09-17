@@ -1083,7 +1083,7 @@ const MainScreen = () => {
       </div>
 
       {/* Individual Sections */}
-      <div style={{ width: '100%', height: '50%' }}>
+      <div style={{ width: '100%', height: '50%', marginBottom: "50px" }}>
         {/* Section 1: About */}
         <div className={`section ${activeSection === 1 ? 'active' : ''}`} style={{
           padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
@@ -1104,10 +1104,10 @@ const MainScreen = () => {
   backgroundImage: `url(${transparentImage})`,
   backgroundSize: 'cover',
   backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  height: '60vh',
+  height: '90vh',
   width: '100%',
-  padding: '20px 10px',
-  margin: 'auto',
+  padding: '10px 30px',
+  marginTop: '20px',
   transition: 'transform 0.6s ease-in-out',
   transform: activeSection === 2 ? 'translateY(0)' : 'translateY(30px)',
   display: 'flex',
@@ -1169,7 +1169,7 @@ const MainScreen = () => {
         </div> */}
 
         {/* Section 3 */}
-        <div className={`section ${activeSection === 3 ? 'active' : ''}`} style={{
+        <div className={`section ${activeSection === 3 ? 'active' : ''}`} style={{ marginTop: "20px",
           padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 3 ? 'translateY(0)' : 'translateY(30px)'
         }}>
@@ -1319,7 +1319,7 @@ const MainScreen = () => {
 
 
         {/* Section 6: Carousel */}
-        <div className={`section ${activeSection === 6 ? 'active' : ''}`} style={{
+        <div className={`section ${activeSection === 6 ? 'active' : ''}`} style={{ height: "80%", marginBottom: "30px",
           padding: '10px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 6 ? 'translateY(0px)' : 'translateY(30px)'
         }}>
