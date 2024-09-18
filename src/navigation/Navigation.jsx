@@ -12,8 +12,8 @@ import {
   BasicInfo,
   BirthScreen,
   DatingType,
-  EmailScreen,
-  GenderScreen,
+  TeenScreen,
+  FoundationSchoolScreen,
   HomeTownScreen,
   LocationScreen,
   MainScreen,
@@ -39,8 +39,8 @@ const Navigation = () => {
           <Route path="basic" element={<BasicInfo />} />
           <Route path="birth" element={<BirthScreen />} />
           <Route path="dating" element={<DatingType />} />
-          <Route path="email" element={<EmailScreen />} />
-          <Route path="gender" element={<GenderScreen />} />
+          <Route path="teens" element={<TeenScreen />} />
+          <Route path="foundationSchool" element={<FoundationSchoolScreen />} />
           <Route path="hometown" element={<HomeTownScreen />} />
           <Route path="location" element={<LocationScreen />} />
           <Route path="looking-for" element={<LookingFor />} />

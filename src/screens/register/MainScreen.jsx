@@ -908,6 +908,7 @@ import church from '../../assets/church.jpg';
 import pastorjoe from '../../assets/pjoe.jpg';
 import carousel3 from '../../assets/pjoe1.jpg';
 import chuch from '../../assets/chuch.jpg';
+import { useNavigate } from "react-router-dom";
 
 const MainScreen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -923,6 +924,8 @@ const MainScreen = () => {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const navigation = useNavigate();
 
   const carouselImages = [
     { src: church, text: 'The Loveworld Teens Church ' },
@@ -1031,8 +1034,17 @@ const MainScreen = () => {
                   <a href="#ministries" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
                   {showMinistries && (
                     <div style={{ position: 'absolute',  width: '180px', top: '30px', left: 0, backgroundColor: 'rgba(0, 0, 0, 0.05)', color: 'white', padding: '10px', zIndex: 2 }}>
-                      <a href="#foundation" style={{ display: 'block', marginBottom: '10px' }}>Foundation School</a>
-                      <a href="#youth" style={{ display: 'block', marginBottom: '10px' }}>Youth Ministry</a>
+                      <a href="#foundation" style={{ display: 'block', marginBottom: '10px' ,
+                        
+                      }}
+                      
+                      onClick={() => {navigation("/foundationSchool");}}
+                      
+                      >Foundation School</a>
+
+                      <a href="#youth" style={{ display: 'block', marginBottom: '10px' }}
+                       onClick={() => {navigation("/teens");}}
+                       >Teens Ministry</a>
                       <a href="#children" style={{ display: 'block' }}>Children Ministry</a>
                     </div>
                   )}
@@ -1099,74 +1111,74 @@ const MainScreen = () => {
           </div>
         </div>
 
-        {/* Section 2: Our Vision */}
-        <div style={{
+       {/* Section 2: Our Vision */}
+<div style={{
+  position: 'relative',
   backgroundImage: `url(${transparentImage})`,
   backgroundSize: 'cover',
-  backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  height: '90vh',
+  backgroundPosition: 'center',
+  backgroundAttachment: 'fixed', // Ensures the background image stays static
+  height: '70vh', // Takes full viewport height
   width: '100%',
-  padding: '10px 30px',
-  marginTop: '20px',
-  transition: 'transform 0.6s ease-in-out',
-  transform: activeSection === 2 ? 'translateY(0)' : 'translateY(30px)',
+  marginTop: '40px',
   display: 'flex',
-  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  textAlign: 'center',
-  boxSizing: 'border-box'
+  overflow: 'hidden',
+  padding: '20px'
 }}>
-  <h1 style={{
+
+  {/* Scrollable Text Container */}
+  <div style={{
+    position: 'relative',
+    zIndex: 2, // Ensures the text stays above the background
     color: 'white',
-    fontSize: '2rem', // Responsive font size
-    padding: '10px',
-    textAlign: 'center',
-    fontWeight: 700
-  }}>Our Vision</h1>
-  
-  <p style={{
-    color: 'white',
-    fontSize: '1rem', // Responsive font size
-    maxWidth: '800px', // Restrict width for readability on larger screens
-    padding: '20px',
-    lineHeight: 1.6 // Improves text readability
+    width: '90%', // Text container takes 90% width
+    height: '100%', // Text container takes 90% height
+    overflowY: 'scroll', // Enables scrolling inside the text container
+    backgroundColor: 'rgba(0, 0, 0, 0.2)', // Slight dark overlay for readability
+    padding: '5px',
+    borderRadius: '30px', // Adds some rounding to the container edges
+    boxSizing: 'border-box',
   }}>
-    Christ Embassy is not just a local assembly; it’s a vision. 
-    The Lord has called us to fulfill a very definite purpose, 
-    which is to take His divine presence to the peoples and nations of the world, 
-    and to demonstrate the character of His Spirit everywhere. 
-    When you worship with us, you learn more than just the letters of the Word;
-    you’re imparted with and impacted by the Spirit of the Word. 
-    As we share God’s Word, it takes root in you, and you become exactly what the Lord wants you to be.
-    The Holy Spirit gets a hold of your life, and His vision becomes real to you and in your life.
-  </p>
+
+    <h1 style={{
+      fontSize: 'clamp(1.5rem, 2vw, 3rem)', // Responsive font size
+      fontWeight: 700,
+      paddingBottom: '10px',
+      textAlign: 'center'
+    }}>
+      Our Vision
+    </h1>
+
+    <p style={{
+      fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', // Responsive font size
+      lineHeight: 1.6, // Improves readability
+      maxWidth: '800px',
+      margin: '0 auto', // Center the text content
+    }}>
+      Christ Embassy is not just a local assembly; it’s a vision. 
+      The Lord has called us to fulfill a very definite purpose, 
+      which is to take His divine presence to the peoples and nations of the world, 
+      and to demonstrate the character of His Spirit everywhere.
+    </p>
+    
+    <p style={{
+      fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', 
+      lineHeight: 1.6, 
+      maxWidth: '800px', 
+      margin: '20px auto 0 auto', // Center and add space above
+    }}>
+      When you worship with us, you learn more than just the letters of the Word;
+      you’re imparted with and impacted by the Spirit of the Word. 
+      As we share God’s Word, it takes root in you, and you become exactly what the Lord wants you to be.
+      The Holy Spirit gets a hold of your life, and His vision becomes real to you and in your life.
+    </p>
+
+  </div>
 </div>
 
-        {/* <div style={{
-          backgroundImage: `url(${transparentImage})`,
-          backgroundSize: 'cover',
-          backgroundColor: 'rgba(0, 0, 0, 0.4)',
-          height: '100vh',
-          width: '100%',
-          padding: '20px 10px',
-          margin: 'auto',
-          transition: 'transform 0.6s ease-in-out', transform: activeSection === 2 ? 'translateY(0)' : 'translateY(30px)'
-        }}>
-          <h1 style={{ color: 'white', fontSize: '30px', padding: 10, textAlign: 'center', fontWeight: 700}}>Our Vision</h1>
-          <p style={{ color: 'white', fontSize: '16px', padding: 20 }}>
-          Christ Embassy is not just a local assembly; it’s a vision. 
-     The Lord has called us to fulfill a very definite purpose,
-      which is to take His divine presence to the peoples and nations of the world,
-       and to demonstrate the character of His Spirit everywhere. When you worship with us,
-       you learn more than just the letters of the Word; 
-      you’re imparted with and impacted by the Spirit of the Word. 
-      As we share God’s Word, it takes root in you, 
-       and you become exactly what the Lord wants you to be.
-     The Holy Spirit gets a hold of your life,
-      and His vision becomes real to you and in your life.
-          </p>
-        </div> */}
+
 
         {/* Section 3 */}
         <div className={`section ${activeSection === 3 ? 'active' : ''}`} style={{ marginTop: "20px",
@@ -1198,68 +1210,32 @@ const MainScreen = () => {
           </div>
         </div>
 
-        {/* Section 5: Schedule with Buttons
-        <div style={{
-          backgroundImage: `url(${transparentImage})`,
-          backgroundSize: 'cover',
-          padding: '50px',
-          textAlign: 'center',
-          width: '100%',
-          height: '100vh',
-          transition: 'transform 0.6s ease-in-out', transform: activeSection === 5 ? 'translateY(0)' : 'translateY(30px)'
-        }}>
-          <h1 style={{ color: 'white', fontSize: '2rem' }}>Our Schedule</h1>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px', marginBottom: '50px', padding: 40 }}>
-            {Object.keys(schedule).map((day) => (
-              <button key={day} onClick={() => setCurrentDay(day)} style={{
-                padding: '10px 20px',
-                backgroundColor: 'orange',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-              }}>{day}</button>
-            ))}
-          </div>
-          
-          {/* Schedule Response Boxes /}
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', padding: '20px' }}>
-            {Object.keys(schedule).map((day, index) => (
-              <div key={index} style={{
-                width: '80px',
-                height: '60px',
-                backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                color: 'white',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: '5px'
-              }}>
-                {currentDay === day ? schedule[day] : '--:--'}
-              </div>
-            ))}
-          </div>
-        </div> */}
-
-        {/* Section 5: Schedule with Buttons */}
+{/* Section 5: Schedule with Buttons */}
 <div style={{
+  position: 'relative',
   backgroundImage: `url(${transparentImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  padding: '2rem',
-  textAlign: 'center',
-  width: '100vw',
-  height: '70vh',
-  boxSizing: 'border-box',  // Ensures padding is included in the width/height calculations
+  backgroundAttachment: 'fixed', // Static background
+  height: '70vh', // Full height of the section
+  width: '100vw', // Full width of the viewport
+  marginTop: '40px', // Adds a gap at the top
+  padding: '20px', // Adds padding around the content
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',  // Vertically center the content
-  alignItems: 'center',      // Horizontally center the content
-  transition: 'transform 0.6s ease-in-out',
-  transform: activeSection === 5 ? 'translateY(0)' : 'translateY(30px)'
+  justifyContent: 'center', // Vertically center the content
+  alignItems: 'center', // Horizontally center the content
+  overflow: 'hidden', // Prevents overflow
+  boxSizing: 'border-box',
 }}>
-  <h1 style={{ color: 'white', fontSize: 'clamp(1.5rem, 5vw, 3rem)', marginBottom: '2rem' }}>
+
+  {/* Section Title */}
+  <h1 style={{ 
+    color: 'white', 
+    fontSize: 'clamp(1.5rem, 5vw, 3rem)', 
+    marginBottom: '2rem' 
+  }}>
     Our Schedule
   </h1>
 
@@ -1269,21 +1245,24 @@ const MainScreen = () => {
     flexWrap: 'wrap', 
     justifyContent: 'center', 
     gap: '1rem', 
-    marginBottom: '3rem', 
-    padding: '1rem',
-    maxWidth: '80vw',  // Ensures the buttons don't exceed the screen width
-    boxSizing: 'border-box'
+    marginBottom: '2rem', // Adjusted for better layout
+    width: '90%', // Takes 90% of the available width
+    boxSizing: 'border-box' 
   }}>
     {Object.keys(schedule).map((day) => (
-      <button key={day} onClick={() => setCurrentDay(day)} style={{
-        padding: '10px 20px',
-        backgroundColor: 'orange',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',  // Adjust button text size
-        cursor: 'pointer',
-      }}>
+      <button 
+        key={day} 
+        onClick={() => setCurrentDay(day)} 
+        style={{
+          padding: '10px 20px',
+          backgroundColor: 'orange',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          fontSize: 'clamp(0.8rem, 2.5vw, 1rem)', // Responsive button text size
+          cursor: 'pointer',
+        }}
+      >
         {day}
       </button>
     ))}
@@ -1295,8 +1274,7 @@ const MainScreen = () => {
     flexWrap: 'wrap', 
     justifyContent: 'center', 
     gap: '1rem', 
-    padding: '1rem', 
-    maxWidth: '80vw',  // Keep the response boxes within the screen width
+    width: '90%', // Ensures response boxes are within the section
     boxSizing: 'border-box'
   }}>
     {Object.keys(schedule).map((day, index) => (
@@ -1318,16 +1296,76 @@ const MainScreen = () => {
 </div>
 
 
-        {/* Section 6: Carousel */}
-        <div className={`section ${activeSection === 6 ? 'active' : ''}`} style={{ height: "80%", marginBottom: "30px",
-          padding: '10px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
-          justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 6 ? 'translateY(0px)' : 'translateY(30px)'
-        }}>
-          <img src={carouselImages[carouselIndex].src} alt="Carousel" style={{ width: isMobile ? '120%' : '60%', height: '350px', marginRight: '5px' }} />
-          <div style={{ flex: 1 }}>
-            <h2>{carouselImages[carouselIndex].text}</h2>
-          </div>
-        </div>
+        
+       {/* Section 6: Carousel */}
+<div 
+  className={`section ${activeSection === 6 ? 'active' : ''}`} 
+  style={{
+    height: '80vh', // Adjust to occupy 80% of viewport height
+    marginBottom: '30px',
+    padding: '10px', 
+    display: 'flex', 
+    flexDirection: isMobile ? 'column' : 'row', // Column on mobile, row on desktop
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    transition: 'transform 0.6s ease-in-out', 
+    transform: activeSection === 6 ? 'translateY(0px)' : 'translateY(30px)',
+    width: '100vw', // Occupy full width of the viewport
+    boxSizing: 'border-box' // Ensure padding is included in width and height calculations
+  }}
+>
+  {/* Image area */}
+  <img 
+    src={carouselImages[carouselIndex].src} 
+    alt="Carousel" 
+    style={{
+      width: isMobile ? '100%' : '60%', // Full width on mobile, 60% on desktop
+      height: '100%', // Maintain full height to match the content
+      objectFit: 'cover', // Ensure image covers the space without distortion
+      marginRight: isMobile ? '0' : '5px', // No margin on mobile, small margin on desktop
+    }} 
+  />
+  
+  {/* Text area */}
+  <div 
+    style={{
+      flex: 1, // Allow the text area to take the remaining space
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center', 
+      height: '100%', // Full height for the text content
+      padding: '20px',
+      width: '90%', // Ensure it stays within 90% width for all screen sizes
+      boxSizing: 'border-box'
+    }}
+  >
+    {/* Heading */}
+    <h2 
+      style={{
+        fontSize: 'clamp(1.5rem, 2vw, 2.5rem)', // Responsive heading size
+        marginBottom: '10px',
+      }}
+    >
+      {carouselImages[carouselIndex].text}
+    </h2>
+    
+    {/* Paragraph */}
+    <p 
+      style={{
+        fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', // Responsive paragraph size
+        lineHeight: 1.6, // Improves readability
+        width: '90%', // Ensure paragraph content stays within 90% of the container
+        height: 'auto',
+        margin: 'auto'
+      }}
+    >
+      This section provides insights into the vision of the teens' church activities. Join us every week to experience spiritual growth, community, and engagement.
+    </p>
+  </div>
+</div>
+
       </div>
 
 
