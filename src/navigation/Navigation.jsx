@@ -19,7 +19,7 @@ import {
   MainScreen,
   LookingFor,
   AdminScreen,
-  PasswordScreen,
+  Children,
   PhotoScreen,
   PreFinalScreen,
   PromptsScreen,
@@ -35,7 +35,6 @@ const Navigation = () => {
       <Routes>
         <Route path="/" element={<LoginRoute />}>
           <Route path="" element={<MainScreen />} />
-          {/* <Route path="login" element={<LoginScreen />} /> */}
           <Route path="basic" element={<BasicInfo />} />
           <Route path="birth" element={<BirthScreen />} />
           <Route path="dating" element={<DatingType />} />
@@ -45,7 +44,7 @@ const Navigation = () => {
           <Route path="location" element={<LocationScreen />} />
           <Route path="looking-for" element={<LookingFor />} />
           <Route path="admin" element={<AdminScreen />} />
-          <Route path="password" element={<PasswordScreen />} />
+          <Route path="children" element={<Children />} />
           <Route path="photo" element={<PhotoScreen />} />
           <Route path="pre-final" element={<PreFinalScreen />} />
           <Route path="prompts" element={<PromptsScreen />} />

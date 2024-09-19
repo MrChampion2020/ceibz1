@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
-import logo from './logo.jpg';
+import logo from './logo.png';
 import video1 from '../../assets/pastor.mp4';
 import video2 from '../../assets/pastor.mp4';
 import image1 from '../../assets/church.jpg';

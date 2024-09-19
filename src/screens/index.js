@@ -18,7 +18,7 @@ export { default as HomeTownScreen } from './register/HomeTownScreen';
 export { default as LocationScreen } from './register/LocationScreen';
 export { default as LookingFor } from './register/LookingFor';
 export { default as AdminScreen } from './register/AdminScreen';
-export { default as PasswordScreen } from './register/PasswordScreen';
+export { default as Children } from './register/Children';
 export { default as PhotoScreen } from './register/PhotoScreen';
 export { default as PreFinalScreen } from './register/PreFinalScreen';
 export { default as PromptsScreen } from './register/PromptsScreen';

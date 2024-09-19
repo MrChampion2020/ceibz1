@@ -901,13 +901,15 @@ import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
-import logo from './logo.jpg';
+import logo from './logo.png';
 import pastorVideo from "../../assets/pastor.mp4";
 import transparentImage from '../../assets/christembassy.jpg';
 import church from '../../assets/church.jpg';
+import chuch from '../../assets/church.jpg';
 import pastorjoe from '../../assets/pjoe.jpg';
-import carousel3 from '../../assets/pjoe1.jpg';
-import chuch from '../../assets/chuch.jpg';
+import teens from '../../assets/post_ftm.jpg';
+import children from '../../assets/child.jpg';
+import lwfs  from '../../assets/teens.jpg';
 import { useNavigate } from "react-router-dom";
 
 const MainScreen = () => {
@@ -928,9 +930,9 @@ const MainScreen = () => {
   const navigation = useNavigate();
 
   const carouselImages = [
-    { src: church, text: 'The Loveworld Teens Church ' },
-    { src: pastorjoe, text: 'Loveworld Foundation School' },
-    { src: carousel3, text: 'Loveworld Children Church' }
+    { src: lwfs, text: 'The Loveworld Teens Church ' },
+    { src: teens, text: 'Loveworld Foundation School' },
+    { src: children, text: 'Loveworld Children Church' }
   ];
 
   const handleNextSlide = () => {
@@ -983,7 +985,8 @@ const MainScreen = () => {
         height: '100vh',
         width: '100vw',
         overflow: 'hidden',
-      }}>
+      }}
+      >
         <video style={{
           position: 'absolute',
           top: 0,
@@ -994,6 +997,7 @@ const MainScreen = () => {
         }} autoPlay muted loop>
           <source src={pastorVideo} type="video/mp4" />
           Your browser does not support the video tag.
+
         </video>
 
         {/* Overlay Header and Content */}
@@ -1018,14 +1022,20 @@ const MainScreen = () => {
             zIndex: 1,
             borderBottom: '0.2px solid white'
           }}>
-            <img src={logo} alt="Church Logo" style={{ width: '60px', height: 'auto' }} />
+            <img src={logo} alt="Church Logo" style={{ width: '60px', height: 'auto' }}
+              onClick={() => navigation("/")}
+            
+            />
             {isMobile ? (
               <div style={{ color: 'white', fontSize: '20px', cursor: 'pointer' }} onClick={toggleMenu}>
                 <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
               </div>
             ) : (
               <nav style={{ display: 'flex', gap: '70px', color: 'white', marginRight: '5%', fontWeight: 600 }}>
-                <a href="#live" style={{ textDecoration: 'none', color: 'white' }}>LIVE</a>
+                <a href="#live" style={{ textDecoration: 'none', color: 'white' }}
+                      onClick={() => {navigation("/LiveStream");}}
+                      
+                      >LIVE</a>
                 <div 
                   onMouseEnter={() => setShowMinistries(true)} 
                   onMouseLeave={() => setShowMinistries(false)} 
@@ -1033,7 +1043,7 @@ const MainScreen = () => {
                 >
                   <a href="#ministries" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
                   {showMinistries && (
-                    <div style={{ position: 'absolute',  width: '180px', top: '30px', left: 0, backgroundColor: 'rgba(0, 0, 0, 0.05)', color: 'white', padding: '10px', zIndex: 2 }}>
+                    <div style={{ position: 'absolute',  width: '180px', top: '20px', left: 0, backgroundColor: 'rgba(0, 0, 0, 0.005)', color: 'white', padding: '5px', zIndex: 2 }}>
                       <a href="#foundation" style={{ display: 'block', marginBottom: '10px' ,
                         
                       }}
@@ -1045,13 +1055,15 @@ const MainScreen = () => {
                       <a href="#youth" style={{ display: 'block', marginBottom: '10px' }}
                        onClick={() => {navigation("/teens");}}
                        >Teens Ministry</a>
-                      <a href="#children" style={{ display: 'block' }}>Children Ministry</a>
+                      <a href="#children" style={{ display: 'block' }}
+                      onClick={() => {navigation("/children");}}
+                      >Children Ministry</a>
                     </div>
                   )}
                 </div>
                 <a href="#testimonies" style={{ textDecoration: 'none', color: 'white' }}>TESTIMONIES</a>
-                <a href="#programs" style={{ textDecoration: 'none', color: 'white' }}>PROGRAMS</a>
-                <a href="#give" style={{ textDecoration: 'none', color: 'white'}}>GIVE</a>
+                <a href="#" style={{ textDecoration: 'none', color: 'white' }}>PROGRAMS</a>
+                <a href="#" style={{ textDecoration: 'none', color: 'white'}}>GIVE</a>
               </nav>
             )}
           </header>
@@ -1068,7 +1080,9 @@ const MainScreen = () => {
               borderRadius: '5px',
               cursor: 'pointer',
               marginBottom: '70px'
-            }}>Watch Live Now</button>
+            }}
+            onClick={() => {navigation("/LiveStream");}}
+            >Watch Live Now</button>
           </div>
 
           {/* Dropdown Menu for Mobile */}
@@ -1085,7 +1099,32 @@ const MainScreen = () => {
               fontSize: '16px'
             }}>
               <a href="#live" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Live</a>
-              <a href="#ministries" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Ministries</a>
+              {/* <a href="#ministries" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Ministries</a>
+               */}
+
+<div 
+                  onMouseEnter={() => setShowMinistries(true)} 
+                  onMouseLeave={() => setShowMinistries(false)} 
+                  style={{ position: 'relative', cursor: 'pointer' }}
+                >
+                  <a href="#ministries" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
+                  {showMinistries && (
+                    <div style={{ position: 'absolute',  width: '180px', top: '20px', left: 0, backgroundColor: 'rgba(0, 0, 0, 0.9)', color: 'white', padding: '5px', zIndex: 2 }}>
+                      <a href="#foundation" style={{ display: 'block', marginBottom: '10px' ,
+                        
+                      }}
+                      
+                      onClick={() => {navigation("/foundationSchool");}}
+                      
+                      >Foundation School</a>
+
+                      <a href="#youth" style={{ display: 'block', marginBottom: '10px' }}
+                       onClick={() => {navigation("/teens");}}
+                       >Teens Ministry</a>
+                      <a href="#children" style={{ display: 'block' }}>Children Ministry</a>
+                    </div>
+                  )}
+                </div>
               <a href="#testimonies" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Testimonies</a>
               <a href="#programs" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Programs</a>
               <a href="#give" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Give</a>
@@ -1095,7 +1134,7 @@ const MainScreen = () => {
       </div>
 
       {/* Individual Sections */}
-      <div style={{ width: '100%', height: '50%', marginBottom: "50px" }}>
+      <div id="about" style={{ width: '100%', height: '50%', marginBottom: "50px" }}>
         {/* Section 1: About */}
         <div className={`section ${activeSection === 1 ? 'active' : ''}`} style={{
           padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
@@ -1180,8 +1219,8 @@ const MainScreen = () => {
 
 
 
-        {/* Section 3 */}
-        <div className={`section ${activeSection === 3 ? 'active' : ''}`} style={{ marginTop: "20px",
+        {/* Testimony 1 */}
+        <div id="testimonies" className={`section ${activeSection === 3 ? 'active' : ''}`} style={{ marginTop: "20px",
           padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 3 ? 'translateY(0)' : 'translateY(30px)'
         }}>
@@ -1195,7 +1234,7 @@ const MainScreen = () => {
           </div>
         </div>
 
-        {/* Section 4 */}
+        {/* testimony 2 */}
         <div className={`section ${activeSection === 4 ? 'active' : ''}`} style={{
           padding: '20px', display: 'flex', flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'center', alignItems: 'center', transition: 'transform 0.6s ease-in-out', transform: activeSection === 4 ? 'translateY(0)' : 'translateY(30px)'
@@ -1212,16 +1251,16 @@ const MainScreen = () => {
 
 
 {/* Section 5: Schedule with Buttons */}
-<div style={{
+<div id="services" style={{
   position: 'relative',
   backgroundImage: `url(${transparentImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundAttachment: 'fixed', // Static background
-  height: '70vh', // Full height of the section
+  height: '80vh', // Full height of the section
   width: '100vw', // Full width of the viewport
   marginTop: '40px', // Adds a gap at the top
-  padding: '20px', // Adds padding around the content
+  padding: '10px', // Adds padding around the content
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center', // Vertically center the content
@@ -1280,7 +1319,7 @@ const MainScreen = () => {
     {Object.keys(schedule).map((day, index) => (
       <div key={index} style={{
         width: 'clamp(60px, 10vw, 100px)',  // Responsive width
-        height: 'clamp(40px, 6vw, 80px)',  // Responsive height
+        height: 'clamp(30px, 5vw, 50px)',  // Responsive height
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
         color: 'white',
         display: 'flex',
@@ -1296,40 +1335,48 @@ const MainScreen = () => {
 </div>
 
 
-        
-       {/* Section 6: Carousel */}
+   {/* Section 6: Carousel */}
 <div 
   className={`section ${activeSection === 6 ? 'active' : ''}`} 
   style={{
-    height: '80vh', // Adjust to occupy 80% of viewport height
+    height: '80vh', // Set the height to 80% of the viewport
     marginBottom: '30px',
     padding: '10px', 
     display: 'flex', 
-    flexDirection: isMobile ? 'column' : 'row', // Column on mobile, row on desktop
+    flexDirection: isMobile ? 'column' : 'row', // Column on mobile, row on larger screens
     justifyContent: 'center', 
     alignItems: 'center', 
     transition: 'transform 0.6s ease-in-out', 
     transform: activeSection === 6 ? 'translateY(0px)' : 'translateY(30px)',
-    width: '100vw', // Occupy full width of the viewport
-    boxSizing: 'border-box' // Ensure padding is included in width and height calculations
+    width: '100vw', // Full width of the viewport
+    boxSizing: 'border-box' // Include padding in width/height calculations
   }}
 >
   {/* Image area */}
-  <img 
-    src={carouselImages[carouselIndex].src} 
-    alt="Carousel" 
+  <div 
     style={{
-      width: isMobile ? '100%' : '60%', // Full width on mobile, 60% on desktop
-      height: '100%', // Maintain full height to match the content
-      objectFit: 'cover', // Ensure image covers the space without distortion
-      marginRight: isMobile ? '0' : '5px', // No margin on mobile, small margin on desktop
-    }} 
-  />
+      flex: isMobile ? '0 0 50%' : '0 0 50%', // 50% of the space for image on both mobile and desktop
+      height: '100%', // Full height for the image container
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <img 
+      src={carouselImages[carouselIndex].src} 
+      alt="Carousel" 
+      style={{
+        width: '100%', // Ensure image takes the full width of its container
+        height: '100%', // Ensure image takes the full height of its container
+        objectFit: 'cover', // Make sure the image covers the container while maintaining aspect ratio
+      }} 
+    />
+  </div>
   
   {/* Text area */}
   <div 
     style={{
-      flex: 1, // Allow the text area to take the remaining space
+      flex: '1', // Allow the text area to take the remaining space
       display: 'flex', 
       flexDirection: 'column',
       justifyContent: 'center',
@@ -1338,7 +1385,8 @@ const MainScreen = () => {
       height: '100%', // Full height for the text content
       padding: '20px',
       width: '90%', // Ensure it stays within 90% width for all screen sizes
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      overflowY: 'auto', // Allows the text content to scroll if it overflows
     }}
   >
     {/* Heading */}
@@ -1356,12 +1404,11 @@ const MainScreen = () => {
       style={{
         fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', // Responsive paragraph size
         lineHeight: 1.6, // Improves readability
-        width: '90%', // Ensure paragraph content stays within 90% of the container
-        height: 'auto',
-        margin: 'auto'
+        width: '100%', // Ensure paragraph content stays within 100% of the container
       }}
     >
-      This section provides insights into the vision of the teens' church activities. Join us every week to experience spiritual growth, community, and engagement.
+      This section provides insights into the vision of the Loveworld Foundation School, 
+      teens ministry and children church activities. Join us every week to experience spiritual growth, fellowship, and real worship.
     </p>
   </div>
 </div>
@@ -1413,12 +1460,41 @@ const MainScreen = () => {
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <a href="#contact" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
-          <a href="#live" style={{ color: 'white', textDecoration: 'none' }}>Live Video</a>
+          <a href="#live" style={{ color: 'white', textDecoration: 'none' }}
+            onClick={() => {navigation("/LiveStream");}}
+                      
+                      >Live Video</a>
+
           <a href="#give" style={{ color: 'white', textDecoration: 'none' }}>Give</a>
           <a href="#partnership" style={{ color: 'white', textDecoration: 'none' }}>Partnership</a>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a>
+          {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
+          <div 
+                  onMouseEnter={() => setShowMinistries(true)} 
+                  onMouseLeave={() => setShowMinistries(false)} 
+                  style={{ position: 'relative', cursor: 'pointer' }}
+                >
+                  <a href="#" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
+                  {showMinistries && (
+                    <div style={{ position: 'absolute',  width: '180px', top: '20px', left: 0, backgroundColor: 'rgba(0, 0, 0, 0.9)', color: 'white', padding: '5px', zIndex: 2 }}>
+                      <a href="#" style={{ display: 'block', marginBottom: '10px' ,
+                        
+                      }}
+                      
+                      onClick={() => {navigation("/foundationSchool");}}
+                      
+                      >Foundation School</a>
+
+                      <a href="#" style={{ display: 'block', marginBottom: '10px' }}
+                       onClick={() => {navigation("/teens");}}
+                       >Teens Ministry</a>
+                      <a href="#" style={{ display: 'block' }}
+                      onClick={() => {navigation("/children");}}
+                      >Children Ministry</a>
+                    </div>
+                  )}
+                </div>
           <a href="#testimonies" style={{ color: 'white', textDecoration: 'none' }}>Testimonies</a>
           <a href="#services" style={{ color: 'white', textDecoration: 'none' }}>Services</a>
           <a href="#about" style={{ color: 'white', textDecoration: 'none' }}>About</a>
