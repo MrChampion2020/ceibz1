@@ -9,7 +9,7 @@ export { default as ChatRoom } from './mainstack/ChatRoom';
 
 
 // Exporting regitser components
-export { default as BasicInfo } from './register/BasicInfo';
+export { default as Contact} from './register/Contact';
 export { default as BirthScreen } from './register/BirthScreen';
 export { default as DatingType } from './register/DatingType';
 export { default as TeenScreen } from './register/TeenScreen';

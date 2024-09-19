@@ -72,6 +72,7 @@ const FoundationSchoolScreen = () => {
           alignItems: "center",
           padding: 20,
           zIndex: 1,
+          height: '30%',
           borderBottom: "0.2px solid white",
           backgroundImage: `url(${bannerImage})`,
           backgroundSize: "cover",
@@ -171,6 +172,7 @@ const FoundationSchoolScreen = () => {
             </a>
           </nav>
         )}
+        
       </header>
 
       {/* Mobile Menu */}

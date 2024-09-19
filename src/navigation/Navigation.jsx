@@ -9,7 +9,7 @@ import {
   LikesScreen,
   ProfileScreen,
   SendLikeScreen,
-  BasicInfo,
+  Contact,
   BirthScreen,
   DatingType,
   TeenScreen,
@@ -35,7 +35,7 @@ const Navigation = () => {
       <Routes>
         <Route path="/" element={<LoginRoute />}>
           <Route path="" element={<MainScreen />} />
-          <Route path="basic" element={<BasicInfo />} />
+          <Route path="contact" element={<Contact />} />
           <Route path="birth" element={<BirthScreen />} />
           <Route path="dating" element={<DatingType />} />
           <Route path="teens" element={<TeenScreen />} />
