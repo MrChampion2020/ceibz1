@@ -241,7 +241,7 @@ const FoundationSchoolScreen = () => {
                   style={{ position: "relative", cursor: "pointer" }}
                 >
                   <a
-                    href="#ministries"
+                    href=""
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     MINISTRIES
@@ -260,7 +260,7 @@ const FoundationSchoolScreen = () => {
                       }}
                     >
                       <a
-                        href="#foundation"
+                        href=""
                         style={{ display: "block", marginBottom: "10px" }}
                         onClick={() => {
                           navigation("/foundationSchool");
@@ -562,7 +562,7 @@ const FoundationSchoolScreen = () => {
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           backgroundSize: "cover",
-          padding: "30px",
+          padding: "30px 15px",
           width: "100%",
           height: "100%",
           color: "white",
@@ -716,7 +716,17 @@ const FoundationSchoolScreen = () => {
 
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
@@ -725,7 +735,17 @@ const FoundationSchoolScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+            }}
             onClick={() => {
               navigation("/");
             }}
@@ -734,7 +754,17 @@ const FoundationSchoolScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/Contact");
             }}
@@ -743,7 +773,17 @@ const FoundationSchoolScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
@@ -777,7 +817,7 @@ const FoundationSchoolScreen = () => {
         }}
       >
          
-          <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "30px", margin: isMobile ? "auto" : "0%"}}>
         <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
         <img
               src={kingschat}
@@ -799,21 +839,21 @@ const FoundationSchoolScreen = () => {
     <FaTwitter size={24} /> 
   </a>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+        <div style={{ display: "flex", flexDirection: "row", padding: '5px', gap: "10px", margin: isMobile ? "auto" : "auto"}}>
           {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
          
             <p>&copy; {new Date().getFullYear()} 
               
             <a
             href=""
-            style={{ textDecoration: "none", padding: '6px'}}
+            style={{ textDecoration: "none", padding: '6px', fontSize: '14px'}}
             onClick={() => {
               navigation("/");
             }}
           >
             Christ Embassy Ibadan Zone 1
           </a>
-                |  All Rights Reserved. </p>
+    </p>
 
         </div>
       </footer>

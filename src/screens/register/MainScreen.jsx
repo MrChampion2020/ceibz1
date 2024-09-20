@@ -236,7 +236,16 @@ import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube, FaInstagram, FaTwitter} from 'react-icons/fa';
+import {
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaGlobe,
+  FaFacebook,
+  FaYoutube,
+  FaInstagram,
+  FaTwitter,
+} from "react-icons/fa";
 import logo from "./logo.png";
 import pastorVideo from "../../assets/pastor.mp4";
 import transparentImage from "../../assets/christembassy.jpg";
@@ -463,10 +472,17 @@ const MainScreen = () => {
                 >
                   TESTIMONIES
                 </a>
-                <a href="#" style={{ textDecoration: "none", color: "white" }}>
+                <a href="#" style={{ textDecoration: "none", color: "white" }}
+                onClick={() => {
+                  navigation("/Programs");
+                }}
+                >
                   PROGRAMS
                 </a>
-                <a href="#" style={{ textDecoration: "none", color: "white" }}>
+                <a href="#" style={{ textDecoration: "none", color: "white" }}
+                onClick={() => {
+                navigation("/give");
+              }}>
                   GIVE
                 </a>
               </nav>
@@ -475,7 +491,10 @@ const MainScreen = () => {
 
           {/* Overlay Text and Action Button */}
           <div style={{ textAlign: "center", color: "white", zIndex: 1 }}>
-            <h1 style={{ fontSize: "30px", marginBottom: "20px" }}>
+            <h1 style={{ fontSize: "30px", marginBottom: "20px" }}
+            onClick={() => {
+              navigation("/LiveStream");
+            }}>
               Join Live Service
             </h1>
             <button
@@ -521,7 +540,7 @@ const MainScreen = () => {
                 }}
                 onClick={toggleMenu}
               >
-                Live
+                LIVE
               </a>
               {/* <a href="#ministries" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Ministries</a>
                */}
@@ -569,7 +588,10 @@ const MainScreen = () => {
                     >
                       Teens Ministry
                     </a>
-                    <a href="#children" style={{ display: "block" }}>
+                    <a href="#children" style={{ display: "block" }}
+                     onClick={() => {
+                      navigation("/children");
+                    }}>
                       Children Ministry
                     </a>
                   </div>
@@ -584,7 +606,7 @@ const MainScreen = () => {
                 }}
                 onClick={toggleMenu}
               >
-                Testimonies
+                TESTIMONIES
               </a>
               <a
                 href="#programs"
@@ -593,9 +615,11 @@ const MainScreen = () => {
                   color: "white",
                   padding: "10px 0",
                 }}
-                onClick={toggleMenu}
+                onClick={() => {
+                  navigation("/Programs");
+                }}
               >
-                Programs
+                PROGRAMS
               </a>
               <a
                 href="#give"
@@ -604,9 +628,11 @@ const MainScreen = () => {
                   color: "white",
                   padding: "10px 0",
                 }}
-                onClick={toggleMenu}
+                onClick={() => {
+                  navigation("/give");
+                }}
               >
-                Give
+                GIVE
               </a>
             </nav>
           )}
@@ -1015,8 +1041,8 @@ const MainScreen = () => {
             {/* Heading */}
             <h2
               style={{
-                fontSize: "24px", // Responsive heading size
-                padding: '10px',
+                fontSize: "20px", // Responsive heading size
+                padding: "10px",
                 width: "100%",
               }}
             >
@@ -1027,7 +1053,7 @@ const MainScreen = () => {
             <p
               style={{
                 fontSize: "14px", // Responsive paragraph size
-                padding: '5px', // Improves readability
+                padding: "5px", // Improves readability
                 width: "100%", // Ensure paragraph content stays within 100% of the container
                 height: "100%",
               }}
@@ -1041,21 +1067,19 @@ const MainScreen = () => {
         </div>
       </div>
 
-
-
       {/* Section 6: Useful Links */}
       <div
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           backgroundSize: "cover",
-          padding: "30px",
+          padding: "40px 15px",
           width: "100%",
           height: "100%",
           color: "white",
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           margin: "auto",
-          gap: '20px',
+          gap: "20px",
           transition: "transform 0.6s ease-in-out",
           transform: activeSection === 6 ? "translateY(0)" : "translateY(5px)",
         }}
@@ -1136,7 +1160,6 @@ const MainScreen = () => {
             Partnership
           </a>
 
-
           <a
             href=""
             style={{ textDecoration: "none" }}
@@ -1147,7 +1170,6 @@ const MainScreen = () => {
             Testify
           </a>
 
-          
           <a
             href=""
             style={{ textDecoration: "none" }}
@@ -1157,7 +1179,10 @@ const MainScreen = () => {
           >
             Programs
           </a>
-          <a href="https://rhapsodyofrealities.org/" style={{ textDecoration: "none" }}>
+          <a
+            href="https://rhapsodyofrealities.org/"
+            style={{ textDecoration: "none" }}
+          >
             Rhapsody
           </a>
           <a
@@ -1201,44 +1226,92 @@ const MainScreen = () => {
           </h1>
 
           <a
+  style={{
+    width: '100%', 
+    textDecoration: "none", 
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center',  // Ensures the icon and text are aligned vertically
+    gap: '10px',           // Adds spacing between the icon and the text
+    color: 'inherit',      // Ensures link color stays consistent
+    fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+    lineHeight: '1.5',     // Adds some height consistency between text and icon
+  }}
+>
+  <FaMapMarkerAlt style={{ fontSize: '18px' }} /> 
+  CVHQ+R4, Ibadan 200285, Oyo
+</a>
+
+          <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+            }}
             onClick={() => {
               navigation("/");
             }}
           >
-           <FaMapMarkerAlt /> CVHQ+R4, Ibadan 200285, Oyo
+            <FaPhoneAlt /> +234 0000 0000 00000
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
-            onClick={() => {
-              navigation("/");
-            }}
-          >
-           <FaPhoneAlt />  +234 0000 0000 00000
-          </a>
-          <a
-            href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/Contact");
             }}
           >
-           <FaEnvelope /> info@ceibz1.com
+            <FaEnvelope /> info@ceibz1.com
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
           >
-          <FaGlobe />  www.ceibz1.com
+            <FaGlobe /> www.ceibz1.com
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/Contact");
             }}
@@ -1258,49 +1331,74 @@ const MainScreen = () => {
           backgroundColor: "black",
           color: "white",
           height: "70%",
-          width: '100%',
-          gap: '20%'
+          width: "100%",
+          gap: "20%",
         }}
       >
-         
-          <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
-        <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
-        <img
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "40px",
+            padding: '5px',
+            margin: isMobile ? "auto" : "auto 0%",
+
+          }}
+        >
+          <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
+            <img
               src={kingschat}
               alt="Church Logo"
               style={{ width: "24px", height: "auto" }}
               onClick={() => navigation("/")}
             />
-  </a>
-  <a href="https://www.facebook.com/ceibz1" style={{ textDecoration: "none" }}>
-    <FaFacebook size={24} /> 
-  </a>
-  <a href="https://www.youtube.com/@ChristEmbassyibz1" style={{ textDecoration: "none" }}>
-    <FaYoutube size={24} /> 
-  </a>
-  <a href="https://instagram.com" style={{ textDecoration: "none" }}>
-    <FaInstagram size={24} /> 
-  </a>
-  <a href="https://twitter.com" style={{ textDecoration: "none" }}>
-    <FaTwitter size={24} /> 
-  </a>
-        </div>
-        <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
-          {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
-         
-            <p>&copy; {new Date().getFullYear()} 
-              
-            <a
-            href=""
-            style={{ textDecoration: "none", padding: '6px', fontSize: isMobile ? "14px" : "14px"}}
-            onClick={() => {
-              navigation("/");
-            }}
-          >
-            Christ Embassy Ibadan Zone 1
           </a>
-                |  All Rights Reserved. </p>
+          <a
+            href="https://www.facebook.com/ceibz1"
+            style={{ textDecoration: "none" }}
+          >
+            <FaFacebook size={24} />
+          </a>
+          <a
+            href="https://www.youtube.com/@ChristEmbassyibz1"
+            style={{ textDecoration: "none" }}
+          >
+            <FaYoutube size={24} />
+          </a>
+          <a href="https://instagram.com" style={{ textDecoration: "none" }}>
+            <FaInstagram size={24} />
+          </a>
+          <a href="https://twitter.com" style={{ textDecoration: "none" }}>
+            <FaTwitter size={24} />
+          </a>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
+            margin: isMobile ? "auto" : "auto",
+            padding: '5px'
+          }}
+        >
+          {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
 
+          <p>
+            &copy; {new Date().getFullYear()}
+            <a
+              href=""
+              style={{
+                textDecoration: "none",
+                padding: "6px",
+                fontSize: "14px",
+              }}
+              onClick={() => {
+                navigation("/");
+              }}
+            >
+              Christ Embassy Ibadan Zone 1
+            </a>
+          </p>
         </div>
       </footer>
     </div>

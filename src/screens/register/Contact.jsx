@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTimes, faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube, FaInstagram, FaTwitter} from 'react-icons/fa';
 import logo from "./logo.png";
 import kingschat from "../../assets/kingschat.png";
@@ -14,10 +14,24 @@ const ContactScreen = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const navigation = useNavigate();
   const [activeSection, setActiveSection] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        setSelectedFile(file.name);
+      }
+    };
+  
+    const handleIconClick = () => {
+      document.getElementById('fileInput').click();
+    };
+  
 
   return (
     <div
@@ -103,18 +117,20 @@ const ContactScreen = () => {
           }}
         >
           <a
-            href="#home"
+            href=""
             style={{
               textDecoration: "none",
               color: "white",
               padding: "10px 0",
             }}
-            onClick={toggleMenu}
+            onClick={() => {
+              navigation("/");
+            }}
           >
             HOME
           </a>
           <a
-            href="#about"
+            href=""
             style={{
               textDecoration: "none",
               color: "white",
@@ -127,14 +143,14 @@ const ContactScreen = () => {
             LIVE
           </a>
           <a
-            href="#contact"
+            href=""
             style={{
               textDecoration: "none",
               color: "white",
               padding: "10px 0",
             }}
             onClick={() => {
-              navigation("/LiveStream");
+              navigation("/give");
             }}
           >
             GIVE
@@ -149,7 +165,7 @@ const ContactScreen = () => {
         >
           Contact Us
         </h2>
-        <form
+         <form
           style={{
             display: "flex",
             flexDirection: "column",
@@ -208,25 +224,44 @@ const ContactScreen = () => {
               border: "1px solid #ccc",
             }}
           />
-          <textarea
-            placeholder="Message"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-              height: "100px",
-            }}
-          ></textarea>
-          <input
-            type="file"
-            accept="image/*, .pdf"
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
+          <div style={{ padding: '10px', border: '1px solid #ccc', width: '100%', maxWidth: '600px' }}>
+      {/* Textarea for message input */}
+      <textarea
+        placeholder="Type your message..."
+        style={{
+          width: '100%',
+          height: '100px',
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '5px',
+        }}
+      ></textarea>
+
+      {/* Attachment Section */}
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', gap: '10px' }}>
+        {/* Paperclip Icon */}
+        <FontAwesomeIcon
+          icon={faPaperclip}
+          style={{ fontSize: '18px', cursor: 'pointer' }}
+          onClick={handleIconClick}
+        />
+
+        {/* Hidden File Input */}
+        <input
+          type="file"
+          id="fileInput"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+
+        {/* Placeholder for selected file name */}
+        {selectedFile ? (
+          <span style={{ fontSize: '14px', color: '#555' }}>{selectedFile}</span>
+        ) : (
+          <span style={{ fontSize: '14px', color: '#888' }}>Add file</span>
+        )}
+      </div>
+    </div>
           <button
             type="submit"
             style={{
@@ -240,7 +275,7 @@ const ContactScreen = () => {
           >
             Submit
           </button>
-        </form>
+        </form> 
       </div>
 
       
@@ -332,7 +367,7 @@ const ContactScreen = () => {
             href=""
             style={{ textDecoration: "none" }}
             onClick={() => {
-              navigation("/LiveStream");
+              navigation("/give");
             }}
           >
             Partnership
@@ -404,7 +439,17 @@ const ContactScreen = () => {
 
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
@@ -413,7 +458,15 @@ const ContactScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5', }}
             onClick={() => {
               navigation("/");
             }}
@@ -422,7 +475,15 @@ const ContactScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5', }}
             onClick={() => {
               navigation("/Contact");
             }}
@@ -431,7 +492,17 @@ const ContactScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none", display: 'flex', flexDirection: 'row' }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
@@ -440,7 +511,16 @@ const ContactScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5', }}
             onClick={() => {
               navigation("/Contact");
             }}
@@ -465,7 +545,7 @@ const ContactScreen = () => {
         }}
       >
          
-          <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "30px", margin: isMobile ? "auto" : "auto"}}>
         <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
         <img
               src={kingschat}
@@ -487,7 +567,7 @@ const ContactScreen = () => {
     <FaTwitter size={24} /> 
   </a>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+        <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "auto"}}>
           {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
          
             <p>&copy; {new Date().getFullYear()} 
@@ -500,8 +580,7 @@ const ContactScreen = () => {
             }}
           >
             Christ Embassy Ibadan Zone 1
-          </a>
-                |  All Rights Reserved. </p>
+          </a> </p>
 
         </div>
       </footer>

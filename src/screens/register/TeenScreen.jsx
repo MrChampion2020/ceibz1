@@ -8,9 +8,12 @@ import kingschat from "../../assets/kingschat.png";
 import { useNavigate } from "react-router-dom";
 import video1 from '../../assets/pastor.mp4';
 import video2 from '../../assets/pastor.mp4';
-import image1 from '../../assets/church.jpg';
-import image2 from '../../assets/chuch.jpg';
-import image3 from '../../assets/church.jpg';
+import image1 from '../../assets/post_teens2.jpg';
+import image2 from '../../assets/teen.jpg';
+import image3 from '../../assets/youth.png';
+import backgroundImage  from '../../assets/teen.jpg';
+import bannerImage from "../../assets/teen.jpg";
+
 
 const TeenScreen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,15 +21,18 @@ const TeenScreen = () => {
   const [flippedIndex, setFlippedIndex] = useState(null); // To track which image is flipped
   const [currentDay, setCurrentDay] = useState(''); // For schedule buttons
   const [activeSection, setActiveSection] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedClass, setSelectedClass] = useState(""); // Declare selectedClass state
+  const [showMinistries, setShowMinistries] = useState(false);
   
   const schedule = {
-    Monday: "Bible Study at 6 PM",
-    Tuesday: "Youth Fellowship at 5 PM",
-    Wednesday: "Service Rehearsal at 7 PM",
-    Thursday: "Outreach at 6 PM",
-    Friday: "Game Night at 8 PM",
-    Saturday: "Sports Event at 9 AM",
-    Sunday: "Youth Service at 10 AM"
+    Monday: "--:--",
+    Tuesday: "--:--",
+    Wednesday: "6:00 PM",
+    Thursday: "--:--",
+    Friday: "6:00 PM",
+    Saturday: "--:--",
+    Sunday: "10:30 AM"
   };
 
   const toggleMenu = () => {
@@ -39,34 +45,313 @@ const TeenScreen = () => {
 
   const navigation = useNavigate();
 
-  return (
-    <div style={{ width: '100%', height: '100%' }}>
+  return (    
+      <div style={{ width: "100%", height: "100%", margin: 'auto', overflow: 'hidden' }}>
       {/* Header Section */}
-      <header style={{
-        display: 'flex',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        justifyContent: 'space-between',
-        width: '100%',
-        alignItems: 'center',
-        padding: 20,
-        zIndex: 1,
-        borderBottom: '0.2px solid white'
-      }}>
-        <img src={logo} alt="Church Logo" style={{ width: '60px', height: 'auto' }} />
+      <header
+        style={{
+          position: 'fixed',  // This makes the header static
+          top: 0,             // Aligns the header at the top of the page
+          left: 0,
+          display: "flex",
+          backgroundColor: "rgba(0, 0, 0, 9)",
+          justifyContent: "space-between",
+          width: "100%",
+          alignItems: "center",
+        
+          zIndex: 1,
+          height: '10%',
+          borderBottom: "0.2px solid white",
+          // backgroundImage: `url(${bannerImage})`,
+          backgroundSize: "cover",
+        }}
+
+      >
+        <img
+          src={logo}
+          alt="Church Logo"
+          style={{ width: "60px", height: "auto" }}
+          onClick={() => {
+            navigation("/");
+          }}
+        />
         {isMobile ? (
-          <div style={{ color: 'white', fontSize: '20px', cursor: 'pointer' }} onClick={toggleMenu}>
+          <div
+            style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
+            onClick={toggleMenu}
+          >
             <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
           </div>
         ) : (
-          <nav style={{ display: 'flex', gap: '70px', color: 'white', marginRight: '5%', fontWeight: 600 }}>
-            <a href="#live" style={{ textDecoration: 'none', color: 'white' }}>LIVE</a>
-            <a href="#ministries" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
-            <a href="#testimonies" style={{ textDecoration: 'none', color: 'white' }}>TESTIMONIES</a>
-            <a href="#programs" style={{ textDecoration: 'none', color: 'white' }}>PROGRAMS</a>
-            <a href="#give" style={{ textDecoration: 'none', color: 'white'}}>GIVE</a>
+          <nav
+            style={{
+              display: "flex",
+              gap: "70px",
+              color: "white",
+              marginRight: "5%",
+              fontWeight: 600,
+            }}
+          >
+            <a
+              href="#live"
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => navigation("/")}
+            >
+              HOME
+            </a>
+            <div
+              onMouseEnter={() => setShowMinistries(true)}
+              onMouseLeave={() => setShowMinistries(false)}
+              style={{ position: "relative", cursor: "pointer" }}
+            >
+              <a
+                href="#ministries"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                MINISTRIES
+              </a>
+              {showMinistries && (
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "180px",
+                    top: "20px",
+                    left: 0,
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    color: "white",
+                    padding: "5px",
+                    zIndex: 2,
+                  }}
+                >
+                  <a
+                    href="#foundation"
+                    style={{ display: "block", marginBottom: "10px" }}
+                    onClick={() => navigation("/foundationSchool")}
+                  >
+                    Foundation School
+                  </a>
+                  <a
+                    href="#youth"
+                    style={{ display: "block", marginBottom: "10px" }}
+                    onClick={() => navigation("/teens")}
+                  >
+                    Teens Ministry
+                  </a>
+                  <a
+                    href="#children"
+                    style={{ display: "block" }}
+                    onClick={() => navigation("/children")}
+                  >
+                    Children Ministry
+                  </a>
+                </div>
+              )}
+            </div>
+            <a
+              href="#testimonies"
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => {
+                navigation("/Contact");
+              }}>
+              CONTACT
+            </a>
+            <a
+              href="#programs"
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => {
+                navigation("/Programs");
+              }}
+            >
+              PROGRAMS
+            </a>
+            <a href="#give" style={{ textDecoration: "none", color: "white" }}
+            onClick={() => {
+              navigation("/give");
+            }}
+            >
+              GIVE
+            </a>
           </nav>
         )}
+        
       </header>
+
+      {/* Mobile Menu */}
+      {menuOpen && isMobile && (
+        <nav
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "100%",
+            backgroundColor: "rgba(001, 005, 050, 9)",
+            display: "flex",
+            flexDirection: "column",
+            padding: "20px",
+            zIndex: 1,
+            }}
+        >
+          <a
+            href=""
+            style={{
+              textDecoration: "none",
+              color: "white",
+              padding: "10px 0",
+            }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            HOME
+          </a>
+          <a
+            href=""
+            style={{
+              textDecoration: "none",
+              color: "white",
+              padding: "10px 0",
+            }}
+            onClick={() => {
+              navigation("/LiveStream");
+            }}
+          >
+            LIVE
+          </a>
+
+          <div
+                  onMouseEnter={() => setShowMinistries(true)}
+                  onMouseLeave={() => setShowMinistries(false)}
+                  style={{ position: "relative", cursor: "pointer" }}
+                >
+                  <a
+                    href=""
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    MINISTRIES
+                  </a>
+                  {showMinistries && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        width: "180px",
+                        top: "20px",
+                        left: 0,
+                        backgroundColor: "rgba(0, 0, 0, 0.9)",
+                        color: "white",
+                        padding: "5px",
+                        zIndex: 2,
+                      }}
+                    >
+                      <a
+                        href=""
+                        style={{ display: "block", marginBottom: "10px" }}
+                        onClick={() => {
+                          navigation("/foundationSchool");
+                        }}
+                      >
+                        Foundation School
+                      </a>
+
+                      <a
+                        href=""
+                        style={{ display: "block", marginBottom: "10px" }}
+                        onClick={() => {
+                          navigation("/teens");
+                        }}
+                      >
+                        Teens Ministry
+                      </a>
+                      <a
+                        href=""
+                        style={{ display: "block" }}
+                        onClick={() => {
+                          navigation("/children");
+                        }}
+                      >
+                        Children Ministry
+                      </a>
+                    </div>
+                  )}
+                </div>
+          <a
+            href=""
+            style={{
+              textDecoration: "none",
+              color: "white",
+              padding: "10px 0",
+            }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+            CONTACT US
+          </a>
+          <a
+            href=""
+            style={{
+              textDecoration: "none",
+              color: "white",
+              padding: "10px 0",
+            }}
+            onClick={() => {
+              navigation("/Programs");
+            }}
+          >
+            PROGRAMS
+          </a>
+          <a
+            href=""
+            style={{
+              textDecoration: "none",
+              color: "white",
+              padding: "10px 0",
+            }}
+            onClick={() => {
+              navigation("/give");
+            }}
+          >
+            GIVE
+          </a>
+        </nav>
+      )}
+
+
+
+      <div
+      style={{
+        position: 'relative',  // Keep the content on top of the background
+        width: '100%',
+        height: '40%',  // Set height to fit your design
+        backgroundImage: `url(${backgroundImage})`,  // Replace with your background image URL
+        backgroundSize: 'cover',  // Cover the entire div
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        textAlign: 'center',
+        zIndex: -1,
+        marginTop: isMobile ? '15%' : '5%'
+       
+      }}
+    >
+      <h1
+        style={{
+          fontSize: '30px',
+          fontWeight: 'bold',
+          zIndex: 1,  // Keep text above the background
+          margin: 0,
+           // Transparent overlay effect
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        width: '100%',
+        height: '100%',
+        padding: 10
+        }}
+      >
+        Welcome to <br /> Loveworld Teens Ministry <br /> Ibadan Zone 1
+      </h1>
+    </div>
 
       {/* Section 1: Image Flip Cards */}
       <section style={{
@@ -81,7 +366,7 @@ const TeenScreen = () => {
           <div 
             key={index}
             style={{
-              width: '300px',
+              width: isMobile ? '100%' : '400px',
               height: '300px',
               position: 'relative',
               perspective: '1000px',
@@ -118,7 +403,19 @@ const TeenScreen = () => {
                 alignItems: 'center',
                 transform: 'rotateY(180deg)'
               }}>
-                <p>This is text for image {index + 1}</p>
+                <p style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  backfaceVisibility: 'hidden',
+                  backgroundColor: 'rgba(0, 0, 0, 9)',
+                  color: 'white',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  transform: 'rotateY(180deg)'
+                }}
+                > We are thrilled to have you here {index + 1}</p>
               </div>
             </div>
           </div>
@@ -202,7 +499,7 @@ const TeenScreen = () => {
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           backgroundSize: "cover",
-          padding: "30px",
+          padding: "30px 10px",
           width: "100%",
           height: "100%",
           color: "white",
@@ -282,7 +579,17 @@ const TeenScreen = () => {
 
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+            }}
             onClick={() => {
               navigation("/LiveStream");
             }}
@@ -293,7 +600,17 @@ const TeenScreen = () => {
 
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/Contact");
             }}
@@ -304,7 +621,18 @@ const TeenScreen = () => {
           
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
+
             onClick={() => {
               navigation("/");
             }}
@@ -316,7 +644,18 @@ const TeenScreen = () => {
           </a>
           <a
             href="https://healingstreams.tv/"
-            style={{ textDecoration: "none" }}
+            style={{ 
+              
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+            }}
             onClick={() => {
               navigation("");
             }}
@@ -355,17 +694,36 @@ const TeenScreen = () => {
           </h1>
 
           <a
-            href=""
-            style={{ textDecoration: "none" }}
-            onClick={() => {
-              navigation("/");
-            }}
-          >
-           <FaMapMarkerAlt /> CVHQ+R4, Ibadan 200285, Oyo
-          </a>
+  style={{
+    width: '100%', 
+    textDecoration: "none", 
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center',  // Ensures the icon and text are aligned vertically
+    gap: '10px',           // Adds spacing between the icon and the text
+    color: 'inherit',      // Ensures link color stays consistent
+    fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+    lineHeight: '1.5',     // Adds some height consistency between text and icon
+  }}
+>
+  <FaMapMarkerAlt style={{ fontSize: '18px' }} /> 
+  CVHQ+R4, Ibadan 200285, Oyo
+</a>
+
+
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
@@ -374,7 +732,15 @@ const TeenScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{  width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5', }}
             onClick={() => {
               navigation("/Contact");
             }}
@@ -383,7 +749,17 @@ const TeenScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+             }}
             onClick={() => {
               navigation("/");
             }}
@@ -392,7 +768,19 @@ const TeenScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none" }}
+            style={{ 
+              
+              width: '100%', 
+              textDecoration: "none", 
+              display: 'flex', 
+              flexDirection: 'row', 
+              alignItems: 'center',  // Ensures the icon and text are aligned vertically
+              gap: '10px',           // Adds spacing between the icon and the text
+              color: 'inherit',      // Ensures link color stays consistent
+              fontSize: '16px',      // Adjust the font size to ensure consistent icon size
+              lineHeight: '1.5',
+            }}
+            
             onClick={() => {
               navigation("/Contact");
             }}
@@ -412,12 +800,12 @@ const TeenScreen = () => {
           backgroundColor: "black",
           color: "white",
           height: "70%",
-          width: '100%',
+          width: '100vw',
           gap: '20%'
         }}
       >
          
-          <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "40px", margin: isMobile ? "auto" : "auto 0%"}}>
         <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
         <img
               src={kingschat}
@@ -439,7 +827,7 @@ const TeenScreen = () => {
     <FaTwitter size={24} /> 
   </a>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+        <div style={{ display: "flex", flexDirection: "row", padding: '5px', gap: "10px", margin: isMobile ? "auto" : "auto"}}>
           {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
          
             <p>&copy; {new Date().getFullYear()} 
@@ -453,7 +841,7 @@ const TeenScreen = () => {
           >
             Christ Embassy Ibadan Zone 1
           </a>
-                |  All Rights Reserved. </p>
+            </p>
 
         </div>
       </footer>
