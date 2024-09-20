@@ -694,7 +694,7 @@ const MainScreen = () => {
             justifyContent: "center",
             alignItems: "center",
             overflow: "hidden",
-            padding: "20px",
+            padding: "10px",
           }}
         >
           {/* Scrollable Text Container */}
@@ -703,7 +703,7 @@ const MainScreen = () => {
               position: "relative",
               zIndex: 2, // Ensures the text stays above the background
               color: "white",
-              width: "95%", // Text container takes 90% width
+              width: "100%", // Text container takes 90% width
               height: "100%", // Text container takes 90% height
               overflowY: "scroll", // Enables scrolling inside the text container
               backgroundColor: "rgba(0, 0, 0, 0.2)", // Slight dark overlay for readability
@@ -1006,8 +1006,8 @@ const MainScreen = () => {
               alignItems: "center",
               textAlign: "center",
               height: "100%", // Full height for the text content
-              padding: "20px",
-              width: "90%", // Ensure it stays within 90% width for all screen sizes
+              padding: "10px",
+              width: "100%", // Ensure it stays within 90% width for all screen sizes
               boxSizing: "border-box",
               overflowY: "auto", // Allows the text content to scroll if it overflows
             }}
@@ -1015,8 +1015,8 @@ const MainScreen = () => {
             {/* Heading */}
             <h2
               style={{
-                fontSize: "clamp(1.5rem, 2vw, 2.5rem)", // Responsive heading size
-                marginBottom: "10px",
+                fontSize: "24px", // Responsive heading size
+                padding: '10px',
                 width: "100%",
               }}
             >
@@ -1026,8 +1026,8 @@ const MainScreen = () => {
             {/* Paragraph */}
             <p
               style={{
-                fontSize: "clamp(1rem, 1.5vw, 1.2rem)", // Responsive paragraph size
-                lineHeight: 1.6, // Improves readability
+                fontSize: "14px", // Responsive paragraph size
+                padding: '5px', // Improves readability
                 width: "100%", // Ensure paragraph content stays within 100% of the container
                 height: "100%",
               }}
@@ -1292,7 +1292,7 @@ const MainScreen = () => {
               
             <a
             href=""
-            style={{ textDecoration: "none", padding: '6px'}}
+            style={{ textDecoration: "none", padding: '6px', fontSize: isMobile ? "14px" : "14px"}}
             onClick={() => {
               navigation("/");
             }}
