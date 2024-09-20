@@ -1,250 +1,203 @@
-import React, { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube, FaInstagram, FaTwitter} from 'react-icons/fa';
-import logo from "./logo.png";
-import kingschat from "../../assets/kingschat.png";
-import bannerImage from "../../assets/pjoe.jpg";
-import { useNavigate } from "react-router-dom";
 
-const ContactScreen = () => {
+import React, { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube, FaInstagram, FaTwitter} from 'react-icons/fa';
+import logo from './logo.png';
+import kingschat from "../../assets/kingschat.png";
+import { useNavigate } from "react-router-dom";
+import video1 from '../../assets/pastor.mp4';
+import video2 from '../../assets/pastor.mp4';
+import image1 from '../../assets/church.jpg';
+import image2 from '../../assets/chuch.jpg';
+import image3 from '../../assets/church.jpg';
+
+const GiveScreen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showMinistries, setShowMinistries] = useState(false); // Added state for ministries dropdown
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const navigation = useNavigate();
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const [flippedIndex, setFlippedIndex] = useState(null); // To track which image is flipped
+  const [currentDay, setCurrentDay] = useState(''); // For schedule buttons
   const [activeSection, setActiveSection] = useState(null);
+  
+  const schedule = {
+    Monday: "Bible Study at 6 PM",
+    Tuesday: "Youth Fellowship at 5 PM",
+    Wednesday: "Service Rehearsal at 7 PM",
+    Thursday: "Outreach at 6 PM",
+    Friday: "Game Night at 8 PM",
+    Saturday: "Sports Event at 9 AM",
+    Sunday: "Youth Service at 10 AM"
+  };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const handleFlip = (index) => {
+    setFlippedIndex(index === flippedIndex ? null : index); // Toggle flip state
+  };
+
+  const navigation = useNavigate();
+
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        margin: "auto",
-        overflow: "hidden",
-      }}
-    >
+    <div style={{ width: '100%', height: '100%' }}>
       {/* Header Section */}
-      <header
-        style={{
-          display: "flex",
-          backgroundColor: "rgba(0, 0, 0, 0.4)",
-          justifyContent: "space-between",
-          width: "100%",
-          alignItems: "center",
-          padding: 20,
-          zIndex: 1,
-          borderBottom: "0.2px solid white",
-          backgroundImage: `url(${bannerImage})`,
-          backgroundSize: "cover",
-        }}
-      >
-        <img src={logo} alt="Logo" style={{ width: "60px", height: "auto" }} />
+      <header style={{
+        display: 'flex',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        justifyContent: 'space-between',
+        width: '100%',
+        alignItems: 'center',
+        padding: 20,
+        zIndex: 1,
+        borderBottom: '0.2px solid white'
+      }}>
+        <img src={logo} alt="Church Logo" style={{ width: '60px', height: 'auto' }} />
         {isMobile ? (
-          <div
-            style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
-            onClick={toggleMenu}
-          >
+          <div style={{ color: 'white', fontSize: '20px', cursor: 'pointer' }} onClick={toggleMenu}>
             <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
           </div>
         ) : (
-          <nav
-            style={{
-              display: "flex",
-              gap: "70px",
-              color: "white",
-              marginRight: "5%",
-              fontWeight: 600,
-            }}
-          >
-            <a
-              href="#home"
-              style={{ textDecoration: "none", color: "white" }}
-              onClick={() => navigation("/")}
-            >
-              HOME
-            </a>
-            <a href="#about" style={{ textDecoration: "none", color: "white" }}
-            onClick={() => {
-              navigation("/LiveStream");
-            }}>
-              LIVE
-            </a>
-            <a
-              href="#contact"
-              style={{ textDecoration: "none", color: "white" }}
-              onClick={() => {
-                navigation("/give");
-              }}
-            >
-              GIVE
-            </a>
+          <nav style={{ display: 'flex', gap: '70px', color: 'white', marginRight: '5%', fontWeight: 600 }}>
+            <a href="#live" style={{ textDecoration: 'none', color: 'white' }}>LIVE</a>
+            <a href="#ministries" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
+            <a href="#testimonies" style={{ textDecoration: 'none', color: 'white' }}>TESTIMONIES</a>
+            <a href="#programs" style={{ textDecoration: 'none', color: 'white' }}>PROGRAMS</a>
+            <a href="#give" style={{ textDecoration: 'none', color: 'white'}}>GIVE</a>
           </nav>
         )}
       </header>
 
-      {/* Mobile Menu */}
-      {menuOpen && isMobile && (
-        <nav
-          style={{
-            position: "absolute",
-            left: 0,
-            top: "100px",
-            width: "60%",
-            backgroundColor: "rgba(001, 005, 050, 0.9)",
-            display: "flex",
-            flexDirection: "column",
-            padding: "30px",
-            zIndex: 1,
-          }}
-        >
-          <a
-            href="#home"
+      {/* Section 1: Image Flip Cards */}
+      <section style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '50px',
+        gap: '20px'
+      }}>
+        {[image1, image2, image3].map((image, index) => (
+          <div 
+            key={index}
             style={{
-              textDecoration: "none",
-              color: "white",
-              padding: "10px 0",
+              width: '300px',
+              height: '300px',
+              position: 'relative',
+              perspective: '1000px',
+              cursor: 'pointer'
             }}
-            onClick={toggleMenu}
+            onClick={() => handleFlip(index)}
           >
-            HOME
-          </a>
-          <a
-            href="#about"
-            style={{
-              textDecoration: "none",
-              color: "white",
-              padding: "10px 0",
-            }}
-            onClick={() => {
-              navigation("/LiveStream");
-            }}
-          >
-            LIVE
-          </a>
-          <a
-            href="#contact"
-            style={{
-              textDecoration: "none",
-              color: "white",
-              padding: "10px 0",
-            }}
-            onClick={() => {
-              navigation("/LiveStream");
-            }}
-          >
-            GIVE
-          </a>
-        </nav>
-      )}
+            <div style={{
+              width: '100%',
+              height: '100%',
+              transition: 'transform 0.8s',
+              transformStyle: 'preserve-3d',
+              transform: flippedIndex === index ? 'rotateY(180deg)' : 'rotateY(0deg)'
+            }}>
+              {/* Front Side */}
+              <div style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                backfaceVisibility: 'hidden'
+              }}>
+                <img src={image} alt={`Image ${index + 1}`} style={{ width: '100%', height: '100%' }} />
+              </div>
+              {/* Back Side */}
+              <div style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                backfaceVisibility: 'hidden',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                color: 'white',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                transform: 'rotateY(180deg)'
+              }}>
+                <p>This is text for image {index + 1}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </section>
 
-      {/* Contact Form Section */}
-      <div style={{ padding: "20px", width: "100%", boxSizing: "border-box" }}>
-        <h2
-          style={{ fontSize: "24px", fontWeight: "700", marginBottom: "20px", textAlign: 'center', color: 'blue' }}
-        >
-          Contact Us
-        </h2>
-        <form
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            maxWidth: "600px",
-            margin: "auto",
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Name"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <input
-            type="tel"
-            placeholder="Phone"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Location"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Title"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <textarea
-            placeholder="Message"
-            required
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-              height: "100px",
-            }}
-          ></textarea>
-          <input
-            type="file"
-            accept="image/*, .pdf"
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              padding: "10px",
-              backgroundColor: "blue",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Submit
-          </button>
-        </form>
-      </div>
+      {/* Section 2: Videos */}
+      <section style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: 'center',
+        padding: '50px',
+        gap: '20px'
+      }}>
+        <div style={{ flex: 1 }}>
+          <video controls style={{ width: '100%' }}>
+            <source src={video1} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div style={{ flex: 1 }}>
+          <video controls style={{ width: '100%' }}>
+            <source src={video2} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
+
+      {/* Section 3: Schedule */}
+      <section style={{
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        padding: '50px',
+        textAlign: 'center',
+        width: '100%',
+      }}>
+        <h1 style={{ fontSize: '2rem', marginBottom: '30px' }}>Our Schedule</h1>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', marginBottom: '30px' }}>
+          {Object.keys(schedule).map((day) => (
+            <button key={day} onClick={() => setCurrentDay(day)} style={{
+              padding: '10px 20px',
+              backgroundColor: 'orange',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}>
+              {day}
+            </button>
+          ))}
+        </div>
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '10px',
+          padding: '20px'
+        }}>
+          {Object.keys(schedule).map((day, index) => (
+            <div key={index} style={{
+              width: '80px',
+              height: '60px',
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              color: 'black',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '5px',
+            }}>
+              {currentDay === day ? schedule[day] : '--:--'}
+            </div>
+          ))}
+        </div>
+      </section>
 
       
-        
+
+      
       {/* Section 6: Useful Links */}
       <div
         style={{
@@ -354,7 +307,7 @@ const ContactScreen = () => {
             href=""
             style={{ textDecoration: "none" }}
             onClick={() => {
-              navigation("/Programs");
+              navigation("/");
             }}
           >
             Programs
@@ -431,7 +384,7 @@ const ContactScreen = () => {
           </a>
           <a
             href=""
-            style={{ textDecoration: "none", display: 'flex', flexDirection: 'row' }}
+            style={{ textDecoration: "none" }}
             onClick={() => {
               navigation("/");
             }}
@@ -505,8 +458,9 @@ const ContactScreen = () => {
 
         </div>
       </footer>
+
     </div>
   );
 };
 
-export default ContactScreen;
+export default GiveScreen;

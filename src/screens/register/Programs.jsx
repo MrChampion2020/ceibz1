@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +9,7 @@ import kingschat from "../../assets/kingschat.png";
 import bannerImage from "../../assets/pjoe.jpg";
 import { useNavigate } from "react-router-dom";
 
-const ContactScreen = () => {
+const ProgramScreen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMinistries, setShowMinistries] = useState(false); // Added state for ministries dropdown
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -78,7 +79,7 @@ const ContactScreen = () => {
               href="#contact"
               style={{ textDecoration: "none", color: "white" }}
               onClick={() => {
-                navigation("/give");
+                navigation("/LiveStream");
               }}
             >
               GIVE
@@ -354,7 +355,7 @@ const ContactScreen = () => {
             href=""
             style={{ textDecoration: "none" }}
             onClick={() => {
-              navigation("/Programs");
+              navigation("/LiveStream");
             }}
           >
             Programs
@@ -509,4 +510,4 @@ const ContactScreen = () => {
   );
 };
 
-export default ContactScreen;
+export default ProgramScreen;

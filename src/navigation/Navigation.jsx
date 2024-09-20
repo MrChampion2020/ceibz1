@@ -11,11 +11,11 @@ import {
   SendLikeScreen,
   Contact,
   BirthScreen,
-  DatingType,
+  ProgramScreen,
   TeenScreen,
   FoundationSchoolScreen,
   HomeTownScreen,
-  LocationScreen,
+  GiveScreen,
   MainScreen,
   LookingFor,
   AdminScreen,
@@ -37,11 +37,11 @@ const Navigation = () => {
           <Route path="" element={<MainScreen />} />
           <Route path="contact" element={<Contact />} />
           <Route path="birth" element={<BirthScreen />} />
-          <Route path="dating" element={<DatingType />} />
+          <Route path="Programs" element={<ProgramScreen />} />
           <Route path="teens" element={<TeenScreen />} />
           <Route path="foundationSchool" element={<FoundationSchoolScreen />} />
           <Route path="hometown" element={<HomeTownScreen />} />
-          <Route path="location" element={<LocationScreen />} />
+          <Route path="give" element={<GiveScreen />} />
           <Route path="looking-for" element={<LookingFor />} />
           <Route path="admin" element={<AdminScreen />} />
           <Route path="children" element={<Children />} />

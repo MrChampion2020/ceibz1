@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube, FaInstagram, FaTwitter} from 'react-icons/fa';
 import logo from './logo.png';
+import kingschat from "../../assets/kingschat.png";
+import { useNavigate } from "react-router-dom";
 import video1 from '../../assets/pastor.mp4';
 import video2 from '../../assets/pastor.mp4';
 import image1 from '../../assets/church.jpg';
@@ -14,6 +17,7 @@ const TeenScreen = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const [flippedIndex, setFlippedIndex] = useState(null); // To track which image is flipped
   const [currentDay, setCurrentDay] = useState(''); // For schedule buttons
+  const [activeSection, setActiveSection] = useState(null);
   
   const schedule = {
     Monday: "Bible Study at 6 PM",
@@ -32,6 +36,8 @@ const TeenScreen = () => {
   const handleFlip = (index) => {
     setFlippedIndex(index === flippedIndex ? null : index); // Toggle flip state
   };
+
+  const navigation = useNavigate();
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -188,28 +194,270 @@ const TeenScreen = () => {
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        padding: '20px',
-        backgroundColor: 'black',
-        color: 'white',
-        marginTop: '50px',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <a href="#contact" style={{ color: 'white', textDecoration: 'none' }}>Contact</a>
-          <a href="#live" style={{ color: 'white', textDecoration: 'none' }}>Live Video</a>
-          <a href="#give" style={{ color: 'white', textDecoration: 'none' }}>Give</a>
-          <a href="#partnership" style={{ color: 'white', textDecoration: 'none' }}>Partnership</a>
+      
+
+      
+      {/* Section 6: Useful Links */}
+      <div
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          backgroundSize: "cover",
+          padding: "30px",
+          width: "100%",
+          height: "100%",
+          color: "white",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          margin: "auto",
+          gap: '20px',
+          transition: "transform 0.6s ease-in-out",
+          transform: activeSection === 6 ? "translateY(0)" : "translateY(5px)",
+        }}
+      >
+        {/* Column for Useful Links */}
+        <div
+          style={{
+            flex: "0 0 30%", // 20% width for the left column
+            textAlign: "left",
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            width: isMobile ? "100%" : "30%",
+          }}
+        >
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            <img
+              src={logo}
+              alt="Church Logo"
+              style={{ width: "40px", height: "auto" }}
+              onClick={() => navigation("/")}
+            />
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            Christ Embassy Ibadan Zone 1
+          </a>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a>
-          <a href="#testimonies" style={{ color: 'white', textDecoration: 'none' }}>Testimonies</a>
-          <a href="#services" style={{ color: 'white', textDecoration: 'none' }}>Services</a>
-          <a href="#about" style={{ color: 'white', textDecoration: 'none' }}>About</a>
+
+        {/* Column for Useful Links */}
+        <div
+          style={{
+            flex: "0 0 30%", // 20% width for the left column
+            textAlign: "left",
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: isMobile ? "100%" : "30%",
+          }}
+        >
+          <h1 style={{ fontSize: "16px", fontWeight: 700 }}>
+            <b
+              style={{
+                paddingBottom: 8,
+                borderBottom: "0.5px solid transparent",
+                background:
+                  "linear-gradient(to right, grey 50%, transparent 50%)",
+                backgroundPosition: "0 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "90% 0.5px", // Adjusts the size of the line
+              }}
+            >
+              Useful
+            </b>
+            <b> Links</b>
+          </h1>
+
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/LiveStream");
+            }}
+          >
+            Partnership
+          </a>
+
+
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+            Testify
+          </a>
+
+          
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            Programs
+          </a>
+          <a href="https://rhapsodyofrealities.org/" style={{ textDecoration: "none" }}>
+            Rhapsody
+          </a>
+          <a
+            href="https://healingstreams.tv/"
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("");
+            }}
+          >
+            Healing Streams
+          </a>
+        </div>
+
+        {/* Column for Useful Links */}
+        <div
+          style={{
+            flex: "0 0 30%", // 20% width for the left column
+            textAlign: "left",
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: isMobile ? "100%" : "30%",
+          }}
+        >
+          <h1 style={{ fontSize: "16px", fontWeight: 700 }}>
+            <b
+              style={{
+                paddingBottom: 8,
+                borderBottom: "0.5px solid transparent",
+                background:
+                  "linear-gradient(to right, grey 50%, transparent 50%)",
+                backgroundPosition: "0 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "80% 0.5px", // Adjusts the size of the line
+              }}
+            >
+              Contact
+            </b>
+            <b> Us</b>
+          </h1>
+
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+           <FaMapMarkerAlt /> CVHQ+R4, Ibadan 200285, Oyo
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+           <FaPhoneAlt />  +234 0000 0000 00000
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+           <FaEnvelope /> info@ceibz1.com
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+          <FaGlobe />  www.ceibz1.com
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+            Pastor's Desk
+          </a>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer
+        style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "center",
+          padding: "20px",
+          backgroundColor: "black",
+          color: "white",
+          height: "70%",
+          width: '100%',
+          gap: '20%'
+        }}
+      >
+         
+          <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+        <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
+        <img
+              src={kingschat}
+              alt="Church Logo"
+              style={{ width: "24px", height: "auto" }}
+              onClick={() => navigation("/")}
+            />
+  </a>
+  <a href="https://www.facebook.com/ceibz1" style={{ textDecoration: "none" }}>
+    <FaFacebook size={24} /> 
+  </a>
+  <a href="https://www.youtube.com/@ChristEmbassyibz1" style={{ textDecoration: "none" }}>
+    <FaYoutube size={24} /> 
+  </a>
+  <a href="https://instagram.com" style={{ textDecoration: "none" }}>
+    <FaInstagram size={24} /> 
+  </a>
+  <a href="https://twitter.com" style={{ textDecoration: "none" }}>
+    <FaTwitter size={24} /> 
+  </a>
+        </div>
+        <div style={{ display: "flex", flexDirection: "row", gap: "10px", margin: isMobile ? "auto" : "0%"}}>
+          {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
+         
+            <p>&copy; {new Date().getFullYear()} 
+              
+            <a
+            href=""
+            style={{ textDecoration: "none", padding: '6px'}}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            Christ Embassy Ibadan Zone 1
+          </a>
+                |  All Rights Reserved. </p>
+
         </div>
       </footer>
+
     </div>
   );
 };

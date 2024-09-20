@@ -11,11 +11,11 @@ export { default as ChatRoom } from './mainstack/ChatRoom';
 // Exporting regitser components
 export { default as Contact} from './register/Contact';
 export { default as BirthScreen } from './register/BirthScreen';
-export { default as DatingType } from './register/DatingType';
+export { default as ProgramScreen } from './register/Programs';
 export { default as TeenScreen } from './register/TeenScreen';
 export { default as FoundationSchoolScreen } from './register/FoundationSchoolScreen';
 export { default as HomeTownScreen } from './register/HomeTownScreen';
-export { default as LocationScreen } from './register/LocationScreen';
+export { default as GiveScreen } from './register/GiveScreen';
 export { default as LookingFor } from './register/LookingFor';
 export { default as AdminScreen } from './register/AdminScreen';
 export { default as Children } from './register/Children';
