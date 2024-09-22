@@ -403,7 +403,7 @@ const MainScreen = () => {
                 }}
               >
                 <a
-                  href="#live"
+                  href=""
                   style={{ textDecoration: "none", color: "white" }}
                   onClick={() => {
                     navigation("/LiveStream");
@@ -417,7 +417,7 @@ const MainScreen = () => {
                   style={{ position: "relative", cursor: "pointer" }}
                 >
                   <a
-                    href="#ministries"
+                    href=""
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     MINISTRIES
@@ -436,7 +436,7 @@ const MainScreen = () => {
                       }}
                     >
                       <a
-                        href="#foundation"
+                        href=""
                         style={{ display: "block", marginBottom: "10px" }}
                         onClick={() => {
                           navigation("/foundationSchool");
@@ -446,7 +446,7 @@ const MainScreen = () => {
                       </a>
 
                       <a
-                        href="#youth"
+                        href=""
                         style={{ display: "block", marginBottom: "10px" }}
                         onClick={() => {
                           navigation("/teens");
@@ -455,7 +455,7 @@ const MainScreen = () => {
                         Teens Ministry
                       </a>
                       <a
-                        href="#children"
+                        href=""
                         style={{ display: "block" }}
                         onClick={() => {
                           navigation("/children");
@@ -472,14 +472,14 @@ const MainScreen = () => {
                 >
                   TESTIMONIES
                 </a>
-                <a href="#" style={{ textDecoration: "none", color: "white" }}
+                <a href="" style={{ textDecoration: "none", color: "white" }}
                 onClick={() => {
                   navigation("/Programs");
                 }}
                 >
                   PROGRAMS
                 </a>
-                <a href="#" style={{ textDecoration: "none", color: "white" }}
+                <a href="" style={{ textDecoration: "none", color: "white" }}
                 onClick={() => {
                 navigation("/give");
               }}>
@@ -532,7 +532,7 @@ const MainScreen = () => {
               }}
             >
               <a
-                href="#live"
+                href=""
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -551,7 +551,7 @@ const MainScreen = () => {
                 style={{ position: "relative", cursor: "pointer" }}
               >
                 <a
-                  href="#ministries"
+                  href=""
                   style={{ textDecoration: "none", color: "white" }}
                 >
                   MINISTRIES
@@ -570,7 +570,7 @@ const MainScreen = () => {
                     }}
                   >
                     <a
-                      href="#foundation"
+                      href=""
                       style={{ display: "block", marginBottom: "10px" }}
                       onClick={() => {
                         navigation("/foundationSchool");
@@ -580,7 +580,7 @@ const MainScreen = () => {
                     </a>
 
                     <a
-                      href="#youth"
+                      href=""
                       style={{ display: "block", marginBottom: "10px" }}
                       onClick={() => {
                         navigation("/teens");
@@ -588,7 +588,7 @@ const MainScreen = () => {
                     >
                       Teens Ministry
                     </a>
-                    <a href="#children" style={{ display: "block" }}
+                    <a href="" style={{ display: "block" }}
                      onClick={() => {
                       navigation("/children");
                     }}>
@@ -609,7 +609,7 @@ const MainScreen = () => {
                 TESTIMONIES
               </a>
               <a
-                href="#programs"
+                href=""
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -622,7 +622,7 @@ const MainScreen = () => {
                 PROGRAMS
               </a>
               <a
-                href="#give"
+                href=""
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -805,18 +805,19 @@ const MainScreen = () => {
               marginRight: "5px",
             }}
           />
-          <div style={{ flex: 1 }}>
+                
+                <div style={{ flex: 1, padding: isMobile ? "5px" : '20px' }}>
             <h1
               style={{
                 textAlign: "center",
-                fontSize: 40,
+                fontSize: 30,
                 fontWeight: 600,
                 marginBottom: 40,
               }}
             >
               Testifier
             </h1>
-            <p>
+            <p >
               {showFullText3
                 ? textSection3
                 : `${textSection3.slice(0, 100)}...`}
@@ -858,11 +859,12 @@ const MainScreen = () => {
               marginRight: "5px",
             }}
           />
-          <div style={{ flex: 1 }}>
+                
+                <div style={{ flex: 1, padding: isMobile ? "5px" : '20px' }}>
             <h1
               style={{
                 textAlign: "center",
-                fontSize: 40,
+                fontSize: 24,
                 fontWeight: 600,
                 marginBottom: 40,
               }}
@@ -968,12 +970,13 @@ const MainScreen = () => {
                 style={{
                   width: "clamp(60px, 10vw, 100px)", // Responsive width
                   height: "clamp(30px, 5vw, 50px)", // Responsive height
-                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                  backgroundColor: "rgba(0, 0, 0, 0.8)",
                   color: "white",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   borderRadius: "5px",
+                  fontWeight: 600,
                   fontSize: "clamp(0.8rem, 2vw, 1.2rem)", // Responsive text size
                 }}
               >
@@ -1339,9 +1342,9 @@ const MainScreen = () => {
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "40px",
+            gap: "20px",
             padding: '5px',
-            margin: isMobile ? "auto" : "auto 0%",
+            margin: isMobile ? "auto" : "auto 5%",
 
           }}
         >

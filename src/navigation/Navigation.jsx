@@ -20,7 +20,7 @@ import {
   LookingFor,
   AdminScreen,
   Children,
-  PhotoScreen,
+  StripeScreen,
   PreFinalScreen,
   PromptsScreen,
   ShowPromptsScreen,
@@ -45,7 +45,7 @@ const Navigation = () => {
           <Route path="looking-for" element={<LookingFor />} />
           <Route path="admin" element={<AdminScreen />} />
           <Route path="children" element={<Children />} />
-          <Route path="photo" element={<PhotoScreen />} />
+          <Route path="stripe" element={<StripeScreen />} />
           <Route path="pre-final" element={<PreFinalScreen />} />
           <Route path="prompts" element={<PromptsScreen />} />
           <Route path="show-prompts" element={<ShowPromptsScreen />} />

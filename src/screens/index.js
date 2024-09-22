@@ -19,7 +19,7 @@ export { default as GiveScreen } from './register/GiveScreen';
 export { default as LookingFor } from './register/LookingFor';
 export { default as AdminScreen } from './register/AdminScreen';
 export { default as Children } from './register/Children';
-export { default as PhotoScreen } from './register/PhotoScreen';
+export { default as StripeScreen } from './register/stripe';
 export { default as PreFinalScreen } from './register/PreFinalScreen';
 export { default as PromptsScreen } from './register/PromptsScreen';
 export { default as ShowPromptsScreen } from './register/ShowPromptsScreen';

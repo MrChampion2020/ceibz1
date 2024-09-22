@@ -545,7 +545,7 @@ const ContactScreen = () => {
         }}
       >
          
-          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "30px", margin: isMobile ? "auto" : "auto"}}>
+          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "20px", margin: isMobile ? "auto" : "auto 5%"}}>
         <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
         <img
               src={kingschat}
