@@ -1,180 +1,785 @@
-import React, { useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube, FaInstagram, FaTwitter } from 'react-icons/fa';
-import logo from './logo.png';
-import kingschat from "../../assets/kingschat.png";
+import React, { useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faTimes,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons"; // Added faArrowLeft for back icon
 import { useNavigate } from "react-router-dom";
-import video1 from '../../assets/pastor.mp4';
-import video2 from '../../assets/pastor.mp4';
-import image1 from '../../assets/church.jpg';
-import image2 from '../../assets/chuch.jpg';
-import image3 from '../../assets/church.jpg';
+import { Elements } from "@stripe/react-stripe-js"; // Import Stripe Elements
+import { loadStripe } from "@stripe/stripe-js"; // Import Stripe.js
+import {
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaFacebook,
+  FaYoutube,
+  FaInstagram,
+  FaTwitter,
+  FaGlobe,
+} from "react-icons/fa";
+import logo from "./logo.png";
+import image1 from "../../assets/partner.png";
+import image2 from "../../assets/building.jpeg";
+import image3 from "../../assets/healings.jpg";
+import kingschat from "../../assets/kingschat.png";
+
+const stripePromise = loadStripe(
+  "pk_test_51Q1gtFKTNsqkYMrBOpf8FM246PAW6mq7QOcCJAffrH9M4Tsp3n6TGlHGPZA2g1phWCr8avF1bdvh5TewgNzx3jIm00YrUOw85F"
+); // Initialize Stripe with your public key
+
+
+const categories = [
+  { value: "", label: "Select Category" },
+  { value: "offering", label: "Service Offering" },
+  { value: "healingStreams", label: "Healing Streams" },
+  { value: "rhapsody", label: "Rhapsody" },
+  { value: "missions", label: "Missions" },
+  { value: "building", label: "Building Project" },
+  { value: "ltm", label: "LTM" },
+];
+
+const currencies = [
+  { value: "", label: "Select Currency" },
+  { value: "USD", label: "USD" },
+  { value: "NGN", label: "NGN" },
+  { value: "GBP", label: "GBP" },
+];
+
 
 const GiveScreen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
   const [flippedIndex, setFlippedIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', amount: '', currency: '', category: '' });
-  const navigation = useNavigate();
-
-  const schedule = {
-    Monday: "Bible Study at 6 PM",
-    Tuesday: "Youth Fellowship at 5 PM",
-    Wednesday: "Service Rehearsal at 7 PM",
-    Thursday: "Outreach at 6 PM",
-    Friday: "Game Night at 8 PM",
-    Saturday: "Sports Event at 9 AM",
-    Sunday: "Youth Service at 10 AM"
-  };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    amount: "",
+    currency: "",
+    category: "",
+  });
+  const [isFormComplete, setIsFormComplete] = useState(false); // Check if form is fully filled
+  const [formIncompleteMessage, setFormIncompleteMessage] = useState(""); // Message for incomplete form
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [showMinistries, setShowMinistries] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const navigation = useNavigate();
+
   const handleFlip = (index) => {
-    setFlippedIndex(index === flippedIndex ? null : index);
-    if (index === 0) {
+    if (flippedIndex === index && showForm) {
       setShowForm(true);
+    } else if (flippedIndex === index) {
+      setShowForm(true); // Show form after the second click
     } else {
+      setFlippedIndex(index);
       setShowForm(false);
     }
   };
 
+
+  // const handleCategory = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  // };
+
+  
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    
+  
+  //   // Check if all form fields are filled
+  //   const allFilled = Object.values(formData).every(
+  //     (value) => value.trim() !== ""
+  //   );
+
+  //   setIsFormComplete(allFilled);
+  //   setFormIncompleteMessage(
+  //     allFilled ? "" : "Please complete the form to proceed."
+  //   );
+  // };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+
+    const allFilled = Object.values(formData).every(
+      (value) => value.trim() !== ""
+    );
+
+    setIsFormComplete(allFilled);
+    setFormIncompleteMessage(
+      allFilled ? "" : "Please complete the form to proceed."
+    );
+  };  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Navigate to Stripe screen after submission
-    navigation('/stripe');
+    if (isFormComplete) {
+      console.log("Form submitted:", formData);
+      // Navigate to Stripe screen after submission
+      // navigate('/stripe');
+      navigation("/stripe");
+    }
+  };
+
+  const handleBack = () => {
+    // Reset states and go back to images
+    setShowForm(false);
+    setFlippedIndex(null);
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      amount: "",
+      currency: "",
+      category: "",
+    });
+    setFormIncompleteMessage("");
+    setIsFormComplete(false);
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: "100%", height: "100%" }}>
       {/* Header Section */}
-      <header style={{
-        display: 'flex',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        justifyContent: 'space-between',
-        width: '100%',
-        alignItems: 'center',
-        padding: 20,
-        zIndex: 1,
-        borderBottom: '0.2px solid white'
-      }}>
-        <img src={logo} alt="Church Logo" style={{ width: '60px', height: 'auto' }} />
+      <header
+        style={{
+          display: "flex",
+          backgroundColor: "black",
+          justifyContent: "space-between",
+          width: "100%",
+          alignItems: "center",
+          padding: 20,
+          zIndex: 1,
+          borderBottom: "0.2px solid white",
+        }}
+      >
+        <img
+          src={logo}
+          alt="Church Logo"
+          style={{ width: "60px", height: "auto" }}
+          onClick={() => navigation("/")}
+        />
         {isMobile ? (
-          <div style={{ color: 'white', fontSize: '20px', cursor: 'pointer' }} onClick={toggleMenu}>
+          <div
+            style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
+            onClick={toggleMenu}
+          >
             <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
           </div>
         ) : (
-          <nav style={{ display: 'flex', gap: '70px', color: 'white', marginRight: '5%', fontWeight: 600 }}>
-            <a href="#live" style={{ textDecoration: 'none', color: 'white' }}>LIVE</a>
-            <a href="#ministries" style={{ textDecoration: 'none', color: 'white' }}>MINISTRIES</a>
-            <a href="#testimonies" style={{ textDecoration: 'none', color: 'white' }}>TESTIMONIES</a>
-            <a href="#programs" style={{ textDecoration: 'none', color: 'white' }}>PROGRAMS</a>
-            <a href="#give" style={{ textDecoration: 'none', color: 'white' }}>GIVE</a>
+          <nav
+            style={{
+              display: "flex",
+              gap: "70px",
+              color: "white",
+              marginRight: "5%",
+              fontWeight: 600,
+            }}
+          >
+            <a
+              href=""
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => {
+                navigation("/");
+              }}
+            >
+              HOME
+            </a>
+            <a
+              href=""
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => {
+                navigation("/LiveStream");
+              }}
+            >
+              LIVE
+            </a>
+            <a
+              href=""
+              style={{ textDecoration: "none", color: "white" }}
+              onClick={() => {
+                navigation("/Contact");
+              }}
+            >
+              CONTACT
+            </a>
           </nav>
         )}
       </header>
 
-      {/* Section 1: Image Flip Cards */}
-      <section style={{
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '50px',
-        gap: '20px'
-      }}>
-        {[{ img: image1, text: "Click to proceed to give your offering" }, 
-          { img: image2, text: "Feature for image 2" }, 
-          { img: image3, text: "Feature for image 3" }].map((item, index) => (
+      {/* Image Flip Cards or Form Section */}
+      {showForm ? (
+        // Display the form instead of images
+        <section style={{ zIndex: 1, padding: "50px", textAlign: "center" }}>
+          {/* Back Icon */}
           <div
-            key={index}
             style={{
-              width: '300px',
-              height: '300px',
-              position: 'relative',
-              perspective: '1000px',
-              cursor: 'pointer'
+              display: "flex",
+              justifyContent: "flex-start",
+              marginBottom: "20px",
             }}
-            onClick={() => handleFlip(index)}
           >
-            <div style={{
-              width: '100%',
-              height: '100%',
-              transition: 'transform 0.8s',
-              transformStyle: 'preserve-3d',
-              transform: flippedIndex === index ? 'rotateY(180deg)' : 'rotateY(0deg)'
-            }}>
-              {/* Front Side */}
-              <div style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backfaceVisibility: 'hidden'
-              }}>
-                <img src={item.img} alt={`Image ${index + 1}`} style={{ width: '100%', height: '100%' }} />
-              </div>
-              {/* Back Side */}
-              <div style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backfaceVisibility: 'hidden',
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                color: 'white',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: 'rotateY(180deg)',
-                cursor: 'pointer' // Indicate it's clickable
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              size="2x"
+              style={{ cursor: "pointer" }}
+              onClick={handleBack}
+            />
+          </div>
+
+          <h2>Make payment in any currency </h2>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              style={{
+                border: "1px solid grey",
+                borderRadius: "5px",
+                color: "black",
+                fontSize: "14",
+                width: "20%",
+                marginTop: 20,
               }}
-              onClick={() => navigation('/stripe')} // Navigate to Stripe on back side click
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              style={{
+                border: "1px solid grey",
+                borderRadius: "5px",
+                color: "black",
+                fontSize: "14",
+                width: "20%",
+                marginTop: 20,
+              }}
+              
+            />
+
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              style={{
+                border: "1px solid grey",
+                borderRadius: "5px",
+                color: "black",
+                fontSize: "14",
+                width: "20%",
+                marginTop: 20,
+              }}
+            />
+            <input
+              type="number"
+              name="amount"
+              placeholder="Amount"
+              value={formData.amount}
+              onChange={handleChange}
+              required
+              style={{
+                border: "1px solid grey",
+                borderRadius: "5px",
+                color: "black",
+                fontSize: "14",
+                width: "20%",
+                marginTop: 20,
+              }}
+            />
+            <select
+              name="currency"
+              value={formData.currency}
+              onChange={handleChange}
+              required
+              style={{
+                border: "1px solid grey",
+                borderRadius: "5px",
+                color: "black",
+                fontSize: "14",
+                width: "20%",
+                marginBottom: 20,
+              }}
+            >
+              {currencies.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              style={{
+                border: "1px solid grey",
+                borderRadius: "5px",
+                color: "black",
+                fontSize: "14",
+                width: "20%",
+                marginBottom: 20,
+              }}
+            >
+              {categories.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+
+            {isFormComplete ? (
+              <Elements stripe={stripePromise}>
+                <button type="submit" style={{ marginTop: "20px" }}>
+                  Proceed to Payment
+                </button>
+              </Elements>
+            ) : (
+              <p style={{ color: "red", marginTop: "20px" }}>
+                {formIncompleteMessage}
+              </p>
+            )}
+          </form>
+        </section>
+      ) : (
+        // Display the image flip cards
+        <section
+          style={{
+            backgroundColor: "black",
+            color: "white",
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            justifyContent: "center",
+            padding: "20px",
+            gap: "30px",
+          }}
+        >
+          {[
+            { img: image1, text: "Click to proceed to give your offering" },
+            {
+              img: image2,
+              text: "Click to proceed and make payment for Your Healing Streams partnership",
+            },
+            { img: image3, text: "Click on me to proceed with payment" },
+          ].map((item, index) => (
+            <div
+              key={index}
+              style={{
+                width: isMobile ? "90vw" : "30%",
+                height: "300px",
+                perspective: "1000px",
+                cursor: "pointer",
+              }}
+              onClick={() => handleFlip(index)}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  transition: "transform 0.8s",
+                  transformStyle: "preserve-3d",
+                  transform:
+                    flippedIndex === index
+                      ? "rotateY(180deg)"
+                      : "rotateY(0deg)",
+                }}
               >
-                <p>{item.text}</p>
+                {/* Front Side */}
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    backfaceVisibility: "hidden",
+                  }}
+                >
+                  <img
+                    src={item.img}
+                    alt={`Image ${index + 1}`}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+                {/* Back Side */}
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    backfaceVisibility: "hidden",
+                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    color: "white",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    transform: "rotateY(180deg)",
+                  }}
+                >
+                  <p>{item.text}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </section>
-
-      {/* Form Section for Image 1 */}
-      {showForm && (
-        <section style={{ padding: '50px', textAlign: 'center' }}>
-          <h2>Provide Your Offering</h2>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-            <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-            <input type="tel" name="phone" placeholder="Phone" onChange={handleChange} required />
-            <input type="number" name="amount" placeholder="Amount" onChange={handleChange} required />
-            <select name="currency" onChange={handleChange} required>
-              <option value="">Select Currency</option>
-              <option value="USD">USD</option>
-              <option value="NGN">NGN</option>
-            </select>
-            <input type="text" name="category" placeholder="Category" onChange={handleChange} required />
-            <button type="submit">Proceed to Payment</button>
-          </form>
+          ))}
         </section>
       )}
 
       {/* Footer Section */}
-      <footer style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', color: 'white', padding: '20px', textAlign: 'center' }}>
-        <p>Contact Us:</p>
-        <p><FaMapMarkerAlt /> Church Address</p>
-        <p><FaPhoneAlt /> (123) 456-7890</p>
-        <p><FaEnvelope /> contact@church.com</p>
-        <p><FaGlobe /> www.churchwebsite.com</p>
-        <p>
-          <FaFacebook /> <FaYoutube /> <FaInstagram /> <FaTwitter />
-        </p>
+
+      {/* Section 6: Useful Links */}
+      <div
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          backgroundSize: "cover",
+          padding: "40px 15px",
+          width: "100%",
+          height: "100%",
+          color: "white",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          margin: "auto",
+          gap: "20px",
+          transition: "transform 0.6s ease-in-out",
+          transform: activeSection === 6 ? "translateY(0)" : "translateY(5px)",
+        }}
+      >
+        {/* Column for Useful Links */}
+        <div
+          style={{
+            flex: "0 0 30%", // 20% width for the left column
+            textAlign: "left",
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            width: isMobile ? "100%" : "30%",
+          }}
+        >
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            <img
+              src={logo}
+              alt="Church Logo"
+              style={{ width: "40px", height: "auto" }}
+              onClick={() => navigation("/")}
+            />
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            Christ Embassy Ibadan Zone 1
+          </a>
+        </div>
+
+        {/* Column for Useful Links */}
+        <div
+          style={{
+            flex: "0 0 30%", // 20% width for the left column
+            textAlign: "left",
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: isMobile ? "100%" : "30%",
+          }}
+        >
+          <h1 style={{ fontSize: "16px", fontWeight: 700 }}>
+            <b
+              style={{
+                paddingBottom: 8,
+                borderBottom: "0.5px solid transparent",
+                background:
+                  "linear-gradient(to right, grey 50%, transparent 50%)",
+                backgroundPosition: "0 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "90% 0.5px", // Adjusts the size of the line
+              }}
+            >
+              Useful
+            </b>
+            <b> Links</b>
+          </h1>
+
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/LiveStream");
+            }}
+          >
+            Partnership
+          </a>
+
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+            Testify
+          </a>
+
+          <a
+            href=""
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            Programs
+          </a>
+          <a
+            href="https://rhapsodyofrealities.org/"
+            style={{ textDecoration: "none" }}
+          >
+            Rhapsody
+          </a>
+          <a
+            href="https://healingstreams.tv/"
+            style={{ textDecoration: "none" }}
+            onClick={() => {
+              navigation("");
+            }}
+          >
+            Healing Streams
+          </a>
+        </div>
+
+        {/* Column for Useful Links */}
+        <div
+          style={{
+            flex: "0 0 30%", // 20% width for the left column
+            textAlign: "left",
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: isMobile ? "100%" : "30%",
+          }}
+        >
+          <h1 style={{ fontSize: "16px", fontWeight: 700 }}>
+            <b
+              style={{
+                paddingBottom: 8,
+                borderBottom: "0.5px solid transparent",
+                background:
+                  "linear-gradient(to right, grey 50%, transparent 50%)",
+                backgroundPosition: "0 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "80% 0.5px", // Adjusts the size of the line
+              }}
+            >
+              Contact
+            </b>
+            <b> Us</b>
+          </h1>
+
+          <a
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center", // Ensures the icon and text are aligned vertically
+              gap: "10px", // Adds spacing between the icon and the text
+              color: "inherit", // Ensures link color stays consistent
+              fontSize: "16px", // Adjust the font size to ensure consistent icon size
+              lineHeight: "1.5", // Adds some height consistency between text and icon
+            }}
+          >
+            <FaMapMarkerAlt style={{ fontSize: "18px" }} />
+            CVHQ+R4, Ibadan 200285, Oyo
+          </a>
+
+          <a
+            href=""
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center", // Ensures the icon and text are aligned vertically
+              gap: "10px", // Adds spacing between the icon and the text
+              color: "inherit", // Ensures link color stays consistent
+              fontSize: "16px", // Adjust the font size to ensure consistent icon size
+              lineHeight: "1.5",
+            }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            <FaPhoneAlt /> +234 0000 0000 00000
+          </a>
+          <a
+            href=""
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center", // Ensures the icon and text are aligned vertically
+              gap: "10px", // Adds spacing between the icon and the text
+              color: "inherit", // Ensures link color stays consistent
+              fontSize: "16px", // Adjust the font size to ensure consistent icon size
+              lineHeight: "1.5",
+            }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+            <FaEnvelope /> info@ceibz1.com
+          </a>
+          <a
+            href=""
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center", // Ensures the icon and text are aligned vertically
+              gap: "10px", // Adds spacing between the icon and the text
+              color: "inherit", // Ensures link color stays consistent
+              fontSize: "16px", // Adjust the font size to ensure consistent icon size
+              lineHeight: "1.5",
+            }}
+            onClick={() => {
+              navigation("/");
+            }}
+          >
+            <FaGlobe /> www.ceibz1.com
+          </a>
+          <a
+            href=""
+            style={{
+              width: "100%",
+              textDecoration: "none",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center", // Ensures the icon and text are aligned vertically
+              gap: "10px", // Adds spacing between the icon and the text
+              color: "inherit", // Ensures link color stays consistent
+              fontSize: "16px", // Adjust the font size to ensure consistent icon size
+              lineHeight: "1.5",
+            }}
+            onClick={() => {
+              navigation("/Contact");
+            }}
+          >
+            Pastor's Desk
+          </a>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer
+        style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "center",
+          padding: "20px",
+          backgroundColor: "black",
+          color: "white",
+          height: "70%",
+          width: "100%",
+          gap: "20%",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "20px",
+            padding: "5px",
+            margin: isMobile ? "auto" : "auto 5%",
+          }}
+        >
+          <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
+            <img
+              src={kingschat}
+              alt="Church Logo"
+              style={{ width: "24px", height: "auto" }}
+              onClick={() => navigation("/")}
+            />
+          </a>
+          <a
+            href="https://www.facebook.com/ceibz1"
+            style={{ textDecoration: "none" }}
+          >
+            <FaFacebook size={24} />
+          </a>
+          <a
+            href="https://www.youtube.com/@ChristEmbassyibz1"
+            style={{ textDecoration: "none" }}
+          >
+            <FaYoutube size={24} />
+          </a>
+          <a href="https://instagram.com" style={{ textDecoration: "none" }}>
+            <FaInstagram size={24} />
+          </a>
+          <a href="https://twitter.com" style={{ textDecoration: "none" }}>
+            <FaTwitter size={24} />
+          </a>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
+            margin: isMobile ? "auto" : "auto",
+            padding: "5px",
+          }}
+        >
+          {/* <a href="#ministries" style={{ color: 'white', textDecoration: 'none' }}>Ministries</a> */}
+
+          <p>
+            &copy; {new Date().getFullYear()}
+            <a
+              href=""
+              style={{
+                textDecoration: "none",
+                padding: "6px",
+                fontSize: "14px",
+              }}
+              onClick={() => {
+                navigation("/");
+              }}
+            >
+              Christ Embassy Ibadan Zone 1
+            </a>
+          </p>
+        </div>
       </footer>
     </div>
   );

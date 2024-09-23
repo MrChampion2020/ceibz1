@@ -76,20 +76,20 @@ const ContactScreen = () => {
             }}
           >
             <a
-              href="#home"
+              href=""
               style={{ textDecoration: "none", color: "white" }}
               onClick={() => navigation("/")}
             >
               HOME
             </a>
-            <a href="#about" style={{ textDecoration: "none", color: "white" }}
+            <a href="" style={{ textDecoration: "none", color: "white" }}
             onClick={() => {
               navigation("/LiveStream");
             }}>
               LIVE
             </a>
             <a
-              href="#contact"
+              href=""
               style={{ textDecoration: "none", color: "white" }}
               onClick={() => {
                 navigation("/give");

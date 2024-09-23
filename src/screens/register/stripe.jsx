@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useStripe, CardElement } from '@stripe/react-stripe-js';
-import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import axios from 'axios';
 
-// Load your Stripe public key outside of the component
-const stripePromise = loadStripe('your-public-key'); // Replace with your actual public key
+// Load Stripe with your public key
+const stripePromise = loadStripe('pk_test_51Q1gtFKTNsqkYMrBOpf8FM246PAW6mq7QOcCJAffrH9M4Tsp3n6TGlHGPZA2g1phWCr8avF1bdvh5TewgNzx3jIm00YrUOw85F');
 
 const StripeScreen = () => {
   const stripe = useStripe();
+  const elements = useElements();
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('usd'); // Default currency
 
@@ -31,7 +32,7 @@ const StripeScreen = () => {
       // Confirm the payment with the card details
       const { error } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: CardElement, // This should be updated to use a ref to the CardElement
+          card: elements.getElement(CardElement), // Get the CardElement instance here
         },
       });
 
@@ -39,7 +40,7 @@ const StripeScreen = () => {
         alert(`Payment Error: ${error.message}`);
       } else {
         alert('Payment Successful!');
-        // Here you can send the amount to your Naira account
+        // Handle post-payment success actions
       }
     } catch (error) {
       alert(`Error: ${error.response ? error.response.data.message : 'An error occurred during payment'}`);
@@ -95,4 +96,12 @@ const StripeScreen = () => {
   );
 };
 
-export default StripeScreen;
+const App = () => {
+  return (
+    <Elements stripe={stripePromise}>
+      <StripeScreen />
+    </Elements>
+  );
+};
+
+export default App;
