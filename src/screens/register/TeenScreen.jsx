@@ -45,6 +45,12 @@ const TeenScreen = () => {
 
   const navigation = useNavigate();
 
+  {var uniqueTexts = [
+    "Welcome to our community!",
+    "Enjoy your experience!",
+    "We are thrilled to have you here!"
+  ];}
+
   return (    
       <div style={{ width: "100%", height: "100%", margin: 'auto', overflow: 'hidden' }}>
       {/* Header Section */}
@@ -93,7 +99,7 @@ const TeenScreen = () => {
             }}
           >
             <a
-              href="#live"
+              href=""
               style={{ textDecoration: "none", color: "white" }}
               onClick={() => navigation("/")}
             >
@@ -105,7 +111,7 @@ const TeenScreen = () => {
               style={{ position: "relative", cursor: "pointer" }}
             >
               <a
-                href="#ministries"
+                href=""
                 style={{ textDecoration: "none", color: "white" }}
               >
                 MINISTRIES
@@ -124,21 +130,21 @@ const TeenScreen = () => {
                   }}
                 >
                   <a
-                    href="#foundation"
+                    href=""
                     style={{ display: "block", marginBottom: "10px" }}
                     onClick={() => navigation("/foundationSchool")}
                   >
                     Foundation School
                   </a>
                   <a
-                    href="#youth"
+                    href=""
                     style={{ display: "block", marginBottom: "10px" }}
                     onClick={() => navigation("/teens")}
                   >
                     Teens Ministry
                   </a>
                   <a
-                    href="#children"
+                    href=""
                     style={{ display: "block" }}
                     onClick={() => navigation("/children")}
                   >
@@ -148,7 +154,7 @@ const TeenScreen = () => {
               )}
             </div>
             <a
-              href="#testimonies"
+              href=""
               style={{ textDecoration: "none", color: "white" }}
               onClick={() => {
                 navigation("/Contact");
@@ -156,7 +162,7 @@ const TeenScreen = () => {
               CONTACT
             </a>
             <a
-              href="#programs"
+              href=""
               style={{ textDecoration: "none", color: "white" }}
               onClick={() => {
                 navigation("/Programs");
@@ -164,7 +170,7 @@ const TeenScreen = () => {
             >
               PROGRAMS
             </a>
-            <a href="#give" style={{ textDecoration: "none", color: "white" }}
+            <a href="" style={{ textDecoration: "none", color: "white" }}
             onClick={() => {
               navigation("/give");
             }}
@@ -353,74 +359,73 @@ const TeenScreen = () => {
       </h1>
     </div>
 
-      {/* Section 1: Image Flip Cards */}
-      <section style={{
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '50px',
-        gap: '20px'
+     {/* Section 1: Image Flip Cards */}
+<section style={{
+  display: 'flex',
+  flexDirection: isMobile ? 'column' : 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '50px',
+  gap: '20px'
+}}>
+  {/* Array of unique texts for each image */}
+
+  {[image1, image2, image3].map((image, index) => (
+    <div 
+      key={index}
+      style={{
+        width: isMobile ? '100%' : '400px',
+        height: '300px',
+        position: 'relative',
+        perspective: '1000px',
+        cursor: 'pointer'
+      }}
+      onClick={() => handleFlip(index)}
+    >
+      <div style={{
+        width: '100%',
+        height: '100%',
+        transition: 'transform 0.8s',
+        transformStyle: 'preserve-3d',
+        transform: flippedIndex === index ? 'rotateY(180deg)' : 'rotateY(0deg)'
       }}>
-        {[image1, image2, image3].map((image, index) => (
-          <div 
-            key={index}
-            style={{
-              width: isMobile ? '100%' : '400px',
-              height: '300px',
-              position: 'relative',
-              perspective: '1000px',
-              cursor: 'pointer'
-            }}
-            onClick={() => handleFlip(index)}
-          >
-            <div style={{
-              width: '100%',
-              height: '100%',
-              transition: 'transform 0.8s',
-              transformStyle: 'preserve-3d',
-              transform: flippedIndex === index ? 'rotateY(180deg)' : 'rotateY(0deg)'
-            }}>
-              {/* Front Side */}
-              <div style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backfaceVisibility: 'hidden'
-              }}>
-                <img src={image} alt={`Image ${index + 1}`} style={{ width: '100%', height: '100%' }} />
-              </div>
-              {/* Back Side */}
-              <div style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backfaceVisibility: 'hidden',
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                color: 'white',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: 'rotateY(180deg)'
-              }}>
-                <p style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  backfaceVisibility: 'hidden',
-                  backgroundColor: 'rgba(0, 0, 0, 9)',
-                  color: 'white',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  transform: 'rotateY(180deg)'
-                }}
-                > We are thrilled to have you here {index + 1}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </section>
+        {/* Front Side */}
+        <div style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          backfaceVisibility: 'hidden'
+        }}>
+          <img src={image} alt={`Image ${index + 1}`} style={{ width: '100%', height: '100%' }} />
+        </div>
+
+        {/* Back Side */}
+        <div style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          backfaceVisibility: 'hidden',
+          backgroundColor: 'black',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          transform: 'rotateY(180deg)'
+        }}>
+          <p style={{
+            textAlign: 'center',
+            padding: '10px',
+            fontSize: '18px',
+            transform: 'rotateY(180deg)'
+          }}>
+            {/* Display unique text for each image */}
+            {uniqueTexts[index]}
+          </p>
+        </div>
+      </div>
+    </div>
+  ))}
+</section>
 
       {/* Section 2: Videos */}
       <section style={{
@@ -805,7 +810,7 @@ const TeenScreen = () => {
         }}
       >
          
-          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "40px", margin: isMobile ? "auto" : "auto 0%"}}>
+          <div style={{ display: "flex", padding: '5px', flexDirection: "row", gap: "20px", margin: isMobile ? "auto" : "auto 0%"}}>
         <a href="https://kingschat.com" style={{ textDecoration: "none" }}>
         <img
               src={kingschat}

@@ -149,70 +149,121 @@ const GiveScreen = () => {
     <div style={{ width: "100%", height: "100%" }}>
       {/* Header Section */}
       <header
-        style={{
-          display: "flex",
-          backgroundColor: "black",
-          justifyContent: "space-between",
-          width: "100%",
-          alignItems: "center",
-          padding: 20,
-          zIndex: 1,
-          borderBottom: "0.2px solid white",
-        }}
+  style={{
+    display: "flex",
+    backgroundColor: "black",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+    padding: 10,
+    zIndex: 1,
+    borderBottom: "0.2px solid white",
+  }}
+>
+  <img
+    src={logo}
+    alt="Church Logo"
+    style={{ width: "60px", height: "auto", marginRight: 40,}}
+    onClick={() => navigation("/")}
+  />
+  {isMobile ? (
+    <div style={{ position: "relative" }}>
+      <div
+        style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
+        onClick={toggleMenu}
       >
-        <img
-          src={logo}
-          alt="Church Logo"
-          style={{ width: "60px", height: "auto" }}
-          onClick={() => navigation("/")}
-        />
-        {isMobile ? (
-          <div
-            style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
-            onClick={toggleMenu}
-          >
-            <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
-          </div>
-        ) : (
-          <nav
-            style={{
-              display: "flex",
-              gap: "70px",
-              color: "white",
-              marginRight: "5%",
-              fontWeight: 600,
+        <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
+      </div>
+
+      {/* Conditionally render the drop-down menu */}
+      {menuOpen && (
+        <nav
+          style={{
+            position: "absolute",
+            top: "50px", // Position below the icon
+            right: 0, // Align to the left side of the screen
+            backgroundColor: "black",
+            padding: "10px",
+            borderRadius: "5px",
+            zIndex: 10,
+            gap: 5,
+            width: "200px", // Optional: set a fixed width for the menu
+          }}
+        >
+          <a
+            href=""
+            style={{ textDecoration: "none", color: "white", display: "block", marginBottom: "10px",}}
+            onClick={() => {
+              navigation("/");
+              toggleMenu(); // Close menu on click
             }}
           >
-            <a
-              href=""
-              style={{ textDecoration: "none", color: "white" }}
-              onClick={() => {
-                navigation("/");
-              }}
-            >
-              HOME
-            </a>
-            <a
-              href=""
-              style={{ textDecoration: "none", color: "white" }}
-              onClick={() => {
-                navigation("/LiveStream");
-              }}
-            >
-              LIVE
-            </a>
-            <a
-              href=""
-              style={{ textDecoration: "none", color: "white" }}
-              onClick={() => {
-                navigation("/Contact");
-              }}
-            >
-              CONTACT
-            </a>
-          </nav>
-        )}
-      </header>
+            HOME
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none", color: "white", display: "block", marginBottom: "10px" }}
+            onClick={() => {
+              navigation("/LiveStream");
+              toggleMenu(); // Close menu on click
+            }}
+          >
+            LIVE
+          </a>
+          <a
+            href=""
+            style={{ textDecoration: "none", color: "white", display: "block" }}
+            onClick={() => {
+              navigation("/Contact");
+              toggleMenu(); // Close menu on click
+            }}
+          >
+            CONTACT
+          </a>
+        </nav>
+      )}
+    </div>
+  ) : (
+    <nav
+      style={{
+        display: "flex",
+        gap: "70px",
+        color: "white",
+        padding: '10px 50px',
+        fontWeight: 600,
+      }}
+    >
+      <a
+        href=""
+        style={{ textDecoration: "none", color: "white" }}
+        onClick={() => {
+          navigation("/");
+        }}
+      >
+        HOME
+      </a>
+      <a
+        href=""
+        style={{ textDecoration: "none", color: "white" }}
+        onClick={() => {
+          navigation("/LiveStream");
+        }}
+      >
+        LIVE
+      </a>
+      <a
+        href=""
+        style={{ textDecoration: "none", color: "white" }}
+        onClick={() => {
+          navigation("/Contact");
+        }}
+      >
+        CONTACT
+      </a>
+    </nav>
+  )}
+</header>
+
 
       {/* Image Flip Cards or Form Section */}
       {showForm ? (
@@ -255,9 +306,11 @@ const GiveScreen = () => {
                 border: "1px solid grey",
                 borderRadius: "5px",
                 color: "black",
+                height: "40px",
                 fontSize: "14",
-                width: "20%",
-                marginTop: 20,
+                width: isMobile ? "80%" : "30%",
+                marginTop: 15,
+                padding: 5
               }}
             />
             <input
@@ -272,8 +325,10 @@ const GiveScreen = () => {
                 borderRadius: "5px",
                 color: "black",
                 fontSize: "14",
-                width: "20%",
-                marginTop: 20,
+                height: "40px",
+                width: isMobile ? "80%" : "30%",
+                marginTop: 10,
+                padding: 5
               }}
               
             />
@@ -290,8 +345,10 @@ const GiveScreen = () => {
                 borderRadius: "5px",
                 color: "black",
                 fontSize: "14",
-                width: "20%",
-                marginTop: 20,
+                height: "40px",
+                width: isMobile ? "80%" : "30%",
+                marginTop: 10,
+                padding: 5
               }}
             />
             <input
@@ -305,9 +362,11 @@ const GiveScreen = () => {
                 border: "1px solid grey",
                 borderRadius: "5px",
                 color: "black",
+                height: "40px",
                 fontSize: "14",
-                width: "20%",
-                marginTop: 20,
+                width: isMobile ? "80%" : "30%",
+                marginTop: 10,
+                padding: 5
               }}
             />
             <select
@@ -320,8 +379,10 @@ const GiveScreen = () => {
                 borderRadius: "5px",
                 color: "black",
                 fontSize: "14",
-                width: "20%",
-                marginBottom: 20,
+                height: "40px",
+                width: isMobile ? "80%" : "30%",
+                marginBottom: 10,
+                padding: 5
               }}
             >
               {currencies.map((option) => (
@@ -341,8 +402,10 @@ const GiveScreen = () => {
                 borderRadius: "5px",
                 color: "black",
                 fontSize: "14",
-                width: "20%",
-                marginBottom: 20,
+                height: "40px",
+                width: isMobile ? "80%" : "30%",
+                marginBottom: 10,
+                padding: 5
               }}
             >
               {categories.map((option) => (

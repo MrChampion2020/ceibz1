@@ -416,54 +416,99 @@ const MainScreen = () => {
                   onMouseLeave={() => setShowMinistries(false)}
                   style={{ position: "relative", cursor: "pointer" }}
                 >
-                  <a
-                    href=""
+                  <div
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     MINISTRIES
-                  </a>
+                  </div>
                   {showMinistries && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        width: "180px",
-                        top: "20px",
-                        left: 0,
-                        backgroundColor: "rgba(0, 0, 0, 0.005)",
-                        color: "white",
-                        padding: "5px",
-                        zIndex: 2,
-                      }}
-                    >
-                      <a
-                        href=""
-                        style={{ display: "block", marginBottom: "10px" }}
-                        onClick={() => {
-                          navigation("/foundationSchool");
-                        }}
-                      >
-                        Foundation School
-                      </a>
+                    // <div
+                    //   style={{
+                    //     position: "absolute",
+                    //     width: "180px",
+                    //     top: "20px",
+                    //     left: 0,
+                    //     backgroundColor: "rgba(0, 0, 0, 0.005)",
+                    //     color: "white",
+                    //     padding: "5px",
+                    //     zIndex: 2,
+                    //   }}
+                    // >
+                    //   <a
+                    //     href=""
+                    //     style={{ display: "block", marginBottom: "10px" }}
+                    //     onClick={() => {
+                    //       navigation("/foundationSchool");
+                    //     }}
+                    //   >
+                    //     Foundation School
+                    //   </a>
 
-                      <a
-                        href=""
-                        style={{ display: "block", marginBottom: "10px" }}
-                        onClick={() => {
-                          navigation("/teens");
-                        }}
-                      >
-                        Teens Ministry
-                      </a>
-                      <a
-                        href=""
-                        style={{ display: "block" }}
-                        onClick={() => {
-                          navigation("/children");
-                        }}
-                      >
-                        Children Ministry
-                      </a>
-                    </div>
+                    //   <a
+                    //     href=""
+                    //     style={{ display: "block", marginBottom: "10px" }}
+                    //     onClick={() => {
+                    //       navigation("/teens");
+                    //     }}
+                    //   >
+                    //     Teens Ministry
+                    //   </a>
+                    //   <a
+                    //     href=""
+                    //     style={{ display: "block" }}
+                    //     onClick={() => {
+                    //       navigation("/children");
+                    //     }}
+                    //   >
+                    //     Children Ministry
+                    //   </a>
+                    // </div>
+                    <div
+  style={{
+    position: "absolute",
+    width: "180px",
+    top: "20px",
+    left: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.005)",
+    color: "white",
+    padding: "5px",
+    zIndex: 2,
+  }}
+>
+  <a
+    href="#"
+    style={{ display: "block", marginBottom: "10px" }}
+    onClick={(e) => {
+      e.preventDefault(); // Prevent default anchor behavior (reload)
+      navigation("/foundationSchool");
+    }}
+  >
+    Foundation School
+  </a>
+
+  <a
+    href="#"
+    style={{ display: "block", marginBottom: "10px" }}
+    onClick={(e) => {
+      e.preventDefault();
+      navigation("/teens");
+    }}
+  >
+    Teens Ministry
+  </a>
+
+  <a
+    href="#"
+    style={{ display: "block" }}
+    onClick={(e) => {
+      e.preventDefault();
+      navigation("/children");
+    }}
+  >
+    Children Ministry
+  </a>
+</div>
+
                   )}
                 </div>
                 <a
@@ -542,20 +587,17 @@ const MainScreen = () => {
               >
                 LIVE
               </a>
-              {/* <a href="#ministries" style={{ textDecoration: 'none', color: 'white', padding: '10px 0' }} onClick={toggleMenu}>Ministries</a>
-               */}
-
               <div
                 onMouseEnter={() => setShowMinistries(true)}
                 onMouseLeave={() => setShowMinistries(false)}
                 style={{ position: "relative", cursor: "pointer" }}
               >
-                <a
-                  href=""
+                <div
+                  
                   style={{ textDecoration: "none", color: "white" }}
                 >
                   MINISTRIES
-                </a>
+                </div>
                 {showMinistries && (
                   <div
                     style={{
@@ -566,7 +608,7 @@ const MainScreen = () => {
                       backgroundColor: "rgba(0, 0, 0, 0.9)",
                       color: "white",
                       padding: "5px",
-                      zIndex: 2,
+                      zIndex: 1,
                     }}
                   >
                     <a
