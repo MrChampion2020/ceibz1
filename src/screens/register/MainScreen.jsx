@@ -422,47 +422,7 @@ const MainScreen = () => {
                     MINISTRIES
                   </div>
                   {showMinistries && (
-                    // <div
-                    //   style={{
-                    //     position: "absolute",
-                    //     width: "180px",
-                    //     top: "20px",
-                    //     left: 0,
-                    //     backgroundColor: "rgba(0, 0, 0, 0.005)",
-                    //     color: "white",
-                    //     padding: "5px",
-                    //     zIndex: 2,
-                    //   }}
-                    // >
-                    //   <a
-                    //     href=""
-                    //     style={{ display: "block", marginBottom: "10px" }}
-                    //     onClick={() => {
-                    //       navigation("/foundationSchool");
-                    //     }}
-                    //   >
-                    //     Foundation School
-                    //   </a>
-
-                    //   <a
-                    //     href=""
-                    //     style={{ display: "block", marginBottom: "10px" }}
-                    //     onClick={() => {
-                    //       navigation("/teens");
-                    //     }}
-                    //   >
-                    //     Teens Ministry
-                    //   </a>
-                    //   <a
-                    //     href=""
-                    //     style={{ display: "block" }}
-                    //     onClick={() => {
-                    //       navigation("/children");
-                    //     }}
-                    //   >
-                    //     Children Ministry
-                    //   </a>
-                    // </div>
+                    
                     <div
   style={{
     position: "absolute",
@@ -574,6 +534,7 @@ const MainScreen = () => {
                 flexDirection: "column",
                 padding: "40px",
                 fontSize: "16px",
+                gap: 20
               }}
             >
               <a
@@ -592,12 +553,11 @@ const MainScreen = () => {
                 onMouseLeave={() => setShowMinistries(false)}
                 style={{ position: "relative", cursor: "pointer" }}
               >
-                <div
-                  
+                <a
                   style={{ textDecoration: "none", color: "white" }}
                 >
                   MINISTRIES
-                </div>
+                </a>
                 {showMinistries && (
                   <div
                     style={{
@@ -609,6 +569,7 @@ const MainScreen = () => {
                       color: "white",
                       padding: "5px",
                       zIndex: 1,
+                      gap: 30
                     }}
                   >
                     <a

@@ -6,13 +6,13 @@ import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaGlobe, FaFacebook, FaYoutube,
 import logo from './logo.png';
 import kingschat from "../../assets/kingschat.png";
 import { useNavigate } from "react-router-dom";
-import video1 from '../../assets/pastor.mp4';
-import video2 from '../../assets/pastor.mp4';
-import image1 from '../../assets/post_teens2.jpg';
+import video1 from '../../assets/teevobible.mp4';
+import video2 from '../../assets/teevo.mp4';
+import image1 from '../../assets/teevolution.jpg';
 import image2 from '../../assets/teen.jpg';
 import image3 from '../../assets/youth.png';
 import backgroundImage  from '../../assets/teen.jpg';
-import bannerImage from "../../assets/teen.jpg";
+
 
 
 const TeenScreen = () => {
@@ -21,8 +21,6 @@ const TeenScreen = () => {
   const [flippedIndex, setFlippedIndex] = useState(null); // To track which image is flipped
   const [currentDay, setCurrentDay] = useState(''); // For schedule buttons
   const [activeSection, setActiveSection] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedClass, setSelectedClass] = useState(""); // Declare selectedClass state
   const [showMinistries, setShowMinistries] = useState(false);
   
   const schedule = {
@@ -46,9 +44,9 @@ const TeenScreen = () => {
   const navigation = useNavigate();
 
   {var uniqueTexts = [
-    "Welcome to our community!",
-    "Enjoy your experience!",
-    "We are thrilled to have you here!"
+    "Welcome to the Loveworld Teens Ministry, Join us to take Teevo to Every Teenager. Click here to be a part",
+    "Every Teenager has a place in the Teens Church, Enjoy your experience! Write to get in touch",
+    "We are thrilled to have you here! Got a question let us."
   ];}
 
   return (    
@@ -86,7 +84,7 @@ const TeenScreen = () => {
             style={{ color: "white", fontSize: "20px", cursor: "pointer" }}
             onClick={toggleMenu}
           >
-            <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" />
+            <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} size="2x" style={{padding: 15}} />
           </div>
         ) : (
           <nav
@@ -188,9 +186,9 @@ const TeenScreen = () => {
           style={{
             position: "absolute",
             left: 0,
-            top: 0,
-            width: "100%",
-            backgroundColor: "rgba(001, 005, 050, 9)",
+            top: 70,
+            width: "50%",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
             display: "flex",
             flexDirection: "column",
             padding: "20px",
@@ -344,7 +342,7 @@ const TeenScreen = () => {
     >
       <h1
         style={{
-          fontSize: '30px',
+          fontSize:  isMobile ? '20px' : '30px',
           fontWeight: 'bold',
           zIndex: 1,  // Keep text above the background
           margin: 0,
@@ -352,7 +350,7 @@ const TeenScreen = () => {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         width: '100%',
         height: '100%',
-        padding: 10
+        padding: 20
         }}
       >
         Welcome to <br /> Loveworld Teens Ministry <br /> Ibadan Zone 1
@@ -365,7 +363,7 @@ const TeenScreen = () => {
   flexDirection: isMobile ? 'column' : 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '50px',
+  padding: '20px',
   gap: '20px'
 }}>
   {/* Array of unique texts for each image */}
@@ -383,7 +381,7 @@ const TeenScreen = () => {
       onClick={() => handleFlip(index)}
     >
       <div style={{
-        width: '100%',
+        width: isMobile ? '100%' : '100%',
         height: '100%',
         transition: 'transform 0.8s',
         transformStyle: 'preserve-3d',
@@ -414,12 +412,15 @@ const TeenScreen = () => {
         }}>
           <p style={{
             textAlign: 'center',
-            padding: '10px',
-            fontSize: '18px',
-            transform: 'rotateY(180deg)'
-          }}>
+            padding: '20px',
+            fontSize: '14px', 
+          }}
+          
+          onClick={() => navigation("/Contact")}
+          >
             {/* Display unique text for each image */}
             {uniqueTexts[index]}
+            
           </p>
         </div>
       </div>
@@ -432,7 +433,7 @@ const TeenScreen = () => {
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         justifyContent: 'center',
-        padding: '50px',
+        padding: '20px',
         gap: '20px'
       }}>
         <div style={{ flex: 1 }}>
@@ -483,12 +484,13 @@ const TeenScreen = () => {
             <div key={index} style={{
               width: '80px',
               height: '60px',
-              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
               color: 'black',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: '5px',
+              fontWeight: 700
             }}>
               {currentDay === day ? schedule[day] : '--:--'}
             </div>

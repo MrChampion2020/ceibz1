@@ -1,234 +1,282 @@
-// import React, { useState, useEffect } from "react";
-// import RegistrationTop from "../../components/RegistrationTop";
-// import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
-// import { useNavigate } from "react-router-dom";
-// import {
-//   saveRegistrationProgress,
-//   getRegistrationProgress,
-// } from "../../registrationUtils";
-// const NameScreen = () => {
-//   const [firstName, setFirstName] = useState("");
-//   const [lastName, setLastName] = useState("");
-//   const navigation = useNavigate();
-//   useEffect(() => {
-//     const progressData = getRegistrationProgress("Name");
-//     if (progressData) {
-//       setFirstName(progressData.firstName || "");
-//       setLastName(progressData.lastName || "");
-//       console.log("NameScreen: ", progressData, " loaded");
-//     }
-//   }, []);
-//   const handleNext = () => {
-//     if (firstName.trim() !== "") {
-//       saveRegistrationProgress("Name", { firstName, lastName });
-//       console.log("NameScreen: ", { firstName, lastName }, " saved");
-//     }
-//     navigation("/email");
-//   };
-//   return (
-//     <>
-//       <RegistrationTop
-//         logo={MdOutlineDriveFileRenameOutline}
-//         title="What's your name?"
-//       />
-//       <div className="mt-6 ml-52 w-[40%] flex flex-col justify-center items-center">
-//         <input
-//           type="text"
-//           name="firstName"
-//           className="w-full text-sm p-2 mt-5 border-b-2 border-b-black focus:outline-none"
-//           id="firstName"
-//           autoFocus={true}
-//           value={firstName}
-//           onChange={(e) => setFirstName(e.target.value)}
-//           placeholder="First Name (required)"
-//         />
-//         <input
-//           type="text"
-//           name="lastName"
-//           className="w-full text-sm p-2 mt-5 border-b-2 border-b-black focus:outline-none"
-//           id="lastName"
-//           value={lastName}
-//           onChange={(e) => setLastName(e.target.value)}
-//           placeholder="Last Name"
-//         />
-//       </div>
-//       <div className="mt-[3%] ml-[60%]">
-//         <button
-//           onClick={handleNext}
-//           className="bg-blue-500 h-12 w-60 border-none rounded-full justify-left items-center self-center mt-5 text-white text-lg font-bold font-sans"
-//         >
-//           Next
-//         </button>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default NameScreen;
-
-
-// import React, { useState, useRef } from 'react';
-
-// const AdminScreen = () => {
-//   const [streamOption, setStreamOption] = useState(null); // Track the selected streaming option
-//   const [streamUrl, setStreamUrl] = useState(''); // For the URL stream
-//   const videoRef = useRef(null); // For webcam video stream
-
-//   // Function to start webcam stream using getUserMedia
-//   const startWebcamStream = async () => {
-//     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//       try {
-//         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-//         videoRef.current.srcObject = stream;
-//         setStreamOption('webcam');
-//       } catch (err) {
-//         console.error('Error accessing webcam: ', err);
-//       }
-//     }
-//   };
-
-//   const handleStartUrlStream = () => {
-//     setStreamOption('url');
-//   };
-
-//   return (
-//     <div>
-//       <h1>Admin Dashboard</h1>
-      
-//       {/* Select Streaming Option */}
-//       <div>
-//         <button onClick={startWebcamStream}>Stream with Webcam</button>
-//         <button onClick={() => handleStartUrlStream()}>Stream with URL</button>
-//       </div>
-
-//       {/* If webcam is chosen */}
-//       {streamOption === 'webcam' && (
-//         <div>
-//           <h2>Webcam Stream</h2>
-//           <video ref={videoRef} autoPlay controls style={{ width: '500px' }} />
-//         </div>
-//       )}
-
-//       {/* If URL is chosen */}
-//       {streamOption === 'url' && (
-//         <div>
-//           <h2>Stream with URL</h2>
-//           <input
-//             type="text"
-//             placeholder="Enter live stream URL (YouTube/Facebook)"
-//             value={streamUrl}
-//             onChange={(e) => setStreamUrl(e.target.value)}
-//           />
-//           {streamUrl && (
-//             <div>
-//               {/* Embed the URL */}
-//               <iframe
-//                 width="500"
-//                 height="300"
-//                 src={streamUrl}
-//                 frameBorder="0"
-//                 allow="autoplay; encrypted-media"
-//                 allowFullScreen
-//                 title="Live stream"
-//               ></iframe>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AdminScreen;
-
-
-
 import React, { useState, useRef, useEffect } from 'react';
 
 const AdminScreen = () => {
-  const [streamOption, setStreamOption] = useState(null); // Track the selected streaming option
-  const [streamUrl, setStreamUrl] = useState(''); // For the URL stream
-  const [comments, setComments] = useState([]); // For storing comments
-  const videoRef = useRef(null); // For webcam video stream
+  const [streamOption, setStreamOption] = useState(null);
+  const [streamUrl, setStreamUrl] = useState('');
+  const [currentStream, setCurrentStream] = useState({ type: null, url: null });
+  const [volume, setVolume] = useState(1);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const videoRef = useRef(null);
 
-  // Function to start webcam stream using getUserMedia
-  const startWebcamStream = async () => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  const startCameraStream = async (cameraType) => {
+    if (isVideoLoaded && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        videoRef.current.srcObject = stream;
-        setStreamOption('webcam');
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: cameraType === 'front' ? 'user' : 'environment' },
+          audio: true,
+        });
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+
+        setStreamOption(cameraType === 'front' ? 'front-camera' : 'back-camera');
+        updateStreamOnServer(cameraType === 'front' ? 'front-camera' : 'back-camera', null);
       } catch (err) {
-        console.error('Error accessing webcam: ', err);
+        console.error('Error accessing camera: ', err);
       }
     }
   };
 
-  const handleStartUrlStream = () => {
-    setStreamOption('url');
+  const handleStartUrlStream = (streamType) => {
+    setStreamOption(streamType);
+    updateStreamOnServer(streamType, streamUrl);
   };
 
-  // Fetch comments from backend API
+  const updateStreamOnServer = (type, url) => {
+    fetch('/api/stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, url }),
+    });
+  };
+
+  const toggleStream = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach((track) => (track.enabled = !track.enabled));
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    if (videoRef.current) {
+      setVolume(e.target.value);
+      videoRef.current.volume = e.target.value;
+    }
+  };
+
+  const switchCamera = () => {
+    if (streamOption === 'front-camera') {
+      startCameraStream('back');
+    } else {
+      startCameraStream('front');
+    }
+  };
+
   useEffect(() => {
-    fetch('/api/comments')
+    fetch('/api/stream')
       .then((res) => res.json())
-      .then((data) => setComments(data));
+      .then((data) => setCurrentStream(data));
   }, []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h1>Admin Dashboard</h1>
-      
-      {/* Select Streaming Option */}
-      <div style={{ margin: '20px' }}>
-        <button onClick={startWebcamStream} style={{ marginRight: '10px' }}>Stream with Webcam</button>
-        <button onClick={() => handleStartUrlStream()}>Stream with URL</button>
+    <div style={{
+      width: "100%",
+      maxWidth: "1200px",
+      margin: "0 auto",
+      padding: "20px",
+      textAlign: "center",
+      backgroundColor: "#f5f5f5"
+    }}>
+      <h1 style={{ fontSize: "2.5em", color: "#333", marginBottom: "20px" }}>
+        Admin Streaming Dashboard
+      </h1>
+
+      {/* Stream Options Section */}
+      <div style={{
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        padding: "20px",
+        marginBottom: "20px",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)"
+      }}>
+        <h2 style={{ fontSize: "1.5em", marginBottom: "10px", color: "#444" }}>
+          Choose Stream Source
+        </h2>
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          marginTop: "20px"
+        }}>
+          <button 
+            onClick={() => startCameraStream('front')} 
+            style={{
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "1em",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Front Camera
+          </button>
+          <button 
+            onClick={() => startCameraStream('back')} 
+            style={{
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "1em",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Back Camera
+          </button>
+          <button 
+            onClick={() => handleStartUrlStream('youtube')} 
+            style={{
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "1em",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            YouTube Live Stream
+          </button>
+          <button 
+            onClick={() => handleStartUrlStream('obs')} 
+            style={{
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "1em",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            OBS Stream
+          </button>
+        </div>
       </div>
 
-      {/* If webcam is chosen */}
-      {streamOption === 'webcam' && (
-        <div>
-          <h2>Webcam Stream</h2>
-          <video ref={videoRef} autoPlay controls style={{ width: '500px', height: '300px' }} />
-        </div>
-      )}
-
-      {/* If URL is chosen */}
-      {streamOption === 'url' && (
-        <div>
-          <h2>Stream with URL</h2>
-          <input
-            type="text"
-            placeholder="Enter live stream URL (YouTube/Facebook)"
-            value={streamUrl}
-            onChange={(e) => setStreamUrl(e.target.value)}
-            style={{ width: '500px', height: '30px', margin: '10px' }}
+      {/* Stream Preview Section */}
+      <div style={{
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        padding: "20px",
+        marginBottom: "20px",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)"
+      }}>
+        <h2 style={{ fontSize: "1.5em", marginBottom: "10px", color: "#444" }}>
+          Stream Preview
+        </h2>
+        {streamOption === 'front-camera' || streamOption === 'back-camera' ? (
+          <video
+            ref={videoRef}
+            autoPlay
+            controls
+            volume={volume}
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              height: "300px",
+              borderRadius: "10px",
+              border: "2px solid #ccc"
+            }}
+            onLoadedMetadata={() => setIsVideoLoaded(true)}
           />
-          {streamUrl && (
-            <div>
-              {/* Embed the URL */}
-              <iframe
-                width="500"
-                height="300"
-                src={streamUrl}
-                frameBorder="0"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Live stream"
-              ></iframe>
-            </div>
-          )}
-        </div>
-      )}
+        ) : streamOption === 'youtube' ? (
+          <iframe 
+            src={streamUrl} 
+            frameBorder="0" 
+            allow="autoplay; encrypted-media" 
+            allowFullScreen 
+            title="YouTube Live Stream" 
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              height: "300px",
+              borderRadius: "10px"
+            }}
+          />
+        ) : streamOption === 'obs' ? (
+          <iframe 
+            src={streamUrl} 
+            frameBorder="0" 
+            allow="autoplay; encrypted-media" 
+            allowFullScreen 
+            title="OBS Stream" 
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              height: "300px",
+              borderRadius: "10px"
+            }}
+          />
+        ) : (
+          <p>No stream is currently active</p>
+        )}
+      </div>
 
-      {/* Comments section */}
-      <div style={{ margin: '20px' }}>
-        <h2>Comments</h2>
-        <ul>
-          {comments.map((comment) => (
-            <li key={comment._id}>{comment.name}: {comment.comment}</li>
-          ))}
-        </ul>
+      {/* Stream Controls Section */}
+      <div style={{
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        padding: "20px",
+        marginBottom: "20px",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)"
+      }}>
+        <h2 style={{ fontSize: "1.5em", marginBottom: "10px", color: "#444" }}>
+          Stream Controls
+        </h2>
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          marginTop: "20px"
+        }}>
+          <button 
+            onClick={toggleStream} 
+            style={{
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "1em",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Toggle Stream
+          </button>
+          <button 
+            onClick={switchCamera} 
+            style={{
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "1em",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Switch Camera
+          </button>
+          <input 
+            type="range" 
+            min="0" 
+            max="1" 
+            step="0.1" 
+            value={volume} 
+            onChange={handleVolumeChange} 
+            style={{
+              width: "200px",
+              height: "30px",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          />
+        </div>
       </div>
     </div>
   );
