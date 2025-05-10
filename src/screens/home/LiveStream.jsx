@@ -46,7 +46,7 @@ const streamSources = [
     name: "YouTube Live",
     icon: <FaYoutube size={24} />,
     color: "#FF0000",
-    embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0",
+    embedUrl: "https://www.youtube.com/embed/qxoIzmzQrgM?autoplay=1&mute=0",  
     description: "Watch our service on YouTube with live chat",
   },
   {
@@ -54,7 +54,7 @@ const streamSources = [
     name: "Facebook Live",
     icon: <FaFacebook size={24} />,
     color: "#1877F2",
-    embedUrl:
+    embedUrl:   
       "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379946729%2F&show_text=false",
     description: "Join us on Facebook and interact with our community",
   },
@@ -377,6 +377,7 @@ const LiveStreamScreen = () => {
               height: "100%",
               backgroundImage: `url(${bannerImage})`,
               backgroundSize: "cover",
+              backgroundColor: "rgba(42, 30, 122, 0.8)",
               backgroundPosition: "center",
               filter: "brightness(0.6)",
             }}

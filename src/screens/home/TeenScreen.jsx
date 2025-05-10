@@ -198,7 +198,7 @@ const TeenScreen = () => {
                 <div style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: "rgba(42, 30, 122, 0.3)",
+                  backgroundColor: "rgba(42, 30, 122, 0.7)",
                   zIndex: 1,
                 }}></div>
               </motion.div>
@@ -268,7 +268,7 @@ const TeenScreen = () => {
               transition={{ duration: 1, delay: 0.5 }}
               style={{
                 position: "absolute",
-                top: "50%",
+                top: "30%",
                 left: 0,
                 right: 0,
                 transform: "translate(-50%, -50%)",
@@ -284,7 +284,7 @@ const TeenScreen = () => {
                 style={{
                   fontSize: isMobile ? "20px" : "30px",
                   fontWeight: "bold",
-                  marginBottom: isMobile ? "10px" : "20px",
+                  marginBottom: isMobile ? "40px" : "50px",
                 }}
               >
                 WELCOME TO <br /> <p style={{fontSize: "60px", fontWeight: 900}}> TEENS MINISTRY </p>
@@ -326,7 +326,7 @@ const TeenScreen = () => {
                 style={{
                   position: "relative",
                   width: "100%",
-                  maxWidth: isMobile ? "90%" : "80%",
+                  maxWidth: isMobile ? "95%" : "80%",
                   margin: isMobile ? "0 auto" : "0",
                   overflow: "hidden",
                 }}

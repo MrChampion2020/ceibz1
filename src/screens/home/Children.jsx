@@ -191,7 +191,7 @@ const Children = () => {
               <motion.div
                 key={carouselIndex}
                 initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 5, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
                 style={{
@@ -214,7 +214,7 @@ const Children = () => {
                 <div style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: "rgba(42, 30, 122, 0.3)",
+                  backgroundColor: "rgba(42, 30, 122, 0.8)",
                   zIndex: 1,
                 }}></div>
               </motion.div>
@@ -285,7 +285,7 @@ const Children = () => {
                           transition={{ duration: 1, delay: 0.5 }}
                           style={{
                             position: "absolute",
-                            top: "50%",
+                            top: "30%",
                             left: 0,
                             right: 0,
                             transform: "translate(-50%, -50%)",
@@ -301,72 +301,15 @@ const Children = () => {
                             style={{
                               fontSize: isMobile ? "20px" : "30px",
                               fontWeight: "bold",
-                              marginBottom: isMobile ? "10px" : "20px",
+                              marginBottom: isMobile ? "40px" : "50px",
                             }}
                           >
-                            WELCOME TO <br /> <p style={{fontSize: "60px", fontWeight: 900}}> TEENS MINISTRY </p>
+                            WELCOME TO <br /> <p style={{fontSize: isMobile ? "30px" : "60px", fontWeight: 900}}> CHILDREN'S MINISTRY </p>
                           </motion.h1>
                         </motion.div>
           </div>
 
-          {/* Live Event Banner */}
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.8, type: "spring", stiffness: 100 }}
-            style={{
-              position: "absolute",
-              bottom: 3,
-              left: 0,
-              right: 0,
-              transform: "translateY(50%)",
-              backgroundColor: "#f59e0b",
-              padding: "16px",
-              zIndex: 1000,
-              maxWidth: "900px",
-              margin: "0 auto",
-              borderRadius: "4px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            <div style={{
-              maxWidth: "800px",
-              margin: "0 auto",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: isMobile ? "column" : "row",
-              gap: isMobile ? "10px" : "0",
-            }}>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 0.5 }}
-                style={{ fontSize: "16px", fontWeight: "500", margin: 0, color: "#000000" }}
-              >
-                JOIN US: SUNDAY SCHOOL WITH OUR CHILDREN MINISTRY
-              </motion.p>
-              <motion.button
-                whileHover={{ scale: 1.1, backgroundColor: "#3a2e8a" }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2, duration: 0.5 }}
-                style={{
-                  backgroundColor: "#2a1e7a",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 16px",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  borderRadius: "4px",
-                }}
-                onClick={() => navigate("/LiveStream")}
-              >
-                JOIN NOW
-              </motion.button>
-            </div>
-          </motion.div>
+         
         </section>
 
         {/* Intro Section (Adapted from Pastor Joe Section) */}

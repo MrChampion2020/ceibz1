@@ -1,39 +1,40 @@
+import { useState, useEffect, useRef } from "react";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../../components/ThemeProvider";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import transparentImage from "../../assets/christembassy.jpg";
+import church from "../../assets/church.jpg";
+import pastorjoe from "../../assets/pjoe.jpg";
+import lwfs from "../../assets/lwfs.jpg";
+import children from "../../assets/child.jpg";
+import teens from "../../assets/teensmin.jpg";
+import reachout from "../../assets/maygcs.jpg";
+import ssunday from "../../assets/ssunday.jpg";
+import healingstreams from "../../assets/max.jpg";
+import gcs from "../../assets/maygcs.jpg";
+import reachoutworld from "../../assets/rownigeria.jpg";
 
-import { useState, useEffect, useRef } from "react"
-import { useMediaQuery } from "react-responsive"
-import { useNavigate } from "react-router-dom"
-import { motion, AnimatePresence } from "framer-motion"
-import { useTheme } from "../../components/ThemeProvider"
-import Navbar from "../../components/Navbar"
-import Footer from "../../components/Footer"
-import transparentImage from "../../assets/christembassy.jpg"
-import church from "../../assets/church.jpg"
-import pastorjoe from "../../assets/pjoe.jpg"
-import lwfs from "../../assets/lwfs.jpg"
-import children from "../../assets/child.jpg"
-import teens from "../../assets/teens.jpg"
-import reachout from "../../assets/reachout.jpg"
-import ssunday from "../../assets/ssunday.jpg"
-import healingstreams from "../../assets/hslhs.jpg"
-
-import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from "react-icons/fa"
+import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from "react-icons/fa";
 
 const MainScreen = () => {
-  const [activeSection, setActiveSection] = useState(null)
-  const [carouselIndex, setCarouselIndex] = useState(0)
-  const [carouselAutoplay, setCarouselAutoplay] = useState(true)
-  const [currentDot, setCurrentDot] = useState(0)
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
-  const isTablet = useMediaQuery({ query: "(max-width: 1024px)" })
-  const navigate = useNavigate()
-  const { theme } = useTheme()
+  const [activeSection, setActiveSection] = useState(null);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [carouselAutoplay, setCarouselAutoplay] = useState(true);
+  const [currentDot, setCurrentDot] = useState(0);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isTablet = useMediaQuery({ query: "(max-width: 1024px)" });
+  const navigate = useNavigate();
+  const { theme } = useTheme();
 
-  const heroRef = useRef(null)
-  const pastorRef = useRef(null)
-  const ministriesRef = useRef(null)
-  const testimoniesRef = useRef(null)
-  const visionRef = useRef(null)
-  const programsRef = useRef(null)
+  const heroRef = useRef(null);
+  const pastorRef = useRef(null);
+  const ministriesRef = useRef(null);
+  const testimoniesRef = useRef(null);
+  const visionRef = useRef(null);
+  const programsRef = useRef(null);
 
   // Carousel banners
   const carouselBanners = [
@@ -46,7 +47,7 @@ const MainScreen = () => {
     {
       image: healingstreams,
     },
-  ]
+  ];
 
   const testimonies = [
     {
@@ -61,30 +62,30 @@ const MainScreen = () => {
       text: "Christ Embassy is not just a local assembly; I witnessed this in my life ever since I joined the ministry",
       author: "Brother Silas Oladele",
     },
-  ]
+  ];
 
   const programs = [
     {
-      title: "Night of Prayer",
-      image: church,
-      date: "Friday, 7PM",
+      title: "Sunday Service",
+      image: ssunday,
+      date: "Every Sunday, 8:30AM",
     },
     {
       title: "Global Communion Service",
-      image: church,
-      date: "Sunday, 10AM",
+      image: gcs,
+      date: "Sunday June 1st, 3PM",
     },
     {
-      title: "Reach Out Nigeria",
-      image: church,
-      date: "Saturday, 12PM",
+      title: "Reach Out World",
+      image: reachoutworld,
+      date: "1st October 2025, 8AM",
     },
     {
       title: "Healing Streams",
       image: church,
-      date: "Coming Soon",
+      date: "Coming This July",
     },
-  ]
+  ];
 
   const ministries = [
     {
@@ -105,16 +106,16 @@ const MainScreen = () => {
       description:
         "The Teens Ministry focuses on creating an environment that demonstrates the character of the Spirit present in Christ's teachings. We are committed to Christ, the vision of our Ministry and what changes in the world.",
     },
-  ]
+  ];
 
   const textSectionJoe = `The man of God Highly Esteemed Pastor Joe Agbaje is the highly revered Zonal Pastor of Christ Embassy 
   Ibadan Zone 1, an ardent follower of the President of the Loveworld Nation Rev. Chris Oyakhilome DSc. DSc. DD. 
   Over the years, he has demonstrated the power of the Word in teaching, healing the sick, and setting the captives free. 
-  Every meeting with him is epoch-making!`
+  Every meeting with him is epoch-making!`;
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
       const sections = [
         { ref: heroRef, id: "hero" },
@@ -123,61 +124,66 @@ const MainScreen = () => {
         { ref: testimoniesRef, id: "testimonies" },
         { ref: visionRef, id: "vision" },
         { ref: programsRef, id: "programs" },
-      ]
+      ];
 
       for (const section of sections) {
-        if (!section.ref.current) continue
+        if (!section.ref.current) continue;
 
-        const element = section.ref.current
-        const rect = element.getBoundingClientRect()
-        const topPosition = rect.top + window.scrollY
-        const bottomPosition = topPosition + rect.height
+        const element = section.ref.current;
+        const rect = element.getBoundingClientRect();
+        const topPosition = rect.top + window.scrollY;
+        const bottomPosition = topPosition + rect.height;
 
         if (scrollPosition >= topPosition && scrollPosition <= bottomPosition) {
-          setActiveSection(section.id)
-          break
+          setActiveSection(section.id);
+          break;
         }
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
-    let interval
+    let interval;
     if (carouselAutoplay) {
       interval = setInterval(() => {
-        setCarouselIndex((prevIndex) => (prevIndex + 1) % carouselBanners.length)
-      }, 5000)
+        setCarouselIndex(
+          (prevIndex) => (prevIndex + 1) % carouselBanners.length
+        );
+      }, 5000);
     }
-    return () => clearInterval(interval)
-  }, [carouselAutoplay, carouselBanners.length])
+    return () => clearInterval(interval);
+  }, [carouselAutoplay, carouselBanners.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentDot((prevDot) => (prevDot + 1) % 4)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
+      setCurrentDot((prevDot) => (prevDot + 1) % 4);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleCarouselPrev = () => {
-    setCarouselAutoplay(false)
-    setCarouselIndex((prevIndex) => (prevIndex - 1 + carouselBanners.length) % carouselBanners.length)
+    setCarouselAutoplay(false);
+    setCarouselIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + carouselBanners.length) % carouselBanners.length
+    );
     // Resume autoplay after 10 seconds of inactivity
-    setTimeout(() => setCarouselAutoplay(true), 10000)
-  }
+    setTimeout(() => setCarouselAutoplay(true), 10000);
+  };
 
   const handleCarouselNext = () => {
-    setCarouselAutoplay(false)
-    setCarouselIndex((prevIndex) => (prevIndex + 1) % carouselBanners.length)
+    setCarouselAutoplay(false);
+    setCarouselIndex((prevIndex) => (prevIndex + 1) % carouselBanners.length);
     // Resume autoplay after 10 seconds of inactivity
-    setTimeout(() => setCarouselAutoplay(true), 10000)
-  }
+    setTimeout(() => setCarouselAutoplay(true), 10000);
+  };
 
   const handleDotClick = (index) => {
-    setCurrentDot(index)
-  }
+    setCurrentDot(index);
+  };
 
   return (
     <div
@@ -206,7 +212,7 @@ const MainScreen = () => {
             backgroundColor: "#f59e0b",
             padding: "16px",
             zIndex: 1000,
-            maxWidth: "900px",
+            maxWidth: isMobile ? "95%" : "70%",
             margin: "0 auto",
             borderRadius: "4px",
             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
@@ -220,10 +226,17 @@ const MainScreen = () => {
               justifyContent: "space-between",
               alignItems: "center",
               flexDirection: isMobile ? "column" : "row",
-              gap: isMobile ? "10px" : "0",
+              gap: isMobile ? "5px" : "0",
             }}
           >
-            <p style={{ fontSize: "16px", fontWeight: "500", margin: 0, color: "#000000" }}>
+            <p
+              style={{
+                fontSize: isMobile ? "10px" : "16px",
+                fontWeight: isMobile ? 500 : 600,
+                margin: 0,
+                color: "#000000",
+              }}
+            >
               HAPPENING LIVE: SUNDAY SERVICE WITH PASTOR JOE AGBAJE
             </p>
             <motion.button
@@ -244,6 +257,7 @@ const MainScreen = () => {
             </motion.button>
           </div>
         </motion.div>
+
         {/* Hero Section with Carousel */}
         <section
           ref={heroRef}
@@ -277,7 +291,9 @@ const MainScreen = () => {
                 }}
               >
                 <img
-                  src={carouselBanners[carouselIndex].image || "/placeholder.svg"}
+                  src={
+                    carouselBanners[carouselIndex].image || "/placeholder.svg"
+                  }
                   alt="Carousel image"
                   style={{
                     width: "100%",
@@ -312,7 +328,10 @@ const MainScreen = () => {
               }}
             >
               <motion.button
-                whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+                whileHover={{
+                  scale: 1.1,
+                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                }}
                 whileTap={{ scale: 0.9 }}
                 style={{
                   width: "40px",
@@ -331,7 +350,10 @@ const MainScreen = () => {
                 <FaChevronLeft />
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+                whileHover={{
+                  scale: 1.1,
+                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                }}
                 whileTap={{ scale: 0.9 }}
                 style={{
                   width: "40px",
@@ -358,13 +380,11 @@ const MainScreen = () => {
           ref={pastorRef}
           style={{
             padding: isMobile ? "40px 16px" : "70px 32px",
-            paddingTop: "20px", // Reduced padding since we no longer need space for the overlapping banner
+            paddingTop: "100px", // Increased padding to account for the overlapping banner
             backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
             color: theme === "dark" ? "#ffffff" : "#000000",
-            position: "relative",
-            zIndex: 0,
-            height: "calc(80vh - 50px)", // Match the height of the carousel section
-            
+            position: "relative", // Add position relative
+            zIndex: 0, // Lower z-index than the banner
           }}
         >
           <div
@@ -393,7 +413,7 @@ const MainScreen = () => {
                 style={{
                   position: "relative",
                   width: "100%",
-                  maxWidth: isMobile ? "90%" : "80%",
+                  maxWidth: isMobile ? "95%" : "80%",
                   margin: isMobile ? "0 auto" : "0",
                   overflow: "hidden",
                 }}
@@ -421,7 +441,7 @@ const MainScreen = () => {
                   style={{
                     fontSize: isMobile ? "24px" : "30px",
                     fontWeight: "bold",
-                    color: "#f59e0b",
+                    color:  theme === "dark" ? "#f59e0b" : "#2a1e7a",
                     marginBottom: "16px",
                   }}
                 >
@@ -438,16 +458,25 @@ const MainScreen = () => {
                   {textSectionJoe}
                 </p>
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{
+                    scale: 1.05,
+                    backgroundColor:
+                      theme === "dark" ? "#f59e0b" : "#2a1e7a",
+                    color: "white",
+                  }}
                   whileTap={{ scale: 0.95 }}
                   style={{
-                    backgroundColor: "#2a1e7a",
-                    color: "white",
-                    border: "none",
                     padding: "10px 20px",
                     cursor: "pointer",
                     borderRadius: "4px",
                     fontSize: "14px",
+                    backgroundColor: "transparent",
+                    color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
+                    border: `1px solid ${
+                      theme === "dark" ? "#f59e0b" : "#2a1e7a"
+                    }`,
+                    cursor: "pointer",
+                    textTransform: "uppercase",
                   }}
                   onClick={() => navigate("/Contact")}
                 >
@@ -486,7 +515,11 @@ const MainScreen = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : isTablet
+                  ? "repeat(2, 1fr)"
+                  : "repeat(3, 1fr)",
                 gap: "24px",
               }}
             >
@@ -500,7 +533,10 @@ const MainScreen = () => {
                   style={{
                     backgroundColor: theme === "dark" ? "#1a1a1a" : "white",
                     overflow: "hidden",
-                    boxShadow: theme === "dark" ? "0 4px 6px rgba(0, 0, 0, 0.3)" : "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    boxShadow:
+                      theme === "dark"
+                        ? "0 4px 6px rgba(0, 0, 0, 0.3)"
+                        : "0 4px 6px rgba(0, 0, 0, 0.1)",
                     borderRadius: "4px",
                   }}
                 >
@@ -548,13 +584,16 @@ const MainScreen = () => {
                     <motion.button
                       whileHover={{
                         scale: 1.05,
-                        backgroundColor: theme === "dark" ? "#f59e0b" : "#2a1e7a",
+                        backgroundColor:
+                          theme === "dark" ? "#f59e0b" : "#2a1e7a",
                         color: "white",
                       }}
                       style={{
                         backgroundColor: "transparent",
                         color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                        border: `1px solid ${theme === "dark" ? "#f59e0b" : "#2a1e7a"}`,
+                        border: `1px solid ${
+                          theme === "dark" ? "#f59e0b" : "#2a1e7a"
+                        }`,
                         padding: "8px 16px",
                         cursor: "pointer",
                         fontSize: "12px",
@@ -562,9 +601,12 @@ const MainScreen = () => {
                         borderRadius: "4px",
                       }}
                       onClick={() => {
-                        if (ministry.title === "FOUNDATION SCHOOL") navigate("/foundationSchool")
-                        if (ministry.title === "CHILDREN MINISTRY") navigate("/children")
-                        if (ministry.title === "TEENS MINISTRY") navigate("/teens")
+                        if (ministry.title === "FOUNDATION SCHOOL")
+                          navigate("/foundationSchool");
+                        if (ministry.title === "CHILDREN MINISTRY")
+                          navigate("/children");
+                        if (ministry.title === "TEENS MINISTRY")
+                          navigate("/teens");
                       }}
                     >
                       LEARN MORE
@@ -605,7 +647,11 @@ const MainScreen = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : isTablet
+                  ? "repeat(2, 1fr)"
+                  : "repeat(4, 1fr)",
                 gap: "20px",
               }}
             >
@@ -641,7 +687,8 @@ const MainScreen = () => {
                       left: 0,
                       right: 0,
                       padding: "16px",
-                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
                     }}
                   >
                     <h3
@@ -683,7 +730,8 @@ const MainScreen = () => {
                       width: "8px",
                       height: "8px",
                       borderRadius: "50%",
-                      backgroundColor: dot === currentDot ? "#f59e0b" : "#9ca3af",
+                      backgroundColor:
+                        dot === currentDot ? "#f59e0b" : "#9ca3af",
                       border: "none",
                       cursor: "pointer",
                       padding: 0,
@@ -742,7 +790,11 @@ const MainScreen = () => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : isTablet
+                  ? "repeat(2, 1fr)"
+                  : "repeat(3, 1fr)",
                 gap: "24px",
               }}
             >
@@ -761,7 +813,9 @@ const MainScreen = () => {
                     border: theme === "dark" ? "1px solid #333333" : "none",
                     borderRadius: "4px",
                     boxShadow:
-                      theme === "dark" ? "0 4px 6px rgba(193, 147, 10, 0.17)" : "0 4px 6px rgba(57, 56, 56, 0.27)",
+                      theme === "dark"
+                        ? "0 4px 6px rgba(193, 147, 10, 0.17)"
+                        : "0 4px 6px rgba(57, 56, 56, 0.27)",
                   }}
                 >
                   <div
@@ -886,8 +940,10 @@ const MainScreen = () => {
                   fontSize: "16px",
                 }}
               >
-                The Lord has called us to fulfill a very definite purpose, which is to take His divine presence to the
-                peoples and nations of the world, and to demonstrate the character of His Spirit everywhere.
+                The Lord has called us to fulfill a very definite purpose, which
+                is to take His divine presence to the peoples and nations of the
+                world, and to demonstrate the character of His Spirit
+                everywhere.
               </p>
 
               <p
@@ -897,10 +953,12 @@ const MainScreen = () => {
                   fontSize: "16px",
                 }}
               >
-                When you worship with us, you learn more than just the letters of the Word; you're imparted with and
-                impacted by the Spirit of the Word. As we share God's Word, it takes root in you, and you become exactly
-                what the Lord wants you to be. The Holy Spirit gets a hold of your life, and His vision becomes real to
-                you and in your life.
+                When you worship with us, you learn more than just the letters
+                of the Word; you're imparted with and impacted by the Spirit of
+                the Word. As we share God's Word, it takes root in you, and you
+                become exactly what the Lord wants you to be. The Holy Spirit
+                gets a hold of your life, and His vision becomes real to you and
+                in your life.
               </p>
             </motion.div>
           </div>
@@ -959,12 +1017,10 @@ const MainScreen = () => {
 
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default MainScreen
-
-
+export default MainScreen;
 
 // import { useState, useEffect, useRef } from "react"
 // import { useMediaQuery } from "react-responsive"
@@ -1074,9 +1130,9 @@ export default MainScreen
 //     },
 //   ]
 
-//   const textSectionJoe = `The man of God Highly Esteemed Pastor Joe Agbaje is the highly revered Zonal Pastor of Christ Embassy 
-//   Ibadan Zone 1, an ardent follower of the President of the Loveworld Nation Rev. Chris Oyakhilome DSc. DSc. DD. 
-//   Over the years, he has demonstrated the power of the Word in teaching, healing the sick, and setting the captives free. 
+//   const textSectionJoe = `The man of God Highly Esteemed Pastor Joe Agbaje is the highly revered Zonal Pastor of Christ Embassy
+//   Ibadan Zone 1, an ardent follower of the President of the Loveworld Nation Rev. Chris Oyakhilome DSc. DSc. DD.
+//   Over the years, he has demonstrated the power of the Word in teaching, healing the sick, and setting the captives free.
 //   Every meeting with him is epoch-making!`
 
 //   useEffect(() => {
@@ -1732,7 +1788,7 @@ export default MainScreen
 //                 >
 //                   <div
 //                     style={{
-                      
+
 //                       color: "#f59e0b",
 //                       position: "absolute",
 //                       top: "16px",
