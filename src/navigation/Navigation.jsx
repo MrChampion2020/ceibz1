@@ -1,72 +1,47 @@
 import React from "react";
-import { BrowserRouter, Route, Routes,} from "react-router-dom";
-import LoginRoute from "./LoginRoute";
-import UserRoute from "./UserRoute";
+import { Route, Routes } from "react-router-dom";
 import {
-  ChatScreen,
-  HandleLikeScreen,
-  HomeScreen,
-  LikesScreen,
-  ProfileScreen,
-  SendLikeScreen,
   Contact,
-  BirthScreen,
+  StreamForm,
   ProgramScreen,
   TeenScreen,
   FoundationSchoolScreen,
-  HomeTownScreen,
+  StreamList,
   GiveScreen,
   MainScreen,
-  LookingFor,
+  StreamPreview,
   AdminScreen,
   Children,
   StripeScreen,
-  PreFinalScreen,
-  PromptsScreen,
-  ShowPromptsScreen,
-  TypeScreen,
-  ChatRoom,
+  LiveStreamView,
+  CommentSection,
   LiveStream,
+  LiveStreamComment,
+  TestifyScreen,
 } from "../screens/index";
 
 const Navigation = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginRoute />}>
-          <Route path="" element={<MainScreen />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="birth" element={<BirthScreen />} />
-          <Route path="Programs" element={<ProgramScreen />} />
-          <Route path="teens" element={<TeenScreen />} />
-          <Route path="foundationSchool" element={<FoundationSchoolScreen />} />
-          <Route path="hometown" element={<HomeTownScreen />} />
-          <Route path="give" element={<GiveScreen />} />
-          <Route path="looking-for" element={<LookingFor />} />
-          <Route path="admin" element={<AdminScreen />} />
-          <Route path="children" element={<Children />} />
-          <Route path="stripe" element={<StripeScreen />} />
-          <Route path="pre-final" element={<PreFinalScreen />} />
-          <Route path="prompts" element={<PromptsScreen />} />
-          <Route path="show-prompts" element={<ShowPromptsScreen />} />
-          <Route path="type" element={<TypeScreen />} />
-          <Route path="LiveStream" element={<LiveStream />} />
-        </Route>
-        <Route path="/login" element={<LoginRoute />} />
-        <Route path="/user" element={<UserRoute />}>
-          <Route path="" element={<HomeScreen />} />
-          <Route path="chat" element={<ChatScreen />} />
-          <Route path="handle-like" element={<HandleLikeScreen />} />
-          {/* <Route path="home" element={<HomeScreen />} /> */}
-          <Route path="likes" element={<LikesScreen />} />
-          <Route path="profile" element={<ProfileScreen />} />
-          <Route path="send-like" element={<SendLikeScreen />} />
-          <Route path="chat-room" element={<ChatRoom />} />
-          
+    <Routes>
+      <Route path="/" element={<MainScreen />} />
+      <Route path="contact" element={<Contact />} />
+      <Route path="streamForm" element={<StreamForm />} />
+      <Route path="Programs" element={<ProgramScreen />} />
+      <Route path="teens" element={<TeenScreen />} />
+      <Route path="foundationSchool" element={<FoundationSchoolScreen />} />
+      <Route path="StreamList" element={<StreamList />} />
+      <Route path="give" element={<GiveScreen />} />
+      <Route path="StreamPreview" element={<StreamPreview />} />
+      <Route path="admin" element={<AdminScreen />} />
+      <Route path="children" element={<Children />} />
+      <Route path="stripe" element={<StripeScreen />} />
+      <Route path="LiveStreamView" element={<LiveStreamView />} />
+      <Route path="commentSection" element={<CommentSection />} />
+      <Route path="LiveStreamComment" element={<LiveStreamComment />} />
+      <Route path="LiveStream" element={<LiveStream />} />
+      <Route path="TestifyScreen" element={<TestifyScreen />} />
 
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    </Routes>
   );
 };
 

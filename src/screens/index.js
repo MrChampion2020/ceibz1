@@ -1,28 +1,19 @@
-// Exporting mainstack components
-export { default as ChatScreen } from './mainstack/ChatScreen';
-export { default as HandleLikeScreen } from './mainstack/HandleLikeScreen';
-export { default as HomeScreen } from './mainstack/HomeScreen';
-export { default as LikesScreen } from './mainstack/LikesScreen';
-export { default as ProfileScreen } from './mainstack/ProfileScreen';
-export { default as SendLikeScreen } from './mainstack/SendLikeScreen';
-export { default as ChatRoom } from './mainstack/ChatRoom';
-
-
 // Exporting regitser components
-export { default as Contact} from './register/Contact';
-export { default as BirthScreen } from './register/BirthScreen';
-export { default as ProgramScreen } from './register/Programs';
-export { default as TeenScreen } from './register/TeenScreen';
-export { default as FoundationSchoolScreen } from './register/FoundationSchoolScreen';
-export { default as HomeTownScreen } from './register/HomeTownScreen';
-export { default as GiveScreen } from './register/GiveScreen';
-export { default as LookingFor } from './register/LookingFor';
-export { default as AdminScreen } from './register/AdminScreen';
-export { default as Children } from './register/Children';
-export { default as StripeScreen } from './register/stripe';
-export { default as PreFinalScreen } from './register/PreFinalScreen';
-export { default as PromptsScreen } from './register/PromptsScreen';
-export { default as ShowPromptsScreen } from './register/ShowPromptsScreen';
-export { default as TypeScreen } from './register/TypeScreen';
-export { default as MainScreen } from './register/MainScreen';
-export { default as LiveStream } from './register/LiveStream';
+export { default as Contact} from './home/Contact';
+export { default as StreamForm } from './home/AdminStreamForm';
+export { default as ProgramScreen } from './home/Programs';
+export { default as TeenScreen } from './home/TeenScreen';
+export { default as FoundationSchoolScreen } from './home/FoundationSchoolScreen';
+export { default as StreamList } from './home/AdminStreamList';
+export { default as GiveScreen } from './home/GiveScreen';
+export { default as StreamPreview } from './home/AdminStreamPreview';
+export { default as AdminScreen } from './home/AdminScreen';
+export { default as Children } from './home/Children';
+export { default as StripeScreen } from './home/stripe';
+export { default as LiveStreamView } from './home/LiveStreamView';
+export { default as CommentSection } from './home/AdminCommentSection';
+export { default as LiveStreamComment } from './home/LiveStreamComment';
+export { default as MainScreen } from './home/MainScreen';
+export { default as LiveStream } from './home/LiveStream';
+export { default as TestifyScreen} from './home/TestifyScreen';
+
