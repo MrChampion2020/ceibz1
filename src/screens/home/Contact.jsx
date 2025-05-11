@@ -8,7 +8,7 @@ import Navbar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import bannerImage from "../../assets/pjoe.jpg"
 import kingschat from "../../assets/kingschat.png"
-import sango from "../../assets/pastor.mp4"
+import sango from "../../assets/videos/churchrd.mp4"
 
 import { useNavigate } from "react-router-dom"
 import { useTheme } from "../../components/ThemeProvider"
