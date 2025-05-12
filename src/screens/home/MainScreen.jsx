@@ -184,7 +184,7 @@ const MainScreen = () => {
       <Navbar />
 
       {/* Main Content */}
-      <div style={{ paddingTop: isMobile ? "16px" : "26px", width: "100%", maxWidth: "100vw" }}>
+      <div style={{ paddingTop: isMobile ? "80px" : "80px", width: "100%", maxWidth: "100vw" }}>
         {/* Live Service Banner */}
         <motion.div
           initial={{ y: -20, opacity: 0 }}
