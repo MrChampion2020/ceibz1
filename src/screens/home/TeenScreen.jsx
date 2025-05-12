@@ -299,7 +299,7 @@ const TeenScreen = () => {
           ref={introRef}
           style={{
             padding: isMobile ? "40px 16px" : "60px 32px",
-            paddingTop: "100px",
+            paddingTop: isMobile ? "50px" : "100px",
             backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
             color: theme === "dark" ? "#ffffff" : "#000000",
             position: "relative",

@@ -164,10 +164,29 @@ const Children = () => {
   return (
     <div style={{
       width: "100%",
-      height: "100%",
+      minWidth: "100%",
+      boxSizing: "border-box",
       backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
       color: theme === "dark" ? "#ffffff" : "#000000",
     }}>
+      <style>
+        {`
+          .hero-section {
+            height: calc(100vh - 0px);
+          }
+          @media (max-width: 768px) {
+            .hero-section {
+              height: 500px;
+            }
+          }
+          .carousel-image {
+            aspect-ratio: 16 / 9;
+          }
+          * {
+            box-sizing: border-box;
+          }
+        `}
+      </style>
       <Navbar />
 
       {/* Main Content */}
@@ -175,12 +194,11 @@ const Children = () => {
         {/* Hero Section with Carousel */}
         <section
           ref={heroRef}
+          className="hero-section"
           style={{
             position: "relative",
-            // height: "calc(100vh - 80px)",
-            height: isMobile ? "500px" : "calc(100vh - 0px)",
-
             width: "100%",
+            minHeight: "500px",
             overflow: "hidden",
           }}
         >
@@ -192,10 +210,10 @@ const Children = () => {
             <AnimatePresence initial={false}>
               <motion.div
                 key={carouselIndex}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 5, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 1.2, ease: "easeInOut" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
                 style={{
                   position: "absolute",
                   inset: 0,
@@ -203,16 +221,28 @@ const Children = () => {
                   width: "100%",
                 }}
               >
-                <img
-                  src={carouselBanners[carouselIndex].image}
-                  alt="Children Ministry Carousel"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center",
-                  }}
-                />
+                <div style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "#ccc", // Placeholder background
+                }}>
+                  <picture>
+                    <source srcSet={carouselBanners[carouselIndex].image} media="(max-width:  768px)" />
+                    <img
+                      src={carouselBanners[carouselIndex].image}
+                      alt="Children Ministry Carousel"
+                      width="1280"
+                      height="720"
+                      className="carousel-image"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        objectPosition: "center",
+                      }}
+                    />
+                  </picture>
+                </div>
                 <div style={{
                   position: "absolute",
                   inset: 0,
@@ -279,47 +309,43 @@ const Children = () => {
               </motion.button>
             </motion.div>
 
-
             {/* Welcome Text */}
-                        <motion.div
-                          initial={{ opacity: 0, y: 50 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 1, delay: 0.5 }}
-                          style={{
-                            position: "absolute",
-                            top: "30%",
-                            left: 0,
-                            right: 0,
-                            transform: "translate(-50%, -50%)",
-                            textAlign: "center",
-                            color: "white",
-                            zIndex: 2,
-                          }}
-                        >
-                          <motion.h1
-                            initial={{ scale: 0.9 }}
-                            animate={{ scale: 1 }}
-                            transition={{ duration: 0.5, delay: 0.6 }}
-                            style={{
-                              fontSize: isMobile ? "20px" : "30px",
-                              fontWeight: "bold",
-                              marginBottom: isMobile ? "40px" : "50px",
-                            }}
-                          >
-                            WELCOME TO <br /> <p style={{fontSize: isMobile ? "30px" : "60px", fontWeight: 900}}> CHILDREN'S MINISTRY </p>
-                          </motion.h1>
-                        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              style={{
+                position: "absolute",
+                top: "30%",
+                left: 0,
+                right: 0,
+                textAlign: "center",
+                color: "white",
+                zIndex: 2,
+              }}
+            >
+              <motion.h1
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                style={{
+                  fontSize: isMobile ? "20px" : "30px",
+                  fontWeight: "bold",
+                  marginBottom: isMobile ? "40px" : "50px",
+                }}
+              >
+                WELCOME TO <br /> <p style={{ fontSize: isMobile ? "30px" : "60px", fontWeight: 900 }}> CHILDREN'S MINISTRY </p>
+              </motion.h1>
+            </motion.div>
           </div>
-
-         
         </section>
 
-        {/* Intro Section (Adapted from Pastor Joe Section) */}
+        {/* Intro Section */}
         <section
           ref={introRef}
           style={{
             padding: isMobile ? "40px 16px" : "60px 32px",
-            paddingTop: "100px",
+            paddingTop: isMobile ? "50px" : "100px",
             backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
             color: theme === "dark" ? "#ffffff" : "#000000",
             position: "relative",
@@ -347,7 +373,7 @@ const Children = () => {
                 style={{
                   position: "relative",
                   width: "100%",
-                  maxWidth: isMobile ? "90%" : "80%",
+                  maxWidth: isMobile ? "95%" : "80%",
                   margin: isMobile ? "0 auto" : "0",
                   overflow: "hidden",
                 }}
@@ -357,6 +383,8 @@ const Children = () => {
                   transition={{ duration: 0.5 }}
                   src={image1}
                   alt="Children Ministry Intro"
+                  width="600"
+                  height="400"
                   style={{
                     width: "100%",
                     height: "auto",
@@ -423,7 +451,7 @@ const Children = () => {
           </div>
         </section>
 
-        {/* Activities Section (Adapted from Ministries Section) */}
+        {/* Activities Section */}
         <section
           ref={activitiesRef}
           style={{
@@ -456,11 +484,11 @@ const Children = () => {
               {activities.map((activity, index) => (
                 <motion.div
                   key={index}
-                  initial={{ y: 100, opacity: 0, scale: 0.9 }}
-                  whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                  initial={{ y: 100, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: index * 0.3, type: "spring" }}
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileHover={{ y: -10 }}
                   style={{
                     backgroundColor: theme === "dark" ? "#1a1a1a" : "white",
                     overflow: "hidden",
@@ -474,11 +502,11 @@ const Children = () => {
                     width: "100%",
                     overflow: "hidden",
                   }}>
-                    <motion.img
-                      whileHover={{ scale: 1.1, rotate: 3 }}
-                      transition={{ duration: 0.5 }}
+                    <img
                       src={activity.image}
                       alt={activity.title}
+                      width="400"
+                      height="200"
                       style={{
                         width: "100%",
                         height: "100%",
@@ -578,11 +606,11 @@ const Children = () => {
               {programs.map((program, index) => (
                 <motion.div
                   key={index}
-                  initial={{ y: 100, opacity: 0, scale: 0.9 }}
-                  whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                  initial={{ y: 100, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: index * 0.2, type: "spring" }}
-                  whileHover={{ y: -10, scale: 1.05 }}
+                  whileHover={{ y: -10 }}
                   style={{
                     position: "relative",
                     overflow: "hidden",
@@ -591,11 +619,11 @@ const Children = () => {
                   }}
                   onClick={() => navigate("/Programs")}
                 >
-                  <motion.img
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
+                  <img
                     src={program.image}
                     alt={program.title}
+                    width="300"
+                    height="180"
                     style={{
                       width: "100%",
                       height: "180px",
@@ -726,11 +754,11 @@ const Children = () => {
               {testimonies.map((testimony, index) => (
                 <motion.div
                   key={index}
-                  initial={{ y: 100, opacity: 0, scale: 0.9 }}
-                  whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                  initial={{ y: 100, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: index * 0.3, type: "spring" }}
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileHover={{ y: -10 }}
                   style={{
                     backgroundColor: theme === "dark" ? "#111111" : "#f9fafb",
                     padding: "32px",
@@ -954,3 +982,4 @@ const Children = () => {
 };
 
 export default Children;
+
