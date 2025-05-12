@@ -192,7 +192,7 @@ const MainScreen = () => {
           transition={{ delay: 0.8, duration: 0.8 }}
           style={{
             position: "absolute",
-            bottom: isMobile ? "45%" : -60,
+            bottom: isMobile ? "38%" : -110,
             // top: isMobile ? "auto" : "auto",
             left: 0,
             right: 0,
