@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import Navbar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import { useTheme } from "../../components/ThemeProvider"
-import bannerImage from "../../assets/church.jpg"
+import bannerImage from "../../assets/sunday.jpg"
 import partnerImage from "../../assets/partner.png"
 import buildingImage from "../../assets/building.jpeg"
 import healingImage from "../../assets/healings.jpg"
@@ -373,7 +373,7 @@ const GiveScreen = () => {
               backgroundImage: `url(${bannerImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              filter: "brightness(0.6)",
+              filter: "brightness(0.2)",
             }}
           />
 
@@ -436,7 +436,9 @@ const GiveScreen = () => {
                 whileHover={{ scale: 1.05, backgroundColor: "#3a2e8a" }}
                 whileTap={{ scale: 0.95 }}
                 style={{
-                  padding: "14px 28px",
+                  padding:  isMobile ? "14px 1px" : "14px 28px",
+                  width: isMobile ? "80%" : "auto",
+                  margin: isMobile ? "0 auto" : "0",
                   backgroundColor: "#2a1e7a",
                   color: "white",
                   border: "none",
@@ -458,7 +460,9 @@ const GiveScreen = () => {
                 whileHover={{ scale: 1.05, backgroundColor: "#e08c00" }}
                 whileTap={{ scale: 0.95 }}
                 style={{
-                  padding: "14px 28px",
+                  padding:  isMobile ? "14px 1px" : "14px 28px",
+                  width: isMobile ? "80%" : "auto",
+                  margin: isMobile ? "0 auto" : "0",
                   backgroundColor: "#f59e0b",
                   color: "white",
                   border: "none",

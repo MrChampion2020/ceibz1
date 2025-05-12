@@ -27,7 +27,7 @@ const ProgramScreen = () => {
   const carouselImages = [pro6, pro3, pro4];
 
   const events = [
-    { title: "Super Sunday With Pst. Joe Agbaje", date: "2025-05-11" },
+    { title: "Mid Week Service With H.E Pst. Joe Agbaje", date: "2025-05-14" },
     { title: "With Pastor Joe Agbaje", date: "2025-05-11" },
   ];
 
@@ -195,7 +195,7 @@ const ProgramScreen = () => {
         {/* Events Area */}
         <section
           style={{
-            padding: "20px",
+            padding:   isMobile ? "10px" : "20px",
             backgroundColor: theme === "dark" ? "#111111" : "black",
             color: "white",
           }}
@@ -244,7 +244,7 @@ const ProgramScreen = () => {
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    style={{ margin: "5px 0 0", fontSize: "18px" }}
+                    style={{ margin: "5px 0 0", fontSize: isMobile ? "12px" :  "18px", }}
                   >
                     {events[0].title}
                   </motion.p>
@@ -401,9 +401,12 @@ const ProgramScreen = () => {
                           backgroundColor: "#2a1e7a",
                           color: "white",
                           border: "none",
-                          padding: "10px 8px",
+                         
                           borderRadius: "4px",
                           cursor: "pointer",
+                          padding:  isMobile ? "14px 1px" : "14px 28px",
+                          width: isMobile ? "50%" : "auto",
+                          margin: isMobile ? "0 auto" : "0",
                         }}
                         onClick={(e) => {
                           e.stopPropagation();

@@ -177,7 +177,9 @@ const Children = () => {
           ref={heroRef}
           style={{
             position: "relative",
-            height: "calc(100vh - 80px)",
+            // height: "calc(100vh - 80px)",
+            height: isMobile ? "500px" : "calc(100vh - 0px)",
+
             width: "100%",
             overflow: "hidden",
           }}
@@ -376,13 +378,13 @@ const Children = () => {
                   whileInView={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                   style={{
-                    fontSize: isMobile ? "24px" : "30px",
+                    fontSize: isMobile ? "20px" : "30px",
                     fontWeight: "bold",
                     color: "#f59e0b",
                     marginBottom: "16px",
                   }}
                 >
-                  WELCOME TO THE CHILDREN MINISTRY
+                  ABOUT CHILDREN MINISTRY
                 </motion.h2>
                 <motion.p
                   initial={{ y: 20, opacity: 0 }}
@@ -903,7 +905,7 @@ const Children = () => {
             style={{
               maxWidth: "1280px",
               margin: "0 auto",
-              padding: "0 16px",
+              padding: isMobile ? "0 5px" : "0 16px",
               display: "flex",
               flexDirection: isMobile ? "column" : "row",
               alignItems: "center",
@@ -915,9 +917,9 @@ const Children = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               style={{
-                fontSize: isMobile ? "14px" : "16px",
+                fontSize: isMobile ? "8px" : "16px",
                 fontWeight: 600,
-                marginBottom: isMobile ? "14px" : 0,
+                marginBottom: isMobile ? "4px" : 0,
                 color: "#2a1e7a",
               }}
             >

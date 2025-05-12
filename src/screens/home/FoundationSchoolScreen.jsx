@@ -10,7 +10,7 @@ import galleryImage1 from "../../assets/foundsch.jpg";
 import galleryImage2 from "../../assets/fsgra1.jpeg";
 import galleryImage3 from "../../assets/fsgrad.jpg";
 import galleryImage4 from "../../assets/post_ftm.jpg";
-import galleryImage5 from "../../assets/bag11.jpg";
+import galleryImage5 from "../../assets/sidefs.jpg";
 
 const FoundationSchoolScreen = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -112,7 +112,8 @@ const FoundationSchoolScreen = () => {
           ref={heroRef}
           style={{
             position: "relative",
-            height: "calc(100vh - 80px)",
+            // height: "calc(100vh - 80px)",
+            height: isMobile ? "500px" : "calc(100vh - 0px)",
             width: "100%",
             overflow: "hidden",
           }}
@@ -149,7 +150,7 @@ const FoundationSchoolScreen = () => {
                 <div style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: "rgba(42, 30, 122, 0.3)",
+                  backgroundColor: "rgba(42, 30, 122, 0.6)",
                   zIndex: 1,
                 }}></div>
               </motion.div>
@@ -306,7 +307,7 @@ const FoundationSchoolScreen = () => {
                   whileInView={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                   style={{
-                    fontSize: isMobile ? "24px" : "30px",
+                    fontSize: isMobile ? "16px" : "30px",
                     fontWeight: "bold",
                     color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
                     marginBottom: "16px",
@@ -460,7 +461,7 @@ const FoundationSchoolScreen = () => {
             zIndex: 10,
             maxWidth: "1280px",
             margin: "0 auto",
-            padding: "0 16px",
+            padding:  isMobile ? "0 8px" : "0 16px",
             color: "white",
           }}>
             <motion.h2
@@ -469,7 +470,7 @@ const FoundationSchoolScreen = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
               style={{
-                fontSize: isMobile ? "24px" : "30px",
+                fontSize: isMobile ? "16px" : "30px",
                 fontWeight: "bold",
                 textAlign: "center",
                 marginBottom: "32px",
@@ -562,7 +563,7 @@ const FoundationSchoolScreen = () => {
           ref={programsRef}
           style={{
             backgroundColor: "#f59e0b",
-            padding: isMobile ? "10px 10px" : "20px 30px",
+            padding: isMobile ? "5px 5px" : "20px 30px",
             maxWidth: isMobile ? "90%" : "70%",
             margin: "30px auto",
             borderRadius: "10px",
@@ -576,7 +577,7 @@ const FoundationSchoolScreen = () => {
             style={{
               maxWidth: "1280px",
               margin: "0 auto",
-              padding: "0 16px",
+              padding:  isMobile ? "0 5px" :  "0 16px",
               display: "flex",
               flexDirection: isMobile ? "column" : "row",
               alignItems: "center",
@@ -588,7 +589,7 @@ const FoundationSchoolScreen = () => {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               style={{
-                fontSize: isMobile ? "14px" : "16px",
+                fontSize: isMobile ? "8px" : "16px",
                 fontWeight: 600,
                 marginBottom: isMobile ? "14px" : 0,
                 color: "#2a1e7a",

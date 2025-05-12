@@ -536,10 +536,12 @@ const TestifyScreen = () => {
                 whileHover={{ scale: 1.05, backgroundColor: "#3a2e8a" }}
                 whileTap={{ scale: 0.95 }}
                 style={{
-                  padding: "14px 28px",
+                  padding:  isMobile ? "14px 1px" : "14px 28px",
                   backgroundColor: "#2a1e7a",
                   color: "white",
                   border: "none",
+                  width: isMobile ? "80%" : "auto",
+                  margin: isMobile ? "0 auto" : "0",
                   borderRadius: "4px",
                   cursor: "pointer",
                   fontSize: "16px",
@@ -558,13 +560,15 @@ const TestifyScreen = () => {
                 whileHover={{ scale: 1.05, backgroundColor: "#e08c00" }}
                 whileTap={{ scale: 0.95 }}
                 style={{
-                  padding: "14px 28px",
+                  padding:  isMobile ? "14px 1px" : "14px 28px",
                   backgroundColor: "#f59e0b",
                   color: "white",
                   border: "none",
                   borderRadius: "4px",
                   cursor: "pointer",
                   fontSize: "16px",
+                  width: isMobile ? "80%" : "auto",
+                  margin: isMobile ? "0 auto" : "0",
                   fontWeight: "500",
                   display: "flex",
                   alignItems: "center",
