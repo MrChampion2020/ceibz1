@@ -16,4 +16,8 @@ export { default as LiveStreamComment } from './home/LiveStreamComment';
 export { default as MainScreen } from './home/MainScreen';
 export { default as LiveStream } from './home/LiveStream';
 export { default as TestifyScreen} from './home/TestifyScreen';
+export { default as BootCamp} from './home/BootCamp';
+export { default as Admin} from './home/Admin';
+
+
 

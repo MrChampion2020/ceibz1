@@ -192,7 +192,7 @@ const MainScreen = () => {
           transition={{ delay: 0.8, duration: 0.8 }}
           style={{
             position: "absolute",
-            bottom: isMobile ? 60 : -110,
+            bottom: isMobile ? -60: -60,
             left: 0,
             right: 0,
             backgroundColor: "#f59e0b",
@@ -250,8 +250,8 @@ const MainScreen = () => {
           ref={heroRef}
           style={{
             position: "relative",
-            // height: "calc(100vh - 50px)",
-            height: isMobile ? "500px" : "calc(100vh - 0px)",
+            height: "calc(100vh - 50px)",
+            // height: isMobile ? "500px" : "calc(100vh - 0px)",
             width: "100%",
             maxWidth: "100vw",
             overflow: "hidden",

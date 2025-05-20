@@ -58,14 +58,24 @@ const streamSources = [
       "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F10153231379946729%2F&show_text=false",
     description: "Join us on Facebook and interact with our community",
   },
+
   {
     id: "inapp",
     name: "In-App Stream",
     icon: <FaPlay size={24} />,
     color: "#2a1e7a",
-    embedUrl: "https://player.vimeo.com/video/76979871?h=8272103f6e",
+    embedUrl: "https://app.castr.io/player/your-stream-id?autoplay=1",
     description: "Our dedicated streaming platform with enhanced features",
   },
+
+  // {
+  //   id: "inapp",
+  //   name: "In-App Stream",
+  //   icon: <FaPlay size={24} />,
+  //   color: "#2a1e7a",
+  //   embedUrl: "https://player.vimeo.com/video/76979871?h=8272103f6e",
+  //   description: "Our dedicated streaming platform with enhanced features",
+  // },
 ]
 
 // Reaction options
@@ -500,7 +510,7 @@ const LiveStreamScreen = () => {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <h2
                   style={{
-                    fontSize: "28px",
+                    fontSize: isMobile ? "16px" : "24px",
                     fontWeight: "700",
                     textAlign: "center",
                     marginBottom: "16px",
@@ -1312,7 +1322,7 @@ const LiveStreamScreen = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               style={{
-                fontSize: "28px",
+                fontSize: isMobile ? "16px" : "24px",
                 fontWeight: "700",
                 textAlign: "center",
                 marginBottom: "16px",

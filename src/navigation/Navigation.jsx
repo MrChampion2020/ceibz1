@@ -19,6 +19,8 @@ import {
   LiveStream,
   LiveStreamComment,
   TestifyScreen,
+  BootCamp,
+  Admin,
 } from "../screens/index";
 
 const Navigation = () => {
@@ -48,6 +50,10 @@ const Navigation = () => {
       <Route path="LiveStreamComment" element={<LiveStreamComment />} />
       <Route path="LiveStream" element={<LiveStream />} />
       <Route path="TestifyScreen" element={<TestifyScreen />} />
+      <Route path="BootCamp" element={<BootCamp />} />
+      <Route path="Admin" element={<Admin />} />
+
+
     </Routes>
   );
 };
