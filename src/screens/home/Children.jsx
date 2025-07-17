@@ -12,6 +12,8 @@ import image1 from '../../assets/kids.jpg';
 import image2 from '../../assets/kiddies.jpg';
 import image3 from '../../assets/kiddieslw.png';
 import transparentImage from "../../assets/christembassy.jpg";
+import api from '../../api';
+import axios from 'axios';
 
 const Children = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -29,6 +31,17 @@ const Children = () => {
   const testimoniesRef = useRef(null);
   const visionRef = useRef(null);
   const programsRef = useRef(null);
+
+  const [events, setEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventsError, setEventsError] = useState('');
+
+  useEffect(() => {
+    axios.get(`${api}/api/events/upcoming`)
+      .then(res => setEvents((res.data.events || []).filter(e => e.category === 'children')))
+      .catch(() => setEventsError('Failed to fetch events'))
+      .finally(() => setLoadingEvents(false));
+  }, []);
 
   // Carousel banners for Children Ministry
   const carouselBanners = [
@@ -603,7 +616,7 @@ const Children = () => {
               gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
               gap: "20px",
             }}>
-              {programs.map((program, index) => (
+              {events.filter(e => e.category === 'children').map((event, index) => (
                 <motion.div
                   key={index}
                   initial={{ y: 100, opacity: 0 }}
@@ -616,57 +629,40 @@ const Children = () => {
                     overflow: "hidden",
                     cursor: "pointer",
                     borderRadius: "4px",
+                    backgroundImage: event.imageUrl ? `url(${event.imageUrl})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    position: 'relative',
                   }}
                   onClick={() => navigate("/Programs")}
                 >
-                  <img
-                    src={program.image}
-                    alt={program.title}
-                    width="300"
-                    height="180"
-                    style={{
-                      width: "100%",
-                      height: "180px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.2 + 0.2 }}
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      padding: "16px",
-                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
-                    }}
-                  >
-                    <motion.h3
-                      initial={{ y: 20, opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        marginBottom: "4px",
-                      }}
-                    >
-                      {program.title}
-                    </motion.h3>
-                    <motion.p
-                      initial={{ y: 20, opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.6 }}
-                      style={{
-                        color: "#f59e0b",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {program.date}
-                    </motion.p>
-                  </motion.div>
+                  {event.videoUrl ? (
+                    <video
+                      src={event.videoUrl}
+                      controls
+                      style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: '8px' }}
+                    />
+                  ) : null}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background: 'rgba(0,0,0,0.6)',
+                    color: 'white',
+                    padding: '12px',
+                    borderRadius: '0 0 8px 8px',
+                  }}>
+                    <h3 style={{ margin: 0 }}>{event.title}</h3>
+                    <p style={{ margin: '4px 0' }}>
+                      {event.startDate ? new Date(event.startDate).toLocaleString() : ''}
+                      {event.endDate ? ' - ' + new Date(event.endDate).toLocaleString() : ''}
+                    </p>
+                    {event.videoDuration ? <p style={{ margin: '4px 0' }}>Video Duration: {Math.floor(event.videoDuration / 60)}:{('0' + (event.videoDuration % 60)).slice(-2)} min</p> : null}
+                    {event.location && <p style={{ margin: '4px 0' }}>Venue: {event.location}</p>}
+                    {event.category && <p style={{ margin: '4px 0' }}>Category: {event.category.charAt(0).toUpperCase() + event.category.slice(1)}</p>}
+                    {event.description && <p style={{ margin: '4px 0' }}>{event.description}</p>}
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -968,7 +964,7 @@ const Children = () => {
                 fontSize: "14px",
                 borderRadius: "4px",
               }}
-              onClick={() => navigate("/LiveStream")}
+              onClick={() => window.location.href = "https://www.ceibz1.online/"}
             >
               JOIN NOW
             </motion.button>

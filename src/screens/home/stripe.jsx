@@ -198,6 +198,7 @@
 // } from "@stripe/react-stripe-js";
 // import axios from "axios";
 // import { useMediaQuery } from "react-responsive";
+// import api from '../../api';
 
 // // Load Stripe with your public key
 // const stripePromise = loadStripe(
@@ -222,7 +223,7 @@
 //     try {
 //       // Create a payment intent on your server
 //       const response = await axios.post(
-//         "http://localhost:5000/create-payment-intent",
+//         `${api}/create-payment-intent`,
 //         {
 //           amount,
 //           currency,

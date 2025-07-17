@@ -612,7 +612,7 @@ const FoundationSchoolScreen = () => {
                 fontSize: "14px",
                 borderRadius: "4px",
               }}
-              onClick={() => navigate("/LiveStream")}
+              onClick={() => window.location.href = "https://www.ceibz1.online/"}
             >
               WATCH LIVE
             </motion.button>

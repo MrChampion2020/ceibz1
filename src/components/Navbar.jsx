@@ -55,7 +55,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "HOME", path: "/" },
-    { name: "WATCH LIVE", path: "/LiveStream" },
+    { name: "WATCH LIVE", path: "https://www.ceibz1.online/", external: true },
     {
       name: "MINISTRIES",
       dropdown: true,
@@ -213,7 +213,13 @@ const Navbar = () => {
                     fontWeight: 600,
                     cursor: "pointer",
                   }}
-                  onClick={() => navigate(link.path)}
+                  onClick={() => {
+                    if (link.external) {
+                      window.location.href = link.path;
+                    } else {
+                      navigate(link.path);
+                    }
+                  }}
                 >
                   {link.name}
                 </motion.div>
@@ -410,7 +416,11 @@ const Navbar = () => {
                       cursor: "pointer",
                     }}
                     onClick={() => {
-                      navigate(link.path); // Fixed: Changed item.path to link.path
+                      if (link.external) {
+                        window.location.href = link.path;
+                      } else {
+                        navigate(link.path);
+                      }
                       setMenuOpen(false);
                     }}
                   >

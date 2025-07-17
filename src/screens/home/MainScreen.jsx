@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../components/ThemeProvider";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import FloatingLiveChat from "../../components/FloatingLiveChat";
+
 import transparentImage from "../../assets/christembassy.jpg";
 import church from "../../assets/church.jpg";
 import pastorjoe from "../../assets/pjoe.jpg";
@@ -17,6 +19,8 @@ import healingstreams from "../../assets/max.jpg";
 import gcs from "../../assets/maygcs.jpg";
 import reachoutworld from "../../assets/rownigeria.jpg";
 import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from "react-icons/fa";
+import api from '../../api';
+import axios from 'axios';
 
 const MainScreen = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -24,6 +28,9 @@ const MainScreen = () => {
   const [carouselAutoplay, setCarouselAutoplay] = useState(true);
   const [currentDot, setCurrentDot] = useState(0);
   const [isInitialRender, setIsInitialRender] = useState(true);
+  const [events, setEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventsError, setEventsError] = useState('');
 
   // Use a fallback for media queries to avoid flickering
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" }) || window.innerWidth <= 768;
@@ -106,6 +113,13 @@ const MainScreen = () => {
       img.src = src;
     });
     setIsInitialRender(false); // Mark initial render as complete after preloading
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${api}/api/events/upcoming`)
+      .then(res => setEvents((res.data.events || []).filter(e => e.category === 'main')))
+      .catch(() => setEventsError('Failed to fetch events'))
+      .finally(() => setLoadingEvents(false));
   }, []);
 
   useEffect(() => {
@@ -238,7 +252,7 @@ const MainScreen = () => {
                 cursor: "pointer",
                 borderRadius: "4px",
               }}
-              onClick={() => navigate("/LiveStream")}
+              onClick={() => window.location.href = "https://www.ceibz1.online/"}
             >
               WATCH LIVE
             </motion.button>
@@ -637,63 +651,70 @@ const MainScreen = () => {
                 gap: "20px",
               }}
             >
-              {programs.map((program, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ y: 50, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  style={{
-                    position: "relative",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    borderRadius: "4px",
-                  }}
-                  onClick={() => navigate("/Programs")}
-                >
-                  <img
-                    src={program.image || "/placeholder.svg"}
-                    alt={program.title}
-                    width={program.width}
-                    height={program.height}
+              {loadingEvents ? (
+                <p>Loading programs...</p>
+              ) : eventsError ? (
+                <p style={{ color: 'red' }}>{eventsError}</p>
+              ) : events.length === 0 ? (
+                <p>No upcoming programs found.</p>
+              ) : (
+                events.map((event, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ y: 50, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ y: -5 }}
                     style={{
-                      width: "100%",
-                      height: "180px",
-                      objectFit: "cover",
+                      position: "relative",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      borderRadius: "8px",
+                      backgroundImage: event.imageUrl ? `url(${event.imageUrl})` : undefined,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      minHeight: '200px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
                     }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      padding: "16px",
-                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
-                    }}
+                    onClick={() => navigate("/Programs")}
                   >
-                    <h3
+                    <div
                       style={{
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        marginBottom: "4px",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        padding: "16px",
+                        background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
                       }}
                     >
-                      {program.title}
-                    </h3>
-                    <p
-                      style={{
-                        color: "#f59e0b",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {program.date}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+                      <h3
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                          marginBottom: "4px",
+                          color: "white",
+                        }}
+                      >
+                        {event.title}
+                      </h3>
+                      <p
+                        style={{
+                          color: "#f59e0b",
+                          fontSize: "14px",
+                          margin: 0,
+                        }}
+                      >
+                        {event.startDate ? new Date(event.startDate).toLocaleDateString() + ' ' + new Date(event.startDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
+                        {event.endDate ? ' - ' + new Date(event.endDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
 
             <div
@@ -978,7 +999,7 @@ const MainScreen = () => {
                 fontSize: "14px",
                 borderRadius: "4px",
               }}
-              onClick={() => navigate("/LiveStream")}
+              onClick={() => window.location.href = "https://www.ceibz1.online/"}
             >
               WATCH LIVE
             </motion.button>
@@ -987,6 +1008,7 @@ const MainScreen = () => {
       </div>
 
       <Footer />
+      <FloatingLiveChat />
     </div>
   );
 };

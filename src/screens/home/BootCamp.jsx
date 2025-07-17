@@ -7,6 +7,7 @@ import Navbar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import { useTheme } from "../../components/ThemeProvider"
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaGraduationCap, FaCode, FaChartBar, FaLaptopCode, FaCheck } from "react-icons/fa"
+import api from '../../api';
 
 const Bootcamp = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
@@ -67,7 +68,7 @@ const Bootcamp = () => {
 
     setFormSubmitting(true)
     try {
-      const response = await fetch("http://localhost:5000/api/register", {
+      const response = await fetch(`${api}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

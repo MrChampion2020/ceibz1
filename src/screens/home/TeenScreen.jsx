@@ -14,12 +14,17 @@ import video2 from '../../assets/teevo.mp4';
 import image1 from '../../assets/teensmin.jpg';
 import image2 from '../../assets/teen.jpg';
 import image3 from '../../assets/youth.png';
+import api from '../../api';
+import axios from 'axios';
 
 const TeenScreen = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [carouselAutoplay, setCarouselAutoplay] = useState(true);
   const [currentDot, setCurrentDot] = useState(0);
+  const [events, setEvents] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventsError, setEventsError] = useState('');
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isTablet = useMediaQuery({ query: "(max-width: 1024px)" });
   const navigate = useNavigate();
@@ -80,6 +85,13 @@ const TeenScreen = () => {
   ];
 
   const textSectionIntro = `The Loveworld Teens Ministry is dedicated to empowering teenagers with the Word of God, fostering a community of faith, growth, and service.`;
+
+  useEffect(() => {
+    axios.get(`${api}/api/events/upcoming`)
+      .then(res => setEvents((res.data.events || []).filter(e => e.category === 'teens')))
+      .catch(() => setEventsError('Failed to fetch events'))
+      .finally(() => setLoadingEvents(false));
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -661,72 +673,63 @@ const TeenScreen = () => {
               gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
               gap: "20px",
             }}>
-              {programs.map((program, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ y: 100, opacity: 0, scale: 0.9 }}
-                  whileInView={{ y: 0, opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: index * 0.2, type: "spring" }}
-                  whileHover={{ y: -10, scale: 1.05 }}
-                  style={{
-                    position: "relative",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    borderRadius: "4px",
-                  }}
-                  onClick={() => navigate("/Programs")}
-                >
-                  <motion.img
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                    src={program.image}
-                    alt={program.title}
-                    style={{
-                      width: "100%",
-                      height: "180px",
-                      objectFit: "cover",
-                    }}
-                  />
+              {loadingEvents ? (
+                <p>Loading programs...</p>
+              ) : eventsError ? (
+                <p style={{ color: "red" }}>{eventsError}</p>
+              ) : events.length === 0 ? (
+                <p>No upcoming teen programs found.</p>
+              ) : (
+                events.filter(e => e.category === 'teens').map((event, index) => (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.2 + 0.2 }}
+                    key={index}
+                    initial={{ y: 100, opacity: 0, scale: 0.9 }}
+                    whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: index * 0.2, type: "spring" }}
+                    whileHover={{ y: -10, scale: 1.05 }}
                     style={{
-                      position: "absolute",
+                      position: "relative",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      borderRadius: "4px",
+                      backgroundImage: event.imageUrl ? `url(${event.imageUrl})` : undefined,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      position: 'relative',
+                    }}
+                    onClick={() => navigate(`/Programs/${event._id}`)}
+                  >
+                    {event.videoUrl ? (
+                      <video
+                        src={event.videoUrl}
+                        controls
+                        style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: '8px' }}
+                      />
+                    ) : null}
+                    <div style={{
+                      position: 'absolute',
                       bottom: 0,
                       left: 0,
                       right: 0,
-                      padding: "16px",
-                      background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)",
-                    }}
-                  >
-                    <motion.h3
-                      initial={{ y: 20, opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        marginBottom: "4px",
-                      }}
-                    >
-                      {program.title}
-                    </motion.h3>
-                    <motion.p
-                      initial={{ y: 20, opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.6 }}
-                      style={{
-                        color: "#f59e0b",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {program.date}
-                    </motion.p>
+                      background: 'rgba(0,0,0,0.6)',
+                      color: 'white',
+                      padding: '12px',
+                      borderRadius: '0 0 8px 8px',
+                    }}>
+                      <h3 style={{ margin: 0 }}>{event.title}</h3>
+                      <p style={{ margin: '4px 0' }}>
+                        {event.startDate ? new Date(event.startDate).toLocaleString() : ''}
+                        {event.endDate ? ' - ' + new Date(event.endDate).toLocaleString() : ''}
+                      </p>
+                      {event.videoDuration ? <p style={{ margin: '4px 0' }}>Video Duration: {Math.floor(event.videoDuration / 60)}:{('0' + (event.videoDuration % 60)).slice(-2)} min</p> : null}
+                      {event.location && <p style={{ margin: '4px 0' }}>Venue: {event.location}</p>}
+                      {event.category && <p style={{ margin: '4px 0' }}>Category: {event.category.charAt(0).toUpperCase() + event.category.slice(1)}</p>}
+                      {event.description && <p style={{ margin: '4px 0' }}>{event.description}</p>}
+                    </div>
                   </motion.div>
-                </motion.div>
-              ))}
+                ))
+              )}
             </div>
 
             <motion.div
@@ -814,7 +817,7 @@ const TeenScreen = () => {
                 fontSize: "14px",
                 borderRadius: "4px",
               }}
-              onClick={() => navigate("/LiveStream")}
+              onClick={() => window.location.href = "https://www.ceibz1.online/"}
             >
               WATCH LIVE
             </motion.button>

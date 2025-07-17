@@ -24,7 +24,7 @@ const Footer = () => {
   const [openDropdown, setOpenDropdown] = useState(null)
 
   const mainMenuLinks = [
-    { name: "WATCH LIVE", path: "/LiveStream" },
+    { name: "WATCH LIVE", path: "https://www.ceibz1.online/", external: true },
     {
       name: "MINISTRIES",
       path: "#",
@@ -194,6 +194,8 @@ const Footer = () => {
                       e.preventDefault()
                       if (link.hasDropdown) {
                         setOpenDropdown(openDropdown === index ? null : index)
+                      } else if (link.external) {
+                        window.location.href = link.path
                       } else if (link.path !== "#") {
                         navigate(link.path)
                         window.scrollTo(0, 0)

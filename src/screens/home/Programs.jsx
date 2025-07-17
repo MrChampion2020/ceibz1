@@ -14,6 +14,8 @@ import provideo2 from "../../assets/kidsvid.mp4";
 import provideo3 from "../../assets/teevobible.mp4";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../components/ThemeProvider";
+import api from '../../api';
+import axios from 'axios';
 
 const ProgramScreen = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -21,60 +23,38 @@ const ProgramScreen = () => {
   const [timeLeft, setTimeLeft] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const videoRefs = useRef([]);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const carouselImages = [pro6, pro3, pro4];
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const events = [
-    { title: "Mid Week Service With H.E Pst. Joe Agbaje", date: "2025-05-14" },
-    { title: "With Pastor Joe Agbaje", date: "2025-05-11" },
-  ];
+  useEffect(() => {
+    axios.get(`${api}/api/events/upcoming`)
+      .then(res => setEvents(res.data.events || []))
+      .catch(() => setError('Failed to fetch events'))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const blogItems = [
-    {
-      type: "image",
-      src: pro1,
-      title: "Community Outreach",
-      date: "2024-06-01",
-      description:
-        "Join us for our annual community outreach program where we serve our local community.",
-    },
-    {
-      type: "video",
-      src: provideo1,
-      title: "Worship Night Highlights",
-      date: "2024-05-15",
-    },
-    {
-      type: "image",
-      src: pro2,
-      title: "Bible Study Series",
-      date: "2024-07-01",
-      description:
-        "Dive deep into the Word with our new Bible study series starting this July.",
-    },
-    {
-      type: "video",
-      src: provideo3,
-      title: "Youth Conference Recap",
-      date: "2024-04-20",
-    },
-    {
-      type: "image",
-      src: pro5,
-      title: "Missions Trip",
-      date: "2024-08-10",
-      description:
-        "Follow our team as they embark on a life-changing missions trip to South America.",
-    },
-    {
-      type: "video",
-      src: provideo2,
-      title: "Easter Service Highlights",
-      date: "2024-04-01",
-    },
-  ];
+  // Filter only future events
+  const now = new Date();
+  const futureEvents = events.filter(e => e.startDate && new Date(e.startDate) > now);
+
+  // Find the next upcoming event (by soonest startDate in the future)
+  const nextEvent = futureEvents.length > 0 ? [...futureEvents].sort((a, b) => new Date(a.startDate) - new Date(b.startDate))[0] : null;
+
+  // Filter events by category (future only)
+  const filteredEvents = selectedCategory === 'all'
+    ? futureEvents
+    : futureEvents.filter(event => event.category === selectedCategory);
+
+  // Get unique categories from events
+  const categories = ['all', ...new Set(events.map(event => event.category).filter(Boolean))];
+
+  // Remove blogItems and all references to it
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -83,18 +63,20 @@ const ProgramScreen = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Countdown timer for nextEvent
   useEffect(() => {
+    if (!nextEvent || !nextEvent.startDate) return;
     const timer = setInterval(() => {
-      const difference = new Date(events[0].date) - new Date();
+      const difference = new Date(nextEvent.startDate) - new Date();
       setTimeLeft({
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
+        days: Math.max(0, Math.floor(difference / (1000 * 60 * 60 * 24))),
+        hours: Math.max(0, Math.floor((difference / (1000 * 60 * 60)) % 24)),
+        minutes: Math.max(0, Math.floor((difference / 1000 / 60) % 60)),
+        seconds: Math.max(0, Math.floor((difference / 1000) % 60)),
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [nextEvent]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -246,7 +228,7 @@ const ProgramScreen = () => {
                     transition={{ duration: 0.5, delay: 0.6 }}
                     style={{ margin: "5px 0 0", fontSize: isMobile ? "12px" :  "18px", }}
                   >
-                    {events[0].title}
+                    {nextEvent ? nextEvent.title : "No events available"}
                   </motion.p>
                   <motion.p
                     initial={{ opacity: 0 }}
@@ -258,8 +240,18 @@ const ProgramScreen = () => {
                       color: theme === "dark" ? "#cccccc" : "#666",
                     }}
                   >
-                    {events[0].date}
+                    {nextEvent ? (nextEvent.startDate ? new Date(nextEvent.startDate).toLocaleString() : "") : ""}
                   </motion.p>
+                  {nextEvent && nextEvent.description && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 1.4 }}
+                      style={{ margin: "0", fontSize: "14px", color: theme === "dark" ? "#cccccc" : "#666" }}
+                    >
+                      {nextEvent.description}
+                    </motion.p>
+                  )}
                 </div>
               </div>
               <motion.div
@@ -315,6 +307,44 @@ const ProgramScreen = () => {
           >
             Upcoming Programs
           </motion.h2>
+
+          {/* Category Filter Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "20px",
+              marginBottom: "30px",
+              flexWrap: "wrap",
+            }}
+          >
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                style={{
+                  padding: '16px 32px',
+                  background: selectedCategory === category ? '#f59e0b' : 'transparent',
+                  color: selectedCategory === category ? '#fff' : '#f59e0b',
+                  border: '2px solid #f59e0b',
+                  borderRadius: '32px',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'all 0.2s',
+                  marginBottom: '8px',
+                }}
+              >
+                {category === 'all' ? 'All Events' : category.charAt(0).toUpperCase() + category.slice(1)}
+              </button>
+            ))}
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -326,164 +356,62 @@ const ProgramScreen = () => {
               gap: "20px",
             }}
           >
-            {blogItems.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.8 }}
-                whileHover={{ scale: 1.02, y: -10 }}
-                style={{
-                  backgroundColor: theme === "dark" ? "#1a1a1a" : "white",
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                  boxShadow:
-                    theme === "dark"
-                      ? "0 4px 6px rgba(0, 0, 0, 0.3)"
-                      : "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                onClick={() => handleItemClick(item)}
-              >
-                {item.type === "image" ? (
-                  <>
+            {filteredEvents.length === 0 ? (
+              <div style={{ color: '#f59e0b', textAlign: 'center', padding: '40px 0' }}>No upcoming programs.</div>
+            ) : (
+              filteredEvents.map((event, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.8 }}
+                  whileHover={{ scale: 1.02, y: -10 }}
+                  style={{
+                    background: '#111',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                    marginBottom: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '340px',
+                  }}
+                  onClick={() => handleItemClick(event)}
+                >
+                  {event.imageUrl && (
                     <img
-                      src={item.src}
-                      alt={item.title}
-                      style={{
-                        width: "100%",
-                        height: "200px",
-                        objectFit: "cover",
-                      }}
+                      src={event.imageUrl}
+                      alt={event.title}
+                      style={{ width: '100%', height: '180px', objectFit: 'cover' }}
                     />
-                    <div
-                      style={{
-                        padding: "15px",
-                        flexGrow: 1,
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        color: theme === "dark" ? "#ffffff" : "#000000",
-                      }}
-                    >
-                      <div>
-                        <motion.h3
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ duration: 0.5, delay: 0.1 }}
-                          style={{ margin: "0 0 10px" }}
-                        >
-                          {item.title}
-                        </motion.h3>
-                        <motion.p
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                          style={{
-                            margin: "0 0 10px",
-                            fontSize: "14px",
-                            color: theme === "dark" ? "#cccccc" : "#666",
-                          }}
-                        >
-                          {item.date}
-                        </motion.p>
-                      </div>
-                      <motion.button
-                        whileHover={{ scale: 1.1, backgroundColor: "#3a2e8a" }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                        style={{
-                          backgroundColor: "#2a1e7a",
-                          color: "white",
-                          border: "none",
-                         
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          padding:  isMobile ? "14px 1px" : "14px 28px",
-                          width: isMobile ? "50%" : "auto",
-                          margin: isMobile ? "0 auto" : "0",
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleContactClick();
-                        }}
-                      >
-                        Contact Us
-                      </motion.button>
+                  )}
+                  <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', background: '#111' }}>
+                    <div>
+                      <h3 style={{ color: 'white', fontSize: '22px', fontWeight: 600, margin: 0 }}>{event.title}</h3>
+                      <div style={{ color: '#f59e0b', fontSize: '16px', margin: '8px 0 0' }}>{event.startDate ? new Date(event.startDate).toLocaleDateString() : ''}</div>
                     </div>
-                  </>
-                ) : (
-                  <div style={{ position: "relative", height: "100%" }}>
-                    <video
-                      ref={(el) => (videoRefs.current[index] = el)}
-                      src={item.src}
+                    <button
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
+                        marginTop: '24px',
+                        background: '#2a1e7a',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        padding: '16px 0',
+                        fontSize: '18px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        width: '100%',
                       }}
-                      muted
-                      loop
-                      playsInline
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        color: "white",
-                        padding: "15px",
-                      }}
+                      onClick={handleContactClick}
                     >
-                      <motion.h3
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        style={{ margin: "0 0 10px" }}
-                      >
-                        {item.title}
-                      </motion.h3>
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        style={{ margin: "0 0 10px", fontSize: "14px" }}
-                      >
-                        {item.date}
-                      </motion.p>
-                      <motion.button
-                        whileHover={{ scale: 1.1, backgroundColor: "#3a2e8a" }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                        style={{
-                          backgroundColor: "#2a1e7a",
-                          color: "white",
-                          border: "none",
-                          padding: "10px 8px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleContactClick();
-                        }}
-                      >
-                        Contact Us
-                      </motion.button>
-                    </div>
+                      Contact Us
+                    </button>
                   </div>
-                )}
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            )}
           </motion.div>
         </section>
 
@@ -521,7 +449,7 @@ const ProgramScreen = () => {
               {selectedItem.type === "image" ? (
                 <>
                   <img
-                    src={selectedItem.src}
+                    src={selectedItem.imageUrl}
                     alt={selectedItem.title}
                     style={{
                       width: "100%",
@@ -562,7 +490,7 @@ const ProgramScreen = () => {
                 </>
               ) : (
                 <video
-                  src={selectedItem.src}
+                  src={selectedItem.videoUrl}
                   controls
                   autoPlay
                   style={{

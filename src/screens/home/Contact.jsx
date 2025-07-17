@@ -32,6 +32,7 @@ import {
   FaTimes,
   FaCheck,
 } from "react-icons/fa"
+import api from '../../api';
 
 const ContactScreen = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
@@ -52,10 +53,21 @@ const ContactScreen = () => {
     message: "",
   })
 
+  const [prayerData, setPrayerData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    prayerRequest: "",
+    isConfidential: false,
+  })
+
   const formRef = useRef(null)
   const prayerFormRef = useRef(null)
   const navigate = useNavigate()
   const { theme } = useTheme()
+
+  // Add refs for all videos
+  const videoRefs = useRef([]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
@@ -96,6 +108,56 @@ const ContactScreen = () => {
     }
   }
 
+  const handlePrayerInputChange = (e) => {
+    const { id, value, type, checked } = e.target
+    setPrayerData({
+      ...prayerData,
+      [id]: type === "checkbox" ? checked : value,
+    })
+  }
+
+  const handlePrayerSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!prayerData.name || !prayerData.email || !prayerData.subject || !prayerData.prayerRequest) {
+      setFormErrors({ prayer: "All fields are required" })
+      return
+    }
+
+    setFormSubmitting(true)
+
+    try {
+      const response = await fetch(`${api}/api/user/prayer-request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(prayerData),
+      })
+
+      if (response.ok) {
+        setFormSubmitting(false)
+        setShowSuccessModal(true)
+        setShowPrayerForm(false)
+
+        // Reset prayer form
+        setPrayerData({
+          name: "",
+          email: "",
+          subject: "",
+          prayerRequest: "",
+          isConfidential: false,
+        })
+      } else {
+        throw new Error('Failed to submit prayer request')
+      }
+    } catch (error) {
+      console.error('Error submitting prayer request:', error)
+      setFormSubmitting(false)
+      setFormErrors({ prayer: "Failed to submit prayer request" })
+    }
+  }
+
   const validateForm = () => {
     const errors = {}
 
@@ -112,7 +174,7 @@ const ContactScreen = () => {
     return errors
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const errors = validateForm()
@@ -123,22 +185,43 @@ const ContactScreen = () => {
 
     setFormSubmitting(true)
 
-    // Simulate form submission
-    setTimeout(() => {
-      setFormSubmitting(false)
-      setShowSuccessModal(true)
-
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        location: "",
-        title: "",
-        message: "",
+    try {
+      // Send to backend
+      const response = await fetch(`${api}/api/user/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.title,
+          message: formData.message
+        }),
       })
-      setSelectedFile(null)
-    }, 1500)
+
+      if (response.ok) {
+        setFormSubmitting(false)
+        setShowSuccessModal(true)
+
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          location: "",
+          title: "",
+          message: "",
+        })
+        setSelectedFile(null)
+      } else {
+        throw new Error('Failed to submit form')
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setFormSubmitting(false)
+      // You could show an error message here
+    }
   }
 
   const toggleFaq = (index) => {
