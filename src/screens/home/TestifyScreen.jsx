@@ -37,6 +37,9 @@ import {
   FaChevronUp,
 } from "react-icons/fa"
 
+import api from '../../api';
+import axios from 'axios';
+
 const TestifyScreen = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" })
   const isTablet = useMediaQuery({ query: "(max-width: 1024px)" })
@@ -62,6 +65,9 @@ const TestifyScreen = () => {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showSubtitles, setShowSubtitles] = useState(true)
   const [videoLoaded, setVideoLoaded] = useState(false)
+  const [testimonies, setTestimonies] = useState([]);
+  const [loadingTestimonies, setLoadingTestimonies] = useState(true);
+  const [testimoniesError, setTestimoniesError] = useState("");
 
   // Refs
   const videoRef = useRef(null)
@@ -82,112 +88,15 @@ const TestifyScreen = () => {
   const [formErrors, setFormErrors] = useState({})
   const [uploadedFileName, setUploadedFileName] = useState("")
 
-  // Sample testimonies data
-  const testimonies = [
-    {
-      id: 1,
-      name: "Brother James Wilson",
-      title: "Healed from Chronic Back Pain",
-      category: "healing",
-      testimony:
-        "I had been suffering from chronic back pain for over 10 years. After Pastor Joe prayed for me during the Healing Streams service, I felt a warm sensation in my back, and the pain completely disappeared. It's been 6 months now, and I'm still pain-free. Glory to God!",
-      date: "March 15, 2023",
-      type: "text",
-      image: pastorjoe,
-      likes: 124,
-    },
-    {
-      id: 2,
-      name: "Sister Mary Johnson",
-      title: "Financial Breakthrough",
-      category: "financial",
-      testimony:
-        "After faithfully giving my tithes and offerings for a year, I experienced a miraculous financial breakthrough. I was offered a job that paid three times my previous salary, and I was able to clear all my debts within six months. God is faithful!",
-      date: "January 8, 2023",
-      type: "video",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: teens,
-      duration: "3:45",
-      likes: 89,
-      subtitles: [
-        { start: 0, end: 5, text: "I want to thank God for His faithfulness in my life." },
-        { start: 5, end: 10, text: "After faithfully giving my tithes and offerings for a year..." },
-        { start: 10, end: 15, text: "I experienced a miraculous financial breakthrough." },
-        { start: 15, end: 20, text: "I was offered a job that paid three times my previous salary." },
-        { start: 20, end: 25, text: "And I was able to clear all my debts within six months." },
-        { start: 25, end: 30, text: "God is faithful! I encourage everyone to trust in Him." },
-      ],
-    },
-    {
-      id: 3,
-      name: "Brother Michael Smith",
-      title: "Salvation Testimony",
-      category: "salvation",
-      testimony:
-        "I was living a life of drugs and crime until a friend invited me to church. During the service, I felt God's presence so strongly that I broke down in tears. That day, I gave my life to Christ, and He has completely transformed me. I've been clean for two years now and am serving in the church's outreach ministry.",
-      date: "November 20, 2022",
-      type: "text",
-      image: children,
-      likes: 156,
-    },
-    {
-      id: 4,
-      name: "Sister Rebecca Okafor",
-      title: "Healed from COVID-19",
-      category: "healing",
-      testimony:
-        "I was diagnosed with severe COVID-19 and was hospitalized in critical condition. The doctors had little hope for my recovery. The church organized a prayer chain for me, and Pastor Joe led special prayers during the Sunday service. Within three days, my condition improved dramatically, and I was discharged a week later. The doctors called it a miracle!",
-      date: "August 5, 2022",
-      type: "video",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: bannerImage,
-      duration: "5:12",
-      likes: 203,
-      subtitles: [
-        { start: 0, end: 5, text: "I want to thank God for healing me from COVID-19." },
-        { start: 5, end: 10, text: "I was diagnosed with severe COVID-19 and was hospitalized in critical condition." },
-        { start: 10, end: 15, text: "The doctors had little hope for my recovery." },
-        { start: 15, end: 20, text: "The church organized a prayer chain for me..." },
-        { start: 20, end: 25, text: "And Pastor Joe led special prayers during the Sunday service." },
-        { start: 25, end: 30, text: "Within three days, my condition improved dramatically." },
-        { start: 30, end: 35, text: "I was discharged a week later. The doctors called it a miracle!" },
-      ],
-    },
-    {
-      id: 5,
-      name: "Brother Daniel Adeyemi",
-      title: "Marriage Restoration",
-      category: "family",
-      testimony:
-        "My marriage was on the brink of divorce after 12 years. My wife and I couldn't even stay in the same room without arguing. We attended the Marriage Restoration program at church, and through the counseling and prayers, God began to heal our relationship. Today, we're more in love than ever before and are now leading the couples' ministry in our cell group.",
-      date: "June 12, 2022",
-      type: "text",
-      image: teens,
-      likes: 178,
-    },
-    {
-      id: 6,
-      name: "Sister Jennifer Okoro",
-      title: "Academic Excellence",
-      category: "education",
-      testimony:
-        "I had failed my professional exams three times and was about to give up on my career. During a midweek service, Pastor Joe spoke about excellence and prayed specifically for those facing academic challenges. I applied the principles I learned and took the exam again. Not only did I pass, but I was among the top five performers nationwide!",
-      date: "April 30, 2022",
-      type: "video",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: children,
-      duration: "4:30",
-      likes: 112,
-      subtitles: [
-        { start: 0, end: 5, text: "I want to testify about God's faithfulness in my academics." },
-        { start: 5, end: 10, text: "I had failed my professional exams three times and was about to give up." },
-        { start: 10, end: 15, text: "During a midweek service, Pastor Joe spoke about excellence..." },
-        { start: 15, end: 20, text: "And prayed specifically for those facing academic challenges." },
-        { start: 20, end: 25, text: "I applied the principles I learned and took the exam again." },
-        { start: 25, end: 30, text: "Not only did I pass, but I was among the top five performers nationwide!" },
-      ],
-    },
-  ]
+  useEffect(() => {
+    axios.get(`${api}/api/user/testimonies`)
+      .then(res => {
+        // Only show approved testimonies
+        setTestimonies((res.data.testimonies || []).filter(t => t.isApproved));
+      })
+      .catch(() => setTestimoniesError('Failed to fetch testimonies'))
+      .finally(() => setLoadingTestimonies(false));
+  }, []);
 
   // Filter testimonies based on search and category
   const filteredTestimonies = testimonies.filter((testimony) => {
@@ -360,7 +269,7 @@ const TestifyScreen = () => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0]
     if (file) {
-      if (file.type.startsWith("video/")) {
+      if (file.type.startsWith("video/") || file.type.startsWith("image/")) {
         setFormData({
           ...formData,
           videoFile: file,
@@ -369,7 +278,7 @@ const TestifyScreen = () => {
       } else {
         setFormErrors({
           ...formErrors,
-          videoFile: "Please upload a valid video file",
+          videoFile: "Please upload a valid video or image file",
         })
       }
     }
@@ -398,23 +307,30 @@ const TestifyScreen = () => {
   }
 
   // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    const errors = validateForm()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errors = validateForm();
     if (Object.keys(errors).length > 0) {
-      setFormErrors(errors)
-      return
+      setFormErrors(errors);
+      return;
     }
-
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setShowSuccessModal(true)
-
-      // Reset form
+    setIsSubmitting(true);
+    try {
+      const formPayload = new FormData();
+      formPayload.append('name', formData.name);
+      formPayload.append('email', formData.email);
+      formPayload.append('title', formData.title);
+      formPayload.append('category', formData.category);
+      formPayload.append('testimony', formData.testimony);
+      formPayload.append('consentToShare', formData.consentToShare);
+      if (formData.videoFile) {
+        formPayload.append('mediaFile', formData.videoFile);
+      }
+      await axios.post(`${api}/api/user/testimony`, formPayload, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setIsSubmitting(false);
+      setShowSuccessModal(true);
       setFormData({
         name: "",
         email: "",
@@ -423,10 +339,13 @@ const TestifyScreen = () => {
         testimony: "",
         videoFile: null,
         consentToShare: false,
-      })
-      setUploadedFileName("")
-    }, 2000)
-  }
+      });
+      setUploadedFileName("");
+    } catch (err) {
+      setIsSubmitting(false);
+      setFormErrors({ submit: 'Failed to submit testimony. Please try again.' });
+    }
+  };
 
   // Categories for filter
   const categories = [
@@ -1727,7 +1646,7 @@ const TestifyScreen = () => {
                         type="file"
                         id="videoFile"
                         ref={fileInputRef}
-                        accept="video/*"
+                        accept="video/*,image/*"
                         style={{ display: "none" }}
                         onChange={handleFileUpload}
                       />

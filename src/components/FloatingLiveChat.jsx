@@ -15,6 +15,8 @@ import {
   FaExpand
 } from 'react-icons/fa';
 import { useTheme } from './ThemeProvider';
+import api from '../api';
+import axios from 'axios';
 
 const FloatingLiveChat = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,64 +26,69 @@ const FloatingLiveChat = () => {
   const [userName, setUserName] = useState('');
   const [showLogin, setShowLogin] = useState(true);
   const [activeTab, setActiveTab] = useState('chat');
+  const [userEmail, setUserEmail] = useState('');
+  const [chatId, setChatId] = useState(() => localStorage.getItem('chatId') || '');
   const messagesEndRef = useRef(null);
   const { theme } = useTheme();
 
-  // Sample messages for demo
-  const sampleMessages = [
-    {
-      id: 1,
-      user: 'Sister Mary',
-      message: 'Amen! This message is exactly what I needed today.',
-      timestamp: '2 minutes ago',
-      reactions: { amen: 5, praise: 2 },
-      type: 'message'
-    },
-    {
-      id: 2,
-      user: 'Brother James',
-      message: 'Praise God for this powerful word! My faith is strengthened.',
-      timestamp: '5 minutes ago',
-      reactions: { praise: 8, fire: 3 },
-      type: 'message'
-    },
-    {
-      id: 3,
-      user: 'Prayer Team',
-      message: 'We are praying for all those who need healing and breakthrough.',
-      timestamp: '8 minutes ago',
-      reactions: { amen: 12, heart: 7 },
-      type: 'prayer'
+  // Poll for messages
+  useEffect(() => {
+    let interval;
+    if (chatId) {
+      const fetchMessages = async () => {
+        try {
+          const res = await axios.get(`${api}/api/user/general-chat/${chatId}/messages`);
+          setMessages(res.data.messages.map((msg, idx) => ({
+            id: idx,
+            user: msg.sender.name,
+            message: msg.message,
+            timestamp: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            type: 'message',
+          })));
+        } catch (err) {
+          // Optionally handle error
+        }
+      };
+      fetchMessages();
+      interval = setInterval(fetchMessages, 3000);
     }
-  ];
+    return () => clearInterval(interval);
+  }, [chatId]);
 
-  useEffect(() => {
-    setMessages(sampleMessages);
-  }, []);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  // On login, store name/email in localStorage
+  const handleLogin = () => {
+    if (!userName.trim() || !userEmail.trim()) return;
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('userEmail', userEmail);
+    setShowLogin(false);
   };
 
-  const handleSubmit = (e) => {
+  // On mount, restore name/email if present
+  useEffect(() => {
+    const savedName = localStorage.getItem('userName');
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedName) setUserName(savedName);
+    if (savedEmail) setUserEmail(savedEmail);
+  }, []);
+
+  // Send message to backend
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !userName.trim()) return;
-
-    const message = {
-      id: Date.now(),
-      user: userName,
-      message: newMessage,
-      timestamp: 'Just now',
-      reactions: {},
-      type: activeTab === 'chat' ? 'message' : 'prayer'
-    };
-
-    setMessages([...messages, message]);
-    setNewMessage('');
+    if (!newMessage.trim() || !userName.trim() || !userEmail.trim()) return;
+    try {
+      const res = await axios.post(`${api}/api/user/general-chat`, {
+        name: userName,
+        email: userEmail,
+        message: newMessage,
+      });
+      if (!chatId && res.data.chatId) {
+        setChatId(res.data.chatId);
+        localStorage.setItem('chatId', res.data.chatId);
+      }
+      setNewMessage('');
+    } catch (err) {
+      // Optionally handle error
+    }
   };
 
   const handleReaction = (messageId, reactionType) => {
@@ -254,17 +261,33 @@ const FloatingLiveChat = () => {
                     color: theme === 'dark' ? '#fff' : '#000'
                   }}
                 />
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    marginBottom: '8px',
+                    backgroundColor: theme === 'dark' ? '#111' : 'white',
+                    color: theme === 'dark' ? '#fff' : '#000'
+                  }}
+                />
                 <button
-                  onClick={() => setShowLogin(false)}
-                  disabled={!userName.trim()}
+                  onClick={handleLogin}
+                  disabled={!userName.trim() || !userEmail.trim()}
                   style={{
                     width: '100%',
                     padding: '8px',
-                    backgroundColor: userName.trim() ? '#2a1e7a' : '#9ca3af',
+                    backgroundColor: userName.trim() && userEmail.trim() ? '#2a1e7a' : '#9ca3af',
                     color: 'white',
                     border: 'none',
                     borderRadius: '6px',
-                    cursor: userName.trim() ? 'pointer' : 'not-allowed',
+                    cursor: userName.trim() && userEmail.trim() ? 'pointer' : 'not-allowed',
                     fontSize: '14px'
                   }}
                 >

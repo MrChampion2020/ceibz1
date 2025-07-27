@@ -31,6 +31,9 @@ const MainScreen = () => {
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [eventsError, setEventsError] = useState('');
+  const [testimonies, setTestimonies] = useState([]);
+  const [loadingTestimonies, setLoadingTestimonies] = useState(true);
+  const [testimoniesError, setTestimoniesError] = useState("");
 
   // Use a fallback for media queries to avoid flickering
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" }) || window.innerWidth <= 768;
@@ -49,21 +52,6 @@ const MainScreen = () => {
     { image: reachout, width: 768, height: 432 }, // Assuming 16:9 ratio for mobile
     { image: ssunday, width: 768, height: 432 },
     { image: healingstreams, width: 768, height: 432 },
-  ];
-
-  const testimonies = [
-    {
-      text: "Christ Embassy is not just a local assembly; I witnessed this in my life ever since I joined the ministry",
-      author: "Brother Silas Oladele",
-    },
-    {
-      text: "Christ Embassy is not just a local assembly; it's a vision come true for me and my entire family! On a daily basis we experience the love of God!",
-      author: "Sister Mary Peter",
-    },
-    {
-      text: "Christ Embassy is not just a local assembly; I witnessed this in my life ever since I joined the ministry",
-      author: "Brother Silas Oladele",
-    },
   ];
 
   const programs = [
@@ -120,6 +108,15 @@ const MainScreen = () => {
       .then(res => setEvents((res.data.events || []).filter(e => e.category === 'main')))
       .catch(() => setEventsError('Failed to fetch events'))
       .finally(() => setLoadingEvents(false));
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${api}/api/user/testimonies`)
+      .then(res => {
+        setTestimonies((res.data.testimonies || []).filter(t => t.isApproved));
+      })
+      .catch(() => setTestimoniesError('Failed to fetch testimonies'))
+      .finally(() => setLoadingTestimonies(false));
   }, []);
 
   useEffect(() => {
@@ -799,65 +796,97 @@ const MainScreen = () => {
                 gap: "24px",
               }}
             >
-              {testimonies.map((testimony, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ y: 50, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                  whileHover={{ y: -8 }}
-                  style={{
-                    backgroundColor: theme === "dark" ? "#111111" : "#f9fafb",
-                    padding: "32px",
-                    position: "relative",
-                    border: theme === "dark" ? "1px solid #333333" : "none",
-                    borderRadius: "4px",
-                    boxShadow: theme === "dark" ? "0 4px 6px rgba(193, 147, 10, 0.17)" : "0 4px 6px rgba(57, 56, 56, 0.27)",
-                  }}
-                >
-                  <div
+              {loadingTestimonies ? (
+                <p>Loading testimonies...</p>
+              ) : testimoniesError ? (
+                <p style={{ color: 'red' }}>{testimoniesError}</p>
+              ) : testimonies.length === 0 ? (
+                <p>No approved testimonies found.</p>
+              ) : (
+                testimonies.map((testimony, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ y: 50, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                    whileHover={{ y: -8 }}
                     style={{
-                      color: "#f59e0b",
-                      position: "absolute",
-                      top: "16px",
-                      left: "16px",
+                      backgroundColor: theme === "dark" ? "#111111" : "#f9fafb",
+                      padding: "32px",
+                      position: "relative",
+                      border: theme === "dark" ? "1px solid #333333" : "none",
+                      borderRadius: "4px",
+                      boxShadow: theme === "dark" ? "0 4px 6px rgba(193, 147, 10, 0.17)" : "0 4px 6px rgba(57, 56, 56, 0.27)",
                     }}
                   >
                     <div
                       style={{
                         color: "#f59e0b",
-                        fontSize: "24px",
-                        marginBottom: "24px",
+                        position: "absolute",
+                        top: "16px",
+                        left: "16px",
                       }}
                     >
-                      <FaQuoteLeft size={24} />
+                      <div
+                        style={{
+                          color: "#f59e0b",
+                          fontSize: "24px",
+                          marginBottom: "24px",
+                        }}
+                      >
+                        <FaQuoteLeft size={24} />
+                      </div>
                     </div>
-                  </div>
-                  <p
-                    style={{
-                      color: theme === "dark" ? "#ffffff" : "#4b5563",
-                      marginBottom: "24px",
-                      position: "relative",
-                      zIndex: 10,
-                      paddingTop: "24px",
-                      fontSize: "14px",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    {testimony.text}
-                  </p>
-                  <p
-                    style={{
-                      fontWeight: 500,
-                      color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {testimony.author}
-                  </p>
-                </motion.div>
-              ))}
+                    {testimony.mediaType === 'video' ? (
+                      <video
+                        src={testimony.mediaUrl}
+                        controls
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          borderRadius: "4px",
+                          marginBottom: "24px",
+                        }}
+                      />
+                    ) : testimony.mediaType === 'image' ? (
+                      <img
+                        src={testimony.mediaUrl}
+                        alt={testimony.text}
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          borderRadius: "4px",
+                          marginBottom: "24px",
+                        }}
+                      />
+                    ) : (
+                      <p
+                        style={{
+                          color: theme === "dark" ? "#ffffff" : "#4b5563",
+                          marginBottom: "24px",
+                          position: "relative",
+                          zIndex: 10,
+                          paddingTop: "24px",
+                          fontSize: "14px",
+                          lineHeight: "1.6",
+                        }}
+                      >
+                        {testimony.text}
+                      </p>
+                    )}
+                    <p
+                      style={{
+                        fontWeight: 500,
+                        color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {testimony.author}
+                    </p>
+                  </motion.div>
+                ))
+              )}
             </div>
           </div>
         </section>

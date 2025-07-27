@@ -1,293 +1,171 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../components/ThemeProvider";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import teensBackground from "../../assets/teen.jpg";
-import childrenImage from "../../assets/child.jpg";
-import globalKidsImage from "../../assets/lwfs.jpg";
-import video1 from '../../assets/teevobible.mp4';
-import video2 from '../../assets/teevo.mp4';
-import image1 from '../../assets/teensmin.jpg';
-import image2 from '../../assets/teen.jpg';
-import image3 from '../../assets/youth.png';
-import api from '../../api';
-import axios from 'axios';
+"use client"
+
+import { useState, useEffect } from "react"
+import { useMediaQuery } from "react-responsive"
+import { useNavigate } from "react-router-dom"
+import { motion } from "framer-motion"
+import { useTheme } from "../../components/ThemeProvider"
+import Navbar from "../../components/Navbar"
+import Footer from "../../components/Footer"
+import FloatingLiveChat from "../../components/FloatingLiveChat"
+import teensHero from "../../assets/teen.jpg"
+import bibleStudiesImg from "../../assets/teensmin.jpg"
+import communityEventsImg from "../../assets/teen.jpg"
+import worshipSessionsImg from "../../assets/youth.png"
+import axios from "axios"
+import api from "../../api"
 
 const TeenScreen = () => {
-  const [activeSection, setActiveSection] = useState(null);
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const [carouselAutoplay, setCarouselAutoplay] = useState(true);
-  const [currentDot, setCurrentDot] = useState(0);
-  const [events, setEvents] = useState([]);
-  const [loadingEvents, setLoadingEvents] = useState(true);
-  const [eventsError, setEventsError] = useState('');
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const isTablet = useMediaQuery({ query: "(max-width: 1024px)" });
-  const navigate = useNavigate();
-  const { theme } = useTheme();
+  const [events, setEvents] = useState([])
+  const [loadingEvents, setLoadingEvents] = useState(true)
+  const [eventsError, setEventsError] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [testimonies, setTestimonies] = useState([]);
+  const [loadingTestimonies, setLoadingTestimonies] = useState(true);
+  const [testimoniesError, setTestimoniesError] = useState("");
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" }) || window.innerWidth <= 768
+  const isTablet = useMediaQuery({ query: "(max-width: 1024px)" }) || window.innerWidth <= 1024
+  const navigate = useNavigate()
+  const { theme } = useTheme()
 
-  const heroRef = useRef(null);
-  const introRef = useRef(null);
-  const activitiesRef = useRef(null);
-  const visionRef = useRef(null);
-  const programsRef = useRef(null);
+  useEffect(() => {
+    axios
+      .get(`${api}/api/events/upcoming`)
+      .then((res) => {
+        console.log("TeenScreen API Response:", res.data.events)
+        // Filter for teens category events that are in the future
+        const allEvents = res.data.events || []
+        const now = new Date()
+        const futureEvents = allEvents.filter((e) => e.startDate && new Date(e.startDate) > now)
+        const teensEvents = futureEvents.filter(
+          (e) =>
+            e.category &&
+            (e.category.toLowerCase().includes("teen") ||
+              e.category.toLowerCase() === "teens" ||
+              e.category.toLowerCase() === "youth"),
+        )
+        setEvents(teensEvents)
+      })
+      .catch((err) => {
+        console.error("TeenScreen API Error:", err)
+        setEventsError(`Failed to fetch teen events: ${err.message}`)
+      })
+      .finally(() => setLoadingEvents(false))
+  }, [])
 
-  // Carousel banners for Teens Ministry
-  const carouselBanners = [
-    { image: image1 },
-    { image: image2 },
-    { image: image3 },
-  ];
+  useEffect(() => {
+    axios.get(`${api}/api/user/testimonies`)
+      .then(res => {
+        setTestimonies((res.data.testimonies || []).filter(t => t.isApproved));
+      })
+      .catch(() => setTestimoniesError('Failed to fetch testimonies'))
+      .finally(() => setLoadingTestimonies(false));
+  }, []);
 
+  // Get unique categories from events
+  const categories = ["all", ...new Set(events.map((event) => event.category).filter(Boolean))]
+
+  // Filter events by selected category
+  const filteredEvents =
+    selectedCategory === "all" ? events : events.filter((event) => event.category === selectedCategory)
+
+  // Preload images to prevent layout shifts
+  useEffect(() => {
+    const preloadImages = [teensHero, bibleStudiesImg, communityEventsImg, worshipSessionsImg]
+    preloadImages.forEach((src) => {
+      const img = new Image()
+      img.src = src
+    })
+  }, [])
+
+  // Activities array for the Activities section
   const activities = [
     {
       title: "BIBLE STUDIES",
-      image: image1,
-      description: "Engaging Bible studies tailored for teens to deepen their faith.",
+      image: bibleStudiesImg,
+      description: "Engaging Bible studies tailored for teens to deepen their faith and understanding of God's Word.",
     },
     {
-      title: "COMMUNITY EVENTS",
-      image: image2,
-      description: "Fun community events to build friendships and serve others.",
+      title: "COMMUNITY OUTREACH",
+      image: communityEventsImg,
+      description: "Community service projects that help teens serve others and make a positive impact.",
     },
     {
-      title: "WORSHIP SESSIONS",
-      image: image3,
-      description: "Vibrant worship sessions to connect teens with God.",
+      title: "WORSHIP & PRAISE",
+      image: worshipSessionsImg,
+      description: "Dynamic worship sessions where teens connect with God through music and prayer.",
     },
-  ];
-
-  const programs = [
-    {
-      title: "Sunday Youth Service",
-      image: image1,
-      date: "Sunday, 10:30 AM",
-    },
-    {
-      title: "Teen Prayer Night",
-      image: image2,
-      date: "Wednesday, 6 PM",
-    },
-    {
-      title: "Youth Camp",
-      image: image3,
-      date: "Coming Soon",
-    },
-    {
-      title: "Leadership Training",
-      image: image1,
-      date: "Coming Soon",
-    },
-  ];
-
-  const textSectionIntro = `The Loveworld Teens Ministry is dedicated to empowering teenagers with the Word of God, fostering a community of faith, growth, and service.`;
-
-  useEffect(() => {
-    axios.get(`${api}/api/events/upcoming`)
-      .then(res => setEvents((res.data.events || []).filter(e => e.category === 'teens')))
-      .catch(() => setEventsError('Failed to fetch events'))
-      .finally(() => setLoadingEvents(false));
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-      const sections = [
-        { ref: heroRef, id: "hero" },
-        { ref: introRef, id: "intro" },
-        { ref: activitiesRef, id: "activities" },
-        { ref: visionRef, id: "vision" },
-        { ref: programsRef, id: "programs" },
-      ];
-
-      for (const section of sections) {
-        if (!section.ref.current) continue;
-
-        const element = section.ref.current;
-        const rect = element.getBoundingClientRect();
-        const topPosition = rect.top + window.scrollY;
-        const bottomPosition = topPosition + rect.height;
-
-        if (scrollPosition >= topPosition && scrollPosition <= bottomPosition) {
-          setActiveSection(section.id);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    let interval;
-    if (carouselAutoplay) {
-      interval = setInterval(() => {
-        setCarouselIndex((prevIndex) => (prevIndex + 1) % carouselBanners.length);
-      }, 5000);
-    }
-    return () => clearInterval(interval);
-  }, [carouselAutoplay, carouselBanners.length]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDot((prevDot) => (prevDot + 1) % 4);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleCarouselPrev = () => {
-    setCarouselAutoplay(false);
-    setCarouselIndex((prevIndex) => (prevIndex - 1 + carouselBanners.length) % carouselBanners.length);
-    setTimeout(() => setCarouselAutoplay(true), 10000);
-  };
-
-  const handleCarouselNext = () => {
-    setCarouselAutoplay(false);
-    setCarouselIndex((prevIndex) => (prevIndex + 1) % carouselBanners.length);
-    setTimeout(() => setCarouselAutoplay(true), 10000);
-  };
-
-  const handleDotClick = (index) => {
-    setCurrentDot(index);
-  };
+  ]
 
   return (
-    <div style={{
-      width: "100%",
-      height: "100%",
-      backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
-      color: theme === "dark" ? "#ffffff" : "#000000",
-    }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
+        color: theme === "dark" ? "#ffffff" : "#000000",
+        overflowX: "hidden",
+      }}
+    >
       <Navbar />
 
-      {/* Main Content */}
-      <div style={{ paddingTop: "80px" }}>
-        {/* Hero Section with Carousel */}
+      <div style={{ paddingTop: isMobile ? "80px" : "80px", width: "100%", maxWidth: "100vw" }}>
+        {/* Hero Section */}
         <section
-          ref={heroRef}
           style={{
             position: "relative",
-            // height: "calc(100vh - 80px)",
-            height: isMobile ? "500px" : "calc(100vh - 0px)",
+            height: isMobile ? "500px" : "calc(100vh - 80px)",
             width: "100%",
+            maxWidth: "100vw",
             overflow: "hidden",
           }}
         >
-          <div style={{
-            position: "relative",
-            height: "100%",
-            width: "100%",
-          }}>
-            <AnimatePresence initial={false}>
-              <motion.div
-                key={carouselIndex}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 9, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 1.2, ease: "easeInOut" }}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                <img
-                  src={carouselBanners[carouselIndex].image}
-                  alt="Teens Ministry Carousel"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center",
-                  }}
-                />
-                <div style={{
-                  position: "absolute",
-                  inset: 0,
-                  backgroundColor: "rgba(42, 30, 122, 0.7)",
-                  zIndex: 1,
-                }}></div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Carousel Navigation */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              height: "100%",
+              width: "100%",
+            }}
+          >
+            <img
+              src={teensHero || "/placeholder.svg"}
+              alt="Teens Ministry Banner"
+              width={768}
+              height={432}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                filter: "brightness(0.7)",
+              }}
+            />
+            <div
               style={{
                 position: "absolute",
-                top: "50%",
-                left: 0,
-                right: 0,
-                transform: "translateY(-50%)",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "0 20px",
-                zIndex: 10,
+                inset: 0,
+                backgroundColor: "rgba(42, 30, 122, 0.4)",
+                zIndex: 1,
               }}
-            >
-              <motion.button
-                whileHover={{ scale: 1.2, backgroundColor: "rgba(255, 255, 255, 0.4)" }}
-                whileTap={{ scale: 0.9 }}
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  border: "none",
-                  color: "white",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onClick={handleCarouselPrev}
-              >
-                <FaChevronLeft />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.2, backgroundColor: "rgba(255, 255, 255, 0.4)" }}
-                whileTap={{ scale: 0.9 }}
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  border: "none",
-                  color: "white",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onClick={handleCarouselNext}
-              >
-                <FaChevronRight />
-              </motion.button>
-            </motion.div>
-
-            {/* Welcome Text */}
+            ></div>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.5 }}
               style={{
                 position: "absolute",
-                top: "30%",
+                top: "50%",
                 left: 0,
                 right: 0,
-                transform: "translate(-50%, -50%)",
+                transform: "translateY(-50%)",
                 textAlign: "center",
                 color: "white",
                 zIndex: 2,
+                padding: "0 20px",
               }}
             >
               <motion.h1
@@ -300,240 +178,372 @@ const TeenScreen = () => {
                   marginBottom: isMobile ? "40px" : "50px",
                 }}
               >
-                WELCOME TO <br /> <p style={{fontSize: "60px", fontWeight: 900}}> TEENS MINISTRY </p>
+                WELCOME TO
               </motion.h1>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Intro Section (Teens Ministry) */}
-        <section
-          ref={introRef}
-          style={{
-            padding: isMobile ? "40px 16px" : "60px 32px",
-            paddingTop: isMobile ? "50px" : "100px",
-            backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
-            color: theme === "dark" ? "#ffffff" : "#000000",
-            position: "relative",
-            zIndex: 0,
-          }}
-        >
-          <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, type: "spring", stiffness: 80 }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr",
-                gap: "30px",
-                alignItems: "center",
-              }}
-            >
-              <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
+              <motion.h1
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
                 style={{
-                  position: "relative",
-                  width: "100%",
-                  maxWidth: isMobile ? "95%" : "80%",
-                  margin: isMobile ? "0 auto" : "0",
-                  overflow: "hidden",
+                  fontSize: isMobile ? "36px" : "72px",
+                  fontWeight: 900,
+                  marginBottom: isMobile ? "20px" : "30px",
+                  lineHeight: 1.1,
                 }}
               >
-                <motion.img
-                  whileHover={{ scale: 1.05, rotate: 2 }}
-                  transition={{ duration: 0.5 }}
-                  src={teensBackground}
-                  alt="Teens Ministry Intro"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    objectFit: "cover",
-                    borderRadius: "5px",
-                  }}
-                />
-              </motion.div>
+                TEENS MINISTRY
+              </motion.h1>
+              
+            </motion.div>
+          </motion.div>
+        </section>
 
-              <motion.div
-                initial={{ x: 100, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
+        {/* About Section */}
+        <section
+          style={{
+            padding: isMobile ? "60px 16px" : "100px 32px",
+            backgroundColor: theme === "dark" ? "#111111" : "#f8f9fa",
+            width: "100%",
+            maxWidth: "100vw",
+          }}
+        >
+          <div style={{ maxWidth: "1280px", margin: "0 auto", width: "100%", display: isMobile ? "block" : "flex", alignItems: "center", gap: isMobile ? 0 : "60px" }}>
+            <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              style={{ flex: isMobile ? undefined : "0 0 400px", marginBottom: isMobile ? "32px" : 0 }}
+            >
+              <img
+                src={teensHero}
+                alt="Teens Ministry Group"
+                width={400}
+                height={300}
+                style={{
+                  width: "100%",
+                  height: isMobile ? "220px" : "300px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                  boxShadow: theme === "dark" ? "0 4px 16px rgba(245,158,11,0.12)" : "0 4px 16px rgba(42,30,122,0.10)",
+                }}
+              />
+            </motion.div>
+            <motion.div
+              initial={{ x: 50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              style={{ flex: 1 }}
+            >
+              <motion.h2
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
-                style={{ marginTop: isMobile ? "24px" : "0" }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  fontSize: isMobile ? "24px" : "30px",
+                  fontWeight: "bold",
+                  color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
+                  marginBottom: "20px",
+                  textAlign: isMobile ? "center" : "left",
+                }}
               >
-                <motion.h2
-                  initial={{ y: 20, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                  style={{
-                    fontSize: isMobile ? "24px" : "30px",
-                    fontWeight: "bold",
-                    color:  theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                    marginBottom: "16px",
-                  }}
-                >
-                  ABOUT TEENS MINISTRY
-                </motion.h2>
-                <motion.p
-                  initial={{ y: 20, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                  style={{
-                    color: theme === "dark" ? "#ffffff" : "#333333",
-                    lineHeight: "1.75",
-                    marginBottom: "24px",
-                    fontSize: "16px",
-                  }}
-                >
-                  {textSectionIntro}
-                </motion.p>
-                <motion.button
-                    whileHover={{
-                      scale: 1.1,
-                      backgroundColor: theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                      color: "white",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{duration: 0.5, delay: 1}}
-                    style={{
-                      backgroundColor: "transparent",
-                      color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                      border: `1px solid ${theme === "dark" ? "#f59e0b" : "#2a1e7a"}`,
-                      padding: "8px 16px",
-                      cursor: "pointer",
-                      fontSize: "12px",
-                      textTransform: "uppercase",
-                      borderRadius: "4px",
-                    }}
-                  onClick={() => navigate("/Contact")}
-                >
-                  GET INVOLVED
-                </motion.button>
-              </motion.div>
+                ABOUT THE TEENS MINISTRY
+              </motion.h2>
+              <div style={{ marginBottom: "20px" }}>
+                <p style={{ marginBottom: "15px", lineHeight: 1.6 }}>
+                  We nurture and guide teenagers aged 13-19 years with the word of God to develop a personal, loving, serving relationship with Jesus Christ and guide them to discover their divine purpose in God; giving them a sound spiritual and moral foundation for a vibrant and victorious Christian walk.
+                </p>
+                <p style={{ marginBottom: "15px", lineHeight: 1.6 }}>We understand that:</p>
+                <ul style={{ paddingLeft: "20px", lineHeight: 1.8 }}>
+                  <li>Every teen has the capacity to contain deity.</li>
+                  <li>Every teen has the ability to receive and understand the Word of God.</li>
+                  <li>Every teen can cultivate a relationship with the Holy Spirit.</li>
+                  <li>Success or failure in the future is determined by a teen's upbringing - Proverbs 22:6</li>
+                </ul>
+              </div>
+              <p style={{ color: theme === "dark" ? "#f59e0b" : "#2a1e7a", fontWeight: 600, fontSize: "16px", textAlign: isMobile ? "center" : "left" }}>
+                Join the Teens church ministry by visiting us today!
+              </p>
             </motion.div>
           </div>
         </section>
 
-        {/* Activities Section (Adapted from Children's Ministry) */}
+
+
+
+
+
+
+
+
+
+        {/* Programs Section */}
         <section
-          ref={activitiesRef}
           style={{
-            padding: isMobile ? "40px 16px" : "60px 32px",
-            backgroundColor: theme === "dark" ? "#111111" : "#f8f9fa",
+            padding: isMobile ? "60px 20px" : "80px 40px",
+            backgroundColor: "#2a1e7a",
+            color: "white",
           }}
         >
-          <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <motion.h2
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+              transition={{ duration: 0.8 }}
               style={{
-                fontSize: isMobile ? "24px" : "30px",
+                fontSize: isMobile ? "28px" : "36px",
                 fontWeight: "bold",
                 textAlign: "center",
+                marginBottom: "20px",
+                color: "#f59e0b",
+              }}
+            >
+              FROM THE TEENS CHURCH MINISTRY
+            </motion.h2>
+
+            {/* Category Filter Buttons */}
+            {categories.length > 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "20px",
+                  marginBottom: "40px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    style={{
+                      padding: "12px 24px",
+                      background: selectedCategory === category ? "#f59e0b" : "transparent",
+                      color: selectedCategory === category ? "#fff" : "#f59e0b",
+                      border: "2px solid #f59e0b",
+                      borderRadius: "25px",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      outline: "none",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    {category === "all" ? "All Programs" : category.charAt(0).toUpperCase() + category.slice(1)}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+                gap: "30px",
                 marginBottom: "40px",
+              }}
+            >
+              {loadingEvents ? (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                  <p>Loading programs...</p>
+                </div>
+              ) : eventsError ? (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                  <p style={{ color: "#f59e0b" }}>{eventsError}</p>
+                </div>
+              ) : filteredEvents.length === 0 ? (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                  <p style={{ color: "#f59e0b" }}>No upcoming teen programs found.</p>
+                </div>
+              ) : (
+                filteredEvents.map((event, index) => (
+                  <motion.div
+                    key={event._id || index}
+                    initial={{ y: 100, opacity: 0, scale: 0.9 }}
+                    whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                    whileHover={{ y: -10, scale: 1.02 }}
+                    style={{
+                      backgroundColor: "#1a1a1a",
+                      borderRadius: "12px",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+                    }}
+                    onClick={() => navigate("/Programs")}
+                  >
+                    {event.imageUrl && (
+                      <img
+                        src={event.imageUrl || "/placeholder.svg"}
+                        alt={event.title}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                    <div style={{ padding: "20px" }}>
+                      <h3
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                          marginBottom: "10px",
+                          color: "white",
+                        }}
+                      >
+                        {event.title}
+                      </h3>
+                      <p
+                        style={{
+                          color: "#f59e0b",
+                          fontSize: "14px",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        {event.startDate ? new Date(event.startDate).toLocaleDateString() : ""}
+                      </p>
+                      {event.description && (
+                        <p
+                          style={{
+                            color: "#cccccc",
+                            fontSize: "14px",
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          {event.description}
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+
+            {/* Dots indicator */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "8px",
+              }}
+            >
+              {[0, 1, 2, 3].map((dot) => (
+                <div
+                  key={dot}
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    backgroundColor: dot === 0 ? "#f59e0b" : "#666",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+
+        {/* Activities Section */}
+        <section
+          style={{
+            padding: isMobile ? "60px 20px" : "80px 40px",
+            backgroundColor: theme === "dark" ? "#111111" : "#f8f9fa",
+          }}
+        >
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <motion.h2
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              style={{
+                fontSize: isMobile ? "28px" : "36px",
+                fontWeight: "bold",
+                textAlign: "center",
+                marginBottom: "60px",
                 color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
               }}
             >
               OUR ACTIVITIES
             </motion.h2>
 
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
-              gap: "24px",
-            }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+                gap: "30px",
+              }}
+            >
               {activities.map((activity, index) => (
                 <motion.div
                   key={index}
-                  initial={{ y: 100, opacity: 0, scale: 0.9 }}
-                  whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                  initial={{ y: 100, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: index * 0.3, type: "spring" }}
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                  whileHover={{ y: -10 }}
                   style={{
                     backgroundColor: theme === "dark" ? "#1a1a1a" : "white",
+                    borderRadius: "8px",
                     overflow: "hidden",
-                    boxShadow: theme === "dark" ? "0 4px 6px rgba(0, 0, 0, 0.3)" : "0 4px 6px rgba(0, 0, 0, 0.1)",
-                    borderRadius: "4px",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <div style={{
-                    position: "relative",
-                    height: "200px",
-                    width: "100%",
-                    overflow: "hidden",
-                  }}>
-                    <motion.img
-                      whileHover={{ scale: 1.1, rotate: 3 }}
-                      transition={{ duration: 0.5 }}
-                      src={activity.image}
-                      alt={activity.title}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
-                  <div style={{ padding: "20px" }}>
-                    <motion.h3
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.3 + 0.2 }}
+                  <img
+                    src={activity.image || "/placeholder.svg"}
+                    alt={activity.title}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div style={{ padding: "25px" }}>
+                    <h3
                       style={{
                         fontSize: "18px",
                         fontWeight: "bold",
-                        marginBottom: "12px",
+                        marginBottom: "15px",
                         color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
                       }}
                     >
                       {activity.title}
-                    </motion.h3>
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.3 + 0.4 }}
+                    </h3>
+                    <p
                       style={{
-                        color: theme === "dark" ? "#cccccc" : "#333333",
-                        marginBottom: "16px",
-                        fontSize: "14px",
-                        lineHeight: "1.6",
+                        color: theme === "dark" ? "#cccccc" : "#666",
+                        lineHeight: 1.6,
+                        marginBottom: "20px",
                       }}
                     >
                       {activity.description}
-                    </motion.p>
-                    <motion.button
-                      whileHover={{
-                        scale: 1.1,
-                        backgroundColor: theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                        color: "white",
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.3 + 0.6 }}
+                    </p>
+                    <button
                       style={{
                         backgroundColor: "transparent",
                         color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
-                        border: `1px solid ${theme === "dark" ? "#f59e0b" : "#2a1e7a"}`,
-                        padding: "8px 16px",
+                        border: `2px solid ${theme === "dark" ? "#f59e0b" : "#2a1e7a"}`,
+                        padding: "10px 20px",
+                        borderRadius: "5px",
                         cursor: "pointer",
                         fontSize: "12px",
+                        fontWeight: "bold",
                         textTransform: "uppercase",
-                        borderRadius: "4px",
+                        transition: "all 0.3s",
                       }}
                       onClick={() => navigate("/Programs")}
                     >
                       LEARN MORE
-                    </motion.button>
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -541,295 +551,215 @@ const TeenScreen = () => {
           </div>
         </section>
 
-        {/* Vision Section (Quote Section) */}
+        {/* Testimonies Section */}
         <section
-          ref={visionRef}
           style={{
-            position: "relative",
-            padding: isMobile ? "60px 16px" : "80px 32px",
-            backgroundColor: "#2a1e7a",
+            padding: isMobile ? "60px 20px" : "80px 40px",
+            backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
           }}
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 0.2 }}
-            transition={{ duration: 1 }}
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: `url(${teensBackground})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              zIndex: 1,
-            }}
-          ></motion.div>
-
-          <div style={{
-            position: "relative",
-            zIndex: 10,
-            maxWidth: "896px",
-            margin: "0 auto",
-            padding: "0 16px",
-            color: "white",
-          }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <motion.h2
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+              transition={{ duration: 0.8 }}
               style={{
-                fontSize: isMobile ? "24px" : "30px",
+                fontSize: isMobile ? "28px" : "36px",
                 fontWeight: "bold",
                 textAlign: "center",
-                marginBottom: "32px",
-                color: "#f59e0b",
+                marginBottom: "60px",
+                color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
               }}
             >
-              OUR VISION
+              TESTIMONIES
             </motion.h2>
 
-            <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
+            <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "24px",
-                textAlign: "center",
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+                gap: "30px",
               }}
             >
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                style={{
-                  fontSize: "18px",
-                  lineHeight: "1.75",
-                  color: "#ffffff",
-                }}
-              >
-                The Loveworld Teens Ministry empowers teenagers to live for Christ.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                style={{
-                  lineHeight: "1.75",
-                  color: "#ffffff",
-                  fontSize: "16px",
-                }}
-              >
-                We foster a community where teens grow in faith, serve others, and discover their divine purpose.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.8 }}
-                style={{
-                  lineHeight: "1.75",
-                  color: "#ffffff",
-                  fontSize: "16px",
-                }}
-              >
-                Our vision is to raise a generation of passionate, God-loving teens to impact the world.
-              </motion.p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Programs Section */}
-        <section
-          ref={programsRef}
-          style={{
-            padding: isMobile ? "40px 16px" : "60px 32px",
-            backgroundColor: "#2a1e7a",
-            color: "white",
-          }}
-        >
-          <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-            <motion.h2
-              initial={{ y: 50, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-              style={{
-                fontSize: isMobile ? "24px" : "30px",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: "40px",
-                color: "#f59e0b",
-              }}
-            >
-              UPCOMING PROGRAMS
-            </motion.h2>
-
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
-              gap: "20px",
-            }}>
-              {loadingEvents ? (
-                <p>Loading programs...</p>
-              ) : eventsError ? (
-                <p style={{ color: "red" }}>{eventsError}</p>
-              ) : events.length === 0 ? (
-                <p>No upcoming teen programs found.</p>
+              {loadingTestimonies ? (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                  <p>Loading testimonies...</p>
+                </div>
+              ) : testimoniesError ? (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                  <p style={{ color: "#f59e0b" }}>{testimoniesError}</p>
+                </div>
+              ) : testimonies.length === 0 ? (
+                <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                  <p style={{ color: "#f59e0b" }}>No approved testimonies found.</p>
+                </div>
               ) : (
-                events.filter(e => e.category === 'teens').map((event, index) => (
+                testimonies.map((testimony, index) => (
                   <motion.div
-                    key={index}
-                    initial={{ y: 100, opacity: 0, scale: 0.9 }}
-                    whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                    key={testimony._id || index}
+                    initial={{ y: 100, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: index * 0.2, type: "spring" }}
-                    whileHover={{ y: -10, scale: 1.05 }}
+                    transition={{ duration: 0.8, delay: index * 0.2 }}
                     style={{
+                      backgroundColor: theme === "dark" ? "#111111" : "#f9fafb",
+                      padding: "30px",
+                      borderRadius: "8px",
                       position: "relative",
-                      overflow: "hidden",
-                      cursor: "pointer",
-                      borderRadius: "4px",
-                      backgroundImage: event.imageUrl ? `url(${event.imageUrl})` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      position: 'relative',
+                      boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
                     }}
-                    onClick={() => navigate(`/Programs/${event._id}`)}
                   >
-                    {event.videoUrl ? (
-                      <video
-                        src={event.videoUrl}
-                        controls
-                        style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: '8px' }}
-                      />
-                    ) : null}
-                    <div style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      background: 'rgba(0,0,0,0.6)',
-                      color: 'white',
-                      padding: '12px',
-                      borderRadius: '0 0 8px 8px',
-                    }}>
-                      <h3 style={{ margin: 0 }}>{event.title}</h3>
-                      <p style={{ margin: '4px 0' }}>
-                        {event.startDate ? new Date(event.startDate).toLocaleString() : ''}
-                        {event.endDate ? ' - ' + new Date(event.endDate).toLocaleString() : ''}
-                      </p>
-                      {event.videoDuration ? <p style={{ margin: '4px 0' }}>Video Duration: {Math.floor(event.videoDuration / 60)}:{('0' + (event.videoDuration % 60)).slice(-2)} min</p> : null}
-                      {event.location && <p style={{ margin: '4px 0' }}>Venue: {event.location}</p>}
-                      {event.category && <p style={{ margin: '4px 0' }}>Category: {event.category.charAt(0).toUpperCase() + event.category.slice(1)}</p>}
-                      {event.description && <p style={{ margin: '4px 0' }}>{event.description}</p>}
+                    <div
+                      style={{
+                        fontSize: "48px",
+                        color: "#f59e0b",
+                        position: "absolute",
+                        top: "15px",
+                        left: "20px",
+                      }}
+                    >
+                      "
                     </div>
+                    {testimony.mediaType === 'video' ? (
+                      <video
+                        src={testimony.mediaUrl}
+                        controls
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : testimony.mediaType === 'image' ? (
+                      <img
+                        src={testimony.mediaUrl}
+                        alt={testimony.text}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <p
+                        style={{
+                          color: theme === "dark" ? "#ffffff" : "#4b5563",
+                          lineHeight: 1.6,
+                          marginBottom: "20px",
+                          paddingTop: "20px",
+                        }}
+                      >
+                        {testimony.text}
+                      </p>
+                    )}
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        color: theme === "dark" ? "#f59e0b" : "#2a1e7a",
+                      }}
+                    >
+                      {testimony.author}
+                    </p>
                   </motion.div>
                 ))
               )}
             </div>
+          </div>
+        </section>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
+        {/* Bible Quote Section */}
+        <section
+          style={{
+            padding: isMobile ? "80px 20px" : "120px 40px",
+            backgroundColor: "#2a1e7a",
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <motion.blockquote
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "32px",
+                fontSize: isMobile ? "24px" : "32px",
+                fontWeight: "bold",
+                lineHeight: 1.4,
+                marginBottom: "20px",
               }}
             >
-              <div style={{ display: "flex", gap: "8px" }}>
-                {[0, 1, 2, 3].map((dot) => (
-                  <motion.button
-                    key={dot}
-                    whileHover={{ scale: 1.3 }}
-                    whileTap={{ scale: 0.9 }}
-                    style={{
-                      width: "8px",
-                      height: "8px",
-                      borderRadius: "50%",
-                      backgroundColor: dot === currentDot ? "#f59e0b" : "#9ca3af",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0,
-                    }}
-                    aria-label={`Go to slide ${dot + 1}`}
-                    onClick={() => handleDotClick(dot)}
-                  />
-                ))}
-              </div>
-            </motion.div>
+              "Train up a child in the way he should go: and when he is old, he will not depart from it."
+            </motion.blockquote>
+            <motion.cite
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              style={{
+                fontSize: "18px",
+                color: "#f59e0b",
+                fontStyle: "normal",
+              }}
+            >
+              Proverbs 22:6 (KJV)
+            </motion.cite>
           </div>
         </section>
 
         {/* Live Event Banner */}
-        <section style={{
-          backgroundColor: "#f59e0b",
-          padding: isMobile ? "10px 10px" : "20px 30px",
-          maxWidth: isMobile ? "90%" : "70%",
-          margin: "30px auto",
-          borderRadius: "10px",
-        }}>
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+        <section
+          style={{
+            backgroundColor: "#f59e0b",
+            padding: isMobile ? "15px 20px" : "20px 40px",
+            margin: "40px auto",
+            maxWidth: "90%",
+            borderRadius: "10px",
+          }}
+        >
+          <div
             style={{
-              maxWidth: "1280px",
-              margin: "0 auto",
-              padding: isMobile ? "0 5px" : "0 16px",
               display: "flex",
               flexDirection: isMobile ? "column" : "row",
               alignItems: "center",
               justifyContent: "space-between",
+              gap: isMobile ? "15px" : "0",
             }}
           >
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+            <p
               style={{
-                fontSize: isMobile ? "8px" : "16px",
-                fontWeight: 600,
-                marginBottom: isMobile ? "4px" : 0,
+                fontSize: isMobile ? "14px" : "16px",
+                fontWeight: "bold",
+                margin: 0,
                 color: "#2a1e7a",
               }}
             >
               HAPPENING LIVE: SUNDAY SERVICE WITH PASTOR JOE AGBAJE
-            </motion.p>
-            <motion.button
-              whileHover={{ scale: 1.1, backgroundColor: "#3a2e8a" }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+            </p>
+            <button
               style={{
                 backgroundColor: "#2a1e7a",
                 color: "white",
                 border: "none",
-                padding: "8px 16px",
+                padding: "10px 20px",
+                borderRadius: "5px",
                 cursor: "pointer",
                 fontSize: "14px",
-                borderRadius: "4px",
+                fontWeight: "bold",
               }}
-              onClick={() => window.location.href = "https://www.ceibz1.online/"}
+              onClick={() => (window.location.href = "https://www.ceibz1.online/")}
             >
               WATCH LIVE
-            </motion.button>
-          </motion.div>
+            </button>
+          </div>
         </section>
       </div>
 
       <Footer />
+      <FloatingLiveChat />
     </div>
-  );
-};
+  )
+}
 
-export default TeenScreen;
-
-
+export default TeenScreen

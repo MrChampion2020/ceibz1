@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useMediaQuery } from "react-responsive"
 import { motion, AnimatePresence } from "framer-motion"
 import Navbar from "../../components/Navbar"
@@ -68,6 +68,30 @@ const ContactScreen = () => {
 
   // Add refs for all videos
   const videoRefs = useRef([]);
+  // Add refs for both video elements
+  const videoRef1 = useRef(null)
+  const videoRef2 = useRef(null)
+
+  // Pause both videos on load
+  useEffect(() => {
+    if (videoRef1.current) videoRef1.current.pause()
+    if (videoRef2.current) videoRef2.current.pause()
+  }, [])
+
+  // Ensure only one video plays at a time
+  useEffect(() => {
+    const v1 = videoRef1.current
+    const v2 = videoRef2.current
+    if (!v1 || !v2) return
+    const handlePlay1 = () => { v2.pause() }
+    const handlePlay2 = () => { v1.pause() }
+    v1.addEventListener('play', handlePlay1)
+    v2.addEventListener('play', handlePlay2)
+    return () => {
+      v1.removeEventListener('play', handlePlay1)
+      v2.removeEventListener('play', handlePlay2)
+    }
+  }, [])
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
@@ -797,7 +821,10 @@ const ContactScreen = () => {
                 }}
               >
                 <div style={{ position: "relative", paddingTop: "56.25%" }}>
-                  <iframe
+                  <video
+                    ref={videoRef1}
+                    src={sango}
+                    controls
                     style={{
                       position: "absolute",
                       top: 0,
@@ -806,11 +833,8 @@ const ContactScreen = () => {
                       height: "100%",
                       border: "none",
                     }}
-                    src={sango}
                     title="Church Location Guide"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  />
                 </div>
                 <div style={{ padding: "20px" }}>
                   <h3
@@ -866,7 +890,10 @@ const ContactScreen = () => {
                 }}
               >
                 <div style={{ position: "relative", paddingTop: "56.25%" }}>
-                  <iframe
+                  <video
+                    ref={videoRef2}
+                    src={sango}
+                    controls
                     style={{
                       position: "absolute",
                       top: 0,
@@ -875,11 +902,8 @@ const ContactScreen = () => {
                       height: "100%",
                       border: "none",
                     }}
-                    src={sango}
                     title="What to Expect"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  />
                 </div>
                 <div style={{ padding: "20px" }}>
                   <h3
